@@ -1,0 +1,218 @@
+<template>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-primary">Floor Manager</h3>
+            <button type="button" class="btn btn-info add-new float-right" @click="openAddModal">
+                <i class="fa fa-plus"></i> Add New
+            </button>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm p-0 m-2">
+                <thead class="thead-dark">
+                    <th scope="col">Room Number</th>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">Floor</th>
+                    <th scope="col">Tariff</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </thead>
+                <tbody>
+                    <tr v-for="room in rooms" :key="room.room_id">
+                        <td>{{room.room_number}}</td>
+                        <td>{{room.room_type  }}</td>
+                        <td>{{room.room_floor }}</td>
+                        <td>{{room.room_tarrif}}</td>
+                        <td>{{room.room_status}}</td>
+                        <td>
+                        <button type="submit" class="btn btn-success" @click="openEditModal(room)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
+                        <button type="submit" class="btn btn-danger" @click="removeRoom(room.room_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </div>
+        <div class="modal fade" id="addRoom" tabindex="-1" role="dialog" aria-labelledby="addRoom" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header py-1">
+                        <h5 v-show="editMode" class="modal-title">Edit Room</h5>
+                        <h5 v-show="!editMode" class="modal-title" id="editreserve">Add Room</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form @submit.prevent=" editMode ? updateRoom() : createRoom()">
+                    <div class="modal-body">
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="room_number">Room Number</label>
+                                        <input v-model="room_form.room_number"  type="number" class="form-control"
+                                        :class="{ 'is-invalid': room_form.errors.has('room') }" id="room_number" placeholder="Ex. 301 / 230" />
+                                        <has-error :form="room_form" field="room"></has-error>
+                                    </div>
+                                    <div class="form-group col-md-9">
+                                        <label for="room_type">Room Type</label>
+                                        <select v-model="room_form.room_type"  id="room_type" class="form-control">
+                                            <option selected>Choose Side..</option>
+                                            <option value="City Side">City Side</option>
+                                            <option value="Bay Side">Bay Side</option>
+                                            <option value="Suite">Suite</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="floor">Floor</label>
+                                            <input v-model="room_form.room_floor"  type="number" class="form-control" id="floor" placeholder="Room Floor" required/>
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            <label for="tarrif">Tarrif</label>
+                                            <input v-model="room_form.room_tarrif"  type="text" class="form-control" id="tarrif" placeholder="PHP Amount" required/>
+                                        </div>
+                                </div>
+
+                    </div>
+                    <div class="modal-footer py-0">
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                        <button v-show="!editMode" type="submit" class="btn btn-sm btn-primary">Add Room</button>
+                        <button v-show="editMode" type="submit" class="btn btn-sm btn-primary">Edit Room</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<!--
+room_number
+room_type
+floor
+tarrif
+-->
+<script>
+export default {
+     data() {
+            return {
+                editMode:true,
+                rooms:{},
+                room_form: new Form({
+                    room_id: '',
+                    room: '',
+                    room_number: '',
+                    room_type: '',
+                    room_floor: '',
+                    room_tarrif: ''
+                })
+            }
+    },
+    methods:{
+        openEditModal(room){
+            this.room_form.fill(room)
+            this.editMode = true;
+            $('#addRoom').modal('show');
+        },
+        openAddModal(){
+            this.editMode = false;
+            $('#addRoom').modal('show')
+        },
+        loadRooms(){
+            this.$Progress.start();
+            axios.get('api/room').then(({data})=>(this.rooms = data.data));
+            this.$Progress.finish();
+        },
+        loadReservationsCont(){
+            axios.get('api/room').then(({data})=>(this.rooms = data.data));
+        },
+        createRoom(){
+                this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
+                this.$Progress.start();
+                this.room_form.post('api/room').then(()=>{
+                    Fire.$emit('romCreated');
+                    $('#addRoom').modal('hide')
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Room added successfully'
+                    })
+                    this.$Progress.finish();
+                    this.loadReservationsCont();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
+
+        },
+        removeRoom(id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        if (result.value) {
+                            axios.delete('api/room/'+id).then(()=>{
+                                    Fire.$emit('romCreated');
+                                    Swal.fire(
+                                    'Deleted!',
+                                    'The room has been deleted.',
+                                    'success'
+                                    )
+
+
+                            }).catch(()=>{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+
+                                })
+                            });
+                        }
+
+                    })
+        },
+        updateRoom(){
+                this.$Progress.start();
+                this.room_form.put('api/room/'+ this.room_form.room_id).then(()=>{
+                    Fire.$emit('romCreated');
+                    $('#addRoom').modal('hide')
+                    this.room_form.reset();
+                    Toast.fire({
+                            icon: 'success',
+                            title: 'Room Updated'
+                    })
+                    this.$Progress.finish();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
+
+
+        }
+
+    },
+    mounted() {
+
+        console.log("Component mounted.");
+    },
+    created(){
+        this.room_form.reset();
+        this.loadRooms();
+        Fire.$on('romCreated',()=>{
+                 this.loadReservationsCont();
+        });
+
+    },
+};
+</script>
