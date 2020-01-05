@@ -57,12 +57,12 @@
             <tbody>
 
                 <tr>
-                    <th scope="row" width="8%"> $room->room_name</th>
-                    <td align="center"> $room->guest['guest_name']</td>
-                    <td align="center"> $room->room_floor</td>
-                    <td align="center"> $room->room_type</td>
-                    <td align="center"> $room->room_status</td>
-                    <td align="center">PHP $room->room_rate</td>
+                    <th scope="row" width="8%"> room_name</th>
+                    <td align="center"> guest['guest_name']</td>
+                    <td align="center"> room_floor</td>
+                    <td align="center"> room_type</td>
+                    <td align="center"> room_status</td>
+                    <td align="center"> room_rate</td>
 
                     <td align="center" width="5%">
                          <!--   $room->id        -->
