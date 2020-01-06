@@ -1,52 +1,45 @@
 <template>
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered " role="document" v-bind:class="{ 'modal-sm': !checkedin , 'modal-xl' : checkedin}">
             <div class="modal-content">
                 <div class="modal-header py-1">
-                    <h5 class="modal-title" id="detailsModal">Guest Information</h5>
+                    <h5 class="modal-title" id="detailsModal">Room Information</h5>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-6">
-                            <div class="card">
-                                <div class="card-header py-1">
-                                    Reservation
-                                </div>
-                                <div class="card-body pl-1 py-1 pr-0">
+                        <div v-bind:class="{ 'col-12': !checkedin}">
+
                                     <table class="table table-borderless table-sm p-0 m-0">
                                         <tbody>
                                             <tr>
-                                                <th>Booking Number: </th>
-                                                <td  id="booking_id"></td>
-
-                                            </tr>
-                                            <tr>
                                                 <td>Room Number: </td>
-                                                <td id="room_name"></td>
-
+                                                <td>{{form.room_number}}</td>
                                             </tr>
-                                            <tr>
-                                                <th>Booked By: </th>
-                                                <td id="booked_by"></td>
-
-                                            </tr>
-                                            <tr>
+                                            <h3 class="ml-1" v-show="!checkedin">Reservations Pending</h3>
+                                            <tr v-show="checkedin">
                                                 <td>Booking Remarks: </td>
                                                 <td id="remarks"></td>
                                             </tr>
-                                            <tr>
-                                                <th>Check-In Date: </th>
+                                            <tr v-show="checkedin">
+                                                <th >Check-In Date: </th>
                                                 <td id="roomcd"></td>
                                             </tr>
-                                            <tr>
+                                            <tr v-show="checkedin">
                                                 <td>Check-Out Date: </td>
                                                 <td id="roomcod"></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                            <div class="card">
+                                    <div class="info-box mb-2">
+                                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                                        <div class="info-box-content">
+                                          <span class="info-box-text">Pending Reservations</span>
+                                          <span class="info-box-number">{{form.reservation_number}}</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                            <div class="card" v-show="checkedin">
                                 <div class="card-header py-1">
                                     Guest Details
                                 </div>
@@ -73,7 +66,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card" v-show="checkedin">
                                 <div class="card-header py-1">
                                     Other Information
                                 </div>
@@ -111,8 +104,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="card">
+                        <div class="col">
+                            <div class="card" v-show="checkedin">
                                 <div class="card-header py-1">
                                     Services
                                 </div>
@@ -156,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer py-0">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -168,13 +161,17 @@
     export default {
         data(){
             return{
-
+                checkedin: false,
+                form: new Form({
+                    reservation_number:'',
+                    room_number:'',
+                    checkin_date:'',
+                    checkout_date:''
+                })
             }
         },
         methods:{
-            loadCont(){
-                axios.get('api/room')
-                    .then(({data})=>(this.data_form = data.data));
+            loadData(){
             },
             create(){
 
@@ -190,7 +187,6 @@
             console.log('Component mounted.')
         },
         created(){
-
         }
     }
 </script>

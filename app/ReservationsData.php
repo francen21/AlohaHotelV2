@@ -25,5 +25,4 @@ class ReservationsData extends Model
     {
         return $this->belongsTo('App\GuestsData', 'guest_id');
     }
-
 }

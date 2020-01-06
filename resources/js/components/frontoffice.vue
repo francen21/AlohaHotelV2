@@ -54,27 +54,27 @@
             </thead>
             <tbody>
                 <tr  v-for="room in rooms" :key="room.room_id">
-                    <th scope="row"   >{{room.room_number}}</th>
+                    <th align="text-center">{{room.room_number}}</th>
                     <td align="center" v-if="!room.reservation.length">Vacant</td>
                     <td align="center" v-else>Has Reservations</td>
                     <td align="center">{{room.room_floor }}</td>
                     <td align="center">{{room.room_type  }}</td>
                     <td align="center">{{room.room_rate  }}</td>
-                    <td align="center" width="5%">
+                    <td align="center">
                         <!--   $room->id        -->
-                        <button @click="openDetailsModal(room.reservation)" type="button" class="btn btn-primary btn-sm"
+                        <button @click="openDetailsModal(room.reservation,room)" type="button" class="btn btn-primary btn-sm"
                             aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                     </td>
-                    <td align="center" width="8%">
+                    <td align="center" >
                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                             data-target="#checkinModal" aria-haspopup="true" aria-expanded="false"
                             style="padding: 0.25px 4.5px;">
                             <i class="fas fa-check-circle"></i> Check In
                         </button>
                     </td>
-                    <td align="center" width="2%">
+                    <td align="center" >
                         <div class="dropdown">
                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </td>
-                    <td align="center" width="2%">
+                    <td align="center">
                         <div class="dropdown">
                             <button type="button" class="btn btn-secondary btn-sm dropdown-toggle font-weight-light"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                     </td>
-                    <td align="center" width="2%">
+                    <td align="center">
                         <div class="dropdown">
                             <button type="button"
                                 class="btn btn-danger btn-sm dropdown-toggle font-weight-light butrooms"
@@ -136,7 +136,7 @@
             <tfoot>
             </tfoot>
         </table>
-        <DETAILS></DETAILS>
+        <DETAILS ref="details"></DETAILS>
     </div>
     </div>
 
@@ -170,8 +170,10 @@ import DETAILS from './Modals/m_frontoffice/details'
                 axios.get('api/room').then(({data})=>(this.rooms = data.data));
                 this.$Progress.finish();
             },
-            openDetailsModal(res){
-                console.log(res['reservation_id']);
+            openDetailsModal(res,rom){
+                console.log(rom);
+                this.$refs.details.form.fill(rom);
+                this.$refs.details.form.reservation_number = res.length;
                 $('#detailsModal').modal('show');
             },
         },
