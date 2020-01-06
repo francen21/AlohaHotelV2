@@ -15,4 +15,10 @@ class Floors extends Model
         'room_status',
         'room_number'
     ];
+
+    public function reservation()
+    {
+        return $this->hasMany('App\ReservationsData' , 'room_number' , 'room_number');
+    }
+
 }

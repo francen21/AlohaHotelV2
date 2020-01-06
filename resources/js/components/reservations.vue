@@ -21,7 +21,7 @@
             <tbody>
                 <tr v-for="res in reservations" :key="res.reservation_id">
                     <td>{{res.reservation_id}}</td>
-                    <td>{{res.room_number}}</td>
+                    <td>{{res.room.room_number}}</td>
                     <td>{{res.guest.guest_name | upText}}</td>
                     <td>{{res.guest.guest_type}}</td>
                     <td>{{res.guest.guest_number}}</td>

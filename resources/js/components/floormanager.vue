@@ -6,7 +6,7 @@
         <not-found></not-found>
     </div>
 
-    <div class="card" v-if="$gate.isHk()">
+    <div class="card" v-if="$gate.isAdmin()">
 
         <div class="card-header">
             <h3 class="m-0 font-weight-bold text-primary">Floor Manager</h3>

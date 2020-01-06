@@ -19,7 +19,7 @@ class ReservationsData extends Model
     ];
     public function room()
     {
-        return $this->belongsTo('App\RoomsData','room_id');
+        return $this->belongsTo('App\RoomsData' , 'room_number' , 'room_number');
     }
     public function guest()
     {

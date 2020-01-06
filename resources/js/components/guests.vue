@@ -25,7 +25,7 @@
                         <td>{{guest.guest_checkin_points}}</td>
                         <td>
                             <button type="submit" class="btn btn-success" @click="openEditModal(guest)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
-                            <button type="submit" class="btn btn-danger" @click="removeRoom(guest.guest_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
+                            <button type="submit" class="btn btn-danger" @click="remove(guest.guest_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
                         </td>
                     </tr>
                 </tbody>

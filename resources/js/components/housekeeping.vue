@@ -2,7 +2,6 @@
     <div class="card">
     <div class="card-header">
         <h3 class="m-0 font-weight-bold text-primary">House Keeping</h3>
-        <button type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add New</button>
     </div>
     <div class="card-body">
         <table class="table table-sm p-0 m-2">
@@ -51,6 +50,7 @@
                     room: '',
                     room_number: '',
                     room_type: '',
+                    room_status: '',
                     room_floor: '',
                     room_tarrif: ''
                 })

@@ -76,21 +76,15 @@ class Rooms extends Controller
      * @param  \App\RoomsData  $roomsData
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RoomsData $roomsData)
+    public function update(Request $request)
     {
         $this->validate($request,[
             //'room' => 'required|unique:rooms_data'
         ]);
 
         $gue = Floors::find($request['room_id']);
-        $gue->room_floor =   $request['room_floor'];
-        $gue->room_type = $request['room_type'];
-        $gue->room_number =   $request['room_number'];
-        $gue->room_tarrif = $request['room_tarrif'];
-        $gue->room = $request['room_floor'].$request['room_number'];
+        $gue->room_status =   $request['room_status'];
         $gue->save();
-
-        return $gue;
     }
 
     /**

@@ -1,10 +1,9 @@
 <template>
 
-<!-- Card Example -->
-<div class="card">
+<div class="container">
+    <div class="card">
     <div class="card-header py-2">
-        <h3 class="m-0 font-weight-bold text-primary">Frony Panel</h3>
-
+        <h3 class="m-0 font-weight-bold text-primary">Front Panel</h3>
         <div class="btn-group">
             <button type="button" class="btn btn-primary btn-sm dropdown-toggle butroomss my-1" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -43,10 +42,9 @@
         <table class="table table-sm p-0 my-2">
             <thead class="thead-dark">
                 <th class="text-center">Room Number</th>
-                <th class="text-center">Guest Name</th>
+                <th class="text-center">Reservation</th>
                 <th class="text-center">Floor</th>
                 <th class="text-center">Room Type</th>
-                <th class="text-center">Status </th>
                 <th class="text-center">Balance </th>
                 <th class="text-center">Details </th>
                 <th class="text-center">Actions </th>
@@ -55,23 +53,20 @@
                 <th class="text-center">Payments </th>
             </thead>
             <tbody>
-
-                <tr>
-                    <th scope="row" width="8%"> room_name</th>
-                    <td align="center"> guest['guest_name']</td>
-                    <td align="center"> room_floor</td>
-                    <td align="center"> room_type</td>
-                    <td align="center"> room_status</td>
-                    <td align="center"> room_rate</td>
-
+                <tr  v-for="room in rooms" :key="room.room_id">
+                    <th scope="row"   >{{room.room_number}}</th>
+                    <td align="center" v-if="!room.reservation.length">Vacant</td>
+                    <td align="center" v-else>Has Reservations</td>
+                    <td align="center">{{room.room_floor }}</td>
+                    <td align="center">{{room.room_type  }}</td>
+                    <td align="center">{{room.room_rate  }}</td>
                     <td align="center" width="5%">
-                         <!--   $room->id        -->
-                        <button type="button" class="btn btn-primary btn-sm open-modal" value="$room->id"
+                        <!--   $room->id        -->
+                        <button @click="openDetailsModal(room.reservation)" type="button" class="btn btn-primary btn-sm"
                             aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
                             <i class="fas fa-info-circle"></i> Details
                         </button>
                     </td>
-
                     <td align="center" width="8%">
                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                             data-target="#checkinModal" aria-haspopup="true" aria-expanded="false"
@@ -79,7 +74,6 @@
                             <i class="fas fa-check-circle"></i> Check In
                         </button>
                     </td>
-
                     <td align="center" width="2%">
                         <div class="dropdown">
                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
@@ -98,7 +92,6 @@
                             </div>
                         </div>
                     </td>
-
                     <td align="center" width="2%">
                         <div class="dropdown">
                             <button type="button" class="btn btn-secondary btn-sm dropdown-toggle font-weight-light"
@@ -119,7 +112,6 @@
                             </div>
                         </div>
                     </td>
-
                     <td align="center" width="2%">
                         <div class="dropdown">
                             <button type="button"
@@ -139,34 +131,57 @@
                             </div>
                         </div>
                     </td>
-
                 </tr>
             </tbody>
             <tfoot>
             </tfoot>
         </table>
+        <DETAILS></DETAILS>
     </div>
-</div>
+    </div>
+
+
+    </div>
+
 
 </template>
 
 <script>
 import CHECKIN from './Modals/m_frontoffice/checkin'
+import DETAILS from './Modals/m_frontoffice/details'
     export default {
         data() {
-             return {
-      // Create a new form instance
-      form: new Form({
-
-      })
-    }
+              return {
+                editMode:true,
+                rooms:{},
+                room_form: new Form({
+                    room_id: '',
+                    room: '',
+                    room_number: '',
+                    room_type: '',
+                    room_floor: '',
+                    room_tarrif: ''
+                })
+            }
+        },
+        methods:{
+            loadRooms(){
+                this.$Progress.start();
+                axios.get('api/room').then(({data})=>(this.rooms = data.data));
+                this.$Progress.finish();
+            },
+            openDetailsModal(res){
+                console.log(res['reservation_id']);
+                $('#detailsModal').modal('show');
+            },
         },
         mounted() {
+            this.loadRooms();
             console.log('Component mounted.')
-        }
-        ,
+        },
         components: {
-            CHECKIN
+            CHECKIN,
+            DETAILS
         }
     }
 </script>

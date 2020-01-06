@@ -20,7 +20,7 @@
                         <div class="col">
                             <label for="room_number">Room Number</label>
                             <select v-model="form.room_number" class="form-control" id="room_number" name="room_number">
-                            <option value="301">301</option>
+                            <option v-for="room in rooms" :key="room.room_id" v-bind:value="room.room_number">{{room.room_number}}</option>
                             </select>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
     export default {
         data() {
             return{
-
+                rooms:[],
                 form: new Form({
                     room_number: '',
                     guest_name: '',
@@ -132,6 +132,7 @@
         },
         methods:{
             createReservation(){
+                this.loadRooms();
                 this.$Progress.start();
                 console.log(this.form);
                 this.form.post('api/reservation').then(()=>{
@@ -150,12 +151,18 @@
                     this.$Progress.fail()
                 });
 
+            },
+            loadRooms(){
+                axios.get('api/room').then(({data})=>(this.rooms = data.data));
             }
+
+
         },
         mounted() {
             this.form.reset();
         },
         created(){
+            this.loadRooms();
             this.form.reset();
         }
     }
