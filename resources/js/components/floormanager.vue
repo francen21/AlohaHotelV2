@@ -2,7 +2,7 @@
 
 <div class="container">
 
-    <div v-if="!$gate.isHk()">
+    <div v-if="!$gate.isAdmin()">
         <not-found></not-found>
     </div>
 
