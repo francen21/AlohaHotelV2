@@ -1,9 +1,3 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -18,6 +12,10 @@ Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
 Vue.use(VueRouter)
+
+import Gate from "./Gate";
+
+Vue.prototype.$gate = new Gate(window.user);
 
 const routes = [
     { path: '/fo', component: require('./components/frontoffice.vue').default },//front office
@@ -38,7 +36,8 @@ const routes = [
 const router = new VueRouter({
     mode : 'history',
     routes // short for `routes: routes`
-  })
+})
+
 
 Vue.filter('upText', function (text) {
     return text.charAt(0).toUpperCase()+text.slice(1);
@@ -80,6 +79,24 @@ window.Fire = Fire;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
+Vue.component(
+    'not-found',
+    require('./components/NotFound.vue').default
+);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('frontoffice', require('./components/frontoffice.vue').default);

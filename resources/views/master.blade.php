@@ -74,6 +74,8 @@
                         <!-- Add icons to the links using the .nav-icon class
                                 with font-awesome or any other icon font library -->
                         <!-- Nav Item - Pages Collapse Menu -->
+                    @if(Gate::check('isAdmin'))
+                        @if(Gate::check('isFo') || Gate::check('isAdmin'))
                         <li class="nav-item">
                             <router-link to="/fo" class="nav-link collapsed">
                                 <i class="nav-icon fas fa-server"></i>
@@ -86,6 +88,8 @@
                                 <span> Reservations</span>
                             </router-link>
                         </li>
+                        @endif
+                        @if(Gate::check('isHk') || Gate::check('isAdmin') || Gate::check('isFo'))
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="/hk">
                                 <i class="nav-icon fas fa-broom"></i>
@@ -98,12 +102,15 @@
                                 <span> Inventory</span>
                             </a>
                         </li>
+                        @endif
+                        @if(Gate::check('isFo') || Gate::check('isAdmin'))
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="/gs">
                                 <i class="nav-icon fas fa-id-badge"></i><!--    -->
                                 <span> Guests</span>
                             </a>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="/rm">
                                 <i class="nav-icon fas fa-hand-holding-usd"></i>
@@ -128,12 +135,15 @@
                                 <span> User Log</span>
                             </a>
                         </li>
+                        @if(Gate::check('isFo') || Gate::check('isAdmin'))
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="/rp">
                                 <i class="nav-icon fas fa-chart-line"></i>
                                 <span> Reports</span>
                             </a>
                         </li>
+                        @endif
+                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -179,7 +189,12 @@
         </footer>
     </div>
     <!-- ./wrapper -->
+    @auth
+    <script>
+         window.user = @json(auth()->user())
+    </script>
 
+    @endauth
     <!-- REQUIRED SCRIPTS -->
 
     <script src="/js/app.js"></script>

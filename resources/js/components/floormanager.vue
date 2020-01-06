@@ -1,5 +1,13 @@
 <template>
-    <div class="card">
+
+<div class="container">
+
+    <div v-if="!$gate.isHk()">
+        <not-found></not-found>
+    </div>
+
+    <div class="card" v-if="$gate.isHk()">
+
         <div class="card-header">
             <h3 class="m-0 font-weight-bold text-primary">Floor Manager</h3>
             <button type="button" class="btn btn-info add-new float-right" @click="openAddModal">
@@ -84,6 +92,8 @@
             </div>
         </div>
     </div>
+</div>
+
 </template>
 <!--
 room_number
@@ -118,9 +128,12 @@ export default {
             $('#addRoom').modal('show')
         },
         loadRooms(){
-            this.$Progress.start();
-            axios.get('api/room').then(({data})=>(this.rooms = data.data));
-            this.$Progress.finish();
+            if(this.$gate.isHk){
+                this.$Progress.start();
+                axios.get('api/room').then(({data})=>(this.rooms = data.data));
+                this.$Progress.finish();
+            }
+
         },
         loadReservationsCont(){
             axios.get('api/room').then(({data})=>(this.rooms = data.data));
