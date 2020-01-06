@@ -47,6 +47,7 @@
                 align-items: center;
                 display: flex;
                 justify-content: center;
+                width: 93%;
             }
 
             .position-ref {
@@ -127,14 +128,12 @@
 
                 <div class="content">
                     <div class="title m-b-md">
-                        Aloha Hotels
+                        Aloha Hotel
                     </div>
 
                     <div class="links">
-                        <a href="#">Aloha Hotels</a>
-                        <a href="#">Brands</a>
                         <a href="#">Services</a>
-                        <a href="#">Getting Started</a>
+                        <a href="#">Book</a>
                         <a href="#">Contact Us</a>
                         <a href="#">Faq</a>
                         <a href="#">Jobs</a>

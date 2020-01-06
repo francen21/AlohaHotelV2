@@ -37,6 +37,14 @@
                 <a class="dropdown-item" href="#">Thing</a>
             </div>
         </div>
+
+        <div class="form-check-inline">
+            <input class="ml-2" type="text" id="from" name="from" placeholder="Date from">
+            <input class="ml-2" type="text" id="to" name="to" placeholder="Date to">
+        </div>
+
+
+
     </div>
     <div class="card-body pt-0">
         <table class="table table-sm p-0 my-2">
@@ -68,7 +76,7 @@
                         </button>
                     </td>
                     <td align="center" >
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                        <button @click="openCheckinModal()" type="button" class="btn btn-success btn-sm" data-toggle="modal"
                             data-target="#checkinModal" aria-haspopup="true" aria-expanded="false"
                             style="padding: 0.25px 4.5px;">
                             <i class="fas fa-check-circle"></i> Check In
@@ -176,9 +184,44 @@ import DETAILS from './Modals/m_frontoffice/details'
                 this.$refs.details.form.reservation_number = res.length;
                 $('#detailsModal').modal('show');
             },
+            openCheckinModal(){
+                $('#checkinModal').modal('show');
+            },
+            function() {
+                var dateFormat = "mm/dd/yy",
+                from = $( "#from" )
+                    .datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                    })
+                    .on( "change", function() {
+                    to.datepicker( "option", "minDate", getDate( this ) );
+                    }),
+                to = $( "#to" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                .on( "change", function() {
+                    from.datepicker( "option", "maxDate", getDate( this ) );
+                });
+
+                function getDate( element ) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate( dateFormat, element.value );
+                } catch( error ) {
+                    date = null;
+                }
+
+                return date;
+                }
+            }
         },
         mounted() {
             this.loadRooms();
+            this.function();
             console.log('Component mounted.')
         },
         components: {

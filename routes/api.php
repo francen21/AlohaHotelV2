@@ -23,4 +23,6 @@ Route::apiResources([
     'house' => 'Rooms',
     'guest' => 'Guests',
     'inventory' => 'InventoryController',
+    'occu' => 'OccuController',
+    'rate' => 'RatesController',
 ]);

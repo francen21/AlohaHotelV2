@@ -8,6 +8,11 @@ import Swal from 'sweetalert2'
 
 window.Form = Form;
 
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+
+import 'jquery-ui/ui/widgets/datepicker.js';
+
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
