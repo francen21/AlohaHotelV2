@@ -41,8 +41,8 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header py-1">
-                    <h5 v-show="editMode" class="modal-title">Edit Room</h5>
-                    <h5 v-show="!editMode" class="modal-title">Add Room</h5>
+                    <h5 v-show="editMode" class="modal-title">Edit Item</h5>
+                    <h5 v-show="!editMode" class="modal-title">Add Item</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
