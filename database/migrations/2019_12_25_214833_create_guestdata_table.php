@@ -18,10 +18,10 @@ class CreateGuestdataTable extends Migration
             $table->string('guest_name', 100);
             $table->string('guest_lastname', 30);
             $table->string('guest_gender', 30);
-            $table->string('guest_address', 200);
-            $table->string('guest_city', 20);
-            $table->string('guest_country', 40);
-            $table->string('guest_remarks', 40);
+            $table->string('guest_address', 200)->default('undefined');
+            $table->string('guest_city', 20)->default('undefined');
+            $table->string('guest_country', 40)->default('undefined');
+            $table->string('guest_remarks', 60)->default('No remarks');
             $table->string('guest_email', 40);
             $table->string('guest_mobile', 20);
             $table->string('guest_type', 100)->nullable();

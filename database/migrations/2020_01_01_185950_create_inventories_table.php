@@ -17,6 +17,7 @@ class CreateInventoriesTable extends Migration
             $table->bigIncrements('inventory_id');
             $table->string('item_code', 100);
             $table->string('item_category', 100);
+            $table->double('item_price', 8, 2);
             $table->string('item_quantity', 100);
             $table->timestamps();
         });

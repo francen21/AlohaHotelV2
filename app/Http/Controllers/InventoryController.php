@@ -32,9 +32,9 @@ class InventoryController extends Controller
         $stock = new Inventory;
         $stock->item_code = $request->item_code;
         $stock->item_category = $request->item_category;
+        $stock->item_price = $request->item_price;
         $stock->item_quantity = $request->item_quantity;
         $stock->save();
-        return $stock;
     }
 
     public function update(Request $request)
@@ -42,6 +42,7 @@ class InventoryController extends Controller
         $inv = Inventory::find($request['inventory_id']);
         $inv->item_code =      $request['item_code'];
         $inv->item_category =  $request['item_category'];
+        $inv->item_category =  $request['item_price'];
         $inv->item_quantity =  $request['item_quantity'];
         $inv->save();
         return $inv;

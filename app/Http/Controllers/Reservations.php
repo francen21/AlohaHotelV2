@@ -29,7 +29,7 @@ class Reservations extends Controller
     {
         $this->validate($request,[
             'guest_name' => 'required|string|max:191',
-            'guest_mobile' => 'required|max:14',
+            //'guest_mobile' => 'required|max:14',
             'guest_type' => 'required',
             'guest_number' => 'required',
             'guest_cid' => 'required|date|after:yesterday',
@@ -41,6 +41,8 @@ class Reservations extends Controller
             ['guest_name' => $request['guest_name'], 'guest_number' => $request['guest_number']],
             [
                 'guest_mobile' => $request['guest_mobile'],
+                'guest_gender' => $request['guest_gender'],
+                'guest_lastname' => $request['guest_lastname'],
                 'guest_type' => $request['guest_type'],
                 'guest_number' => $request['guest_number'],
                 'guest_cap' => $request['guest_cap']

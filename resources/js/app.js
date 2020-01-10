@@ -10,8 +10,6 @@ window.Form = Form;
 
 import $ from 'jquery';
 window.$ = window.jQuery = $;
-import dt from 'datatables.net';
-window.dt = dt;
 
 import 'jquery-ui/ui/widgets/datepicker.js';
 
@@ -23,34 +21,7 @@ Vue.use(VueRouter)
 import Gate from "./Gate";
 
 Vue.prototype.$gate = new Gate(window.user);
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-// Install BootstrapVue
-Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// This imports all the layout components such as <b-container>, <b-row>, <b-col>:
-import { LayoutPlugin } from 'bootstrap-vue'
-Vue.use(LayoutPlugin)
-
-// This imports <b-modal> as well as the v-b-modal directive as a plugin:
-import { ModalPlugin } from 'bootstrap-vue'
-Vue.use(ModalPlugin)
-
-// This imports <b-card> along with all the <b-card-*> sub-components as a plugin:
-import { CardPlugin } from 'bootstrap-vue'
-Vue.use(CardPlugin)
-
-// This imports directive v-b-scrollspy as a plugin:
-import { VBScrollspyPlugin } from 'bootstrap-vue'
-Vue.use(VBScrollspyPlugin)
-
-// This imports the dropdown and table plugins
-import { DropdownPlugin, TablePlugin } from 'bootstrap-vue'
-Vue.use(DropdownPlugin)
-Vue.use(TablePlugin)
 
 const routes = [
     { path: '/fo', component: require('./components/frontoffice.vue').default },//front office
@@ -100,7 +71,7 @@ const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 0.100,
     timerProgressBar: true,
     onOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -112,6 +83,17 @@ window.Toast = Toast;
 let Fire = new Vue();
 window.Fire = Fire;
 
+Vue.filter('toCurrency', function (value) {
+    if (typeof value !== "number") {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'PHP',
+        minimumFractionDigits: 2
+    });
+    return formatter.format(value);
+});
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component(
