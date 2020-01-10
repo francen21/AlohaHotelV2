@@ -15,7 +15,7 @@ class CreateReservationdataTable extends Migration
     {
         Schema::create('reservations_data', function (Blueprint $table) {
             $table->bigIncrements('reservation_id');
-            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('room_number');
             $table->unsignedBigInteger('guest_id');
             $table->unsignedSmallInteger('guest_cap');
             $table->date('check_in')->nullable(true);

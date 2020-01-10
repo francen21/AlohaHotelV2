@@ -9,7 +9,7 @@
     <div class="card" v-if="$gate.isAdmin()">
 
         <div class="card-header">
-            <h3 class="m-0 font-weight-bold text-primary">Floor Manager</h3>
+            <h3 class="m-0 font-weight-bold text-primary float-left">Floor Manager</h3>
             <button type="button" class="btn btn-info add-new float-right" @click="openAddModal">
                 <i class="fa fa-plus"></i> Add New
             </button>
@@ -56,7 +56,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label for="room_number">Room Number</label>
-                                        <input v-model="room_form.room_number"  type="number" class="form-control"
+                                        <input v-model="room_form.room_number" min="1"  type="number" class="form-control"
                                         :class="{ 'is-invalid': room_form.errors.has('room') }" id="room_number" placeholder="Ex. 301 / 230" />
                                         <has-error :form="room_form" field="room"></has-error>
                                     </div>
@@ -73,11 +73,11 @@
                                 <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label for="floor">Floor</label>
-                                            <input v-model="room_form.room_floor"  type="number" class="form-control" id="floor" placeholder="Room Floor" required/>
+                                            <input v-model="room_form.room_floor"  type="number" min="1" class="form-control" id="floor" placeholder="Room Floor" required/>
                                         </div>
                                         <div class="form-group col-md-8">
                                             <label for="tarrif">Tarrif</label>
-                                            <input v-model="room_form.room_tarrif"  type="text" class="form-control" id="tarrif" placeholder="PHP Amount" required/>
+                                            <input v-model.number="room_form.room_tarrif" type="number" class="form-control" id="tarrif" placeholder="PHP Amount" required/>
                                         </div>
                                 </div>
 
@@ -113,7 +113,7 @@ export default {
                     room_number: '',
                     room_type: '',
                     room_floor: '',
-                    room_tarrif: ''
+                    room_tarrif: '',
                 })
             }
     },
@@ -140,10 +140,12 @@ export default {
         },
         createRoom(){
                 this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
+                this.room_form.room_tarrif = parseFloat(this.room_form.room_tarrif).toFixed(2);
                 this.$Progress.start();
                 this.room_form.post('api/room').then(()=>{
                     Fire.$emit('romCreated');
                     $('#addRoom').modal('hide')
+                    this.room_form.reset();
                     Toast.fire({
                         icon: 'success',
                         title: 'Room added successfully'

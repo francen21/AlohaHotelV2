@@ -1,45 +1,47 @@
 <template>
-
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-tittle">Reservation</h3>
-        <div class="card-tools">
-            <button type="button" class="btn btn-info float-sm-right" @click="openAddModal"><i class="fa fa-plus"></i> Add New</button>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-black float-left">Reservation</h3>
+                <button type="button" class="btn btn-info float-right" @click="openAddModal">
+                    <i class="fas fa-plus"></i> Add New
+                </button>
         </div>
+        <div class="card-body table-responsive">
+            <table class="table table-sm p-0 m-2">
+                <thead class="thead-dark">
+                    <th scope="col">Reservation Id</th>
+                    <th scope="col">Room Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Id Type</th>
+                    <th scope="col">Id Number</th>
+                    <th scope="col">Created at</th>
+                    <th scope="col">Actions</th>
+                </thead>
+                <tbody>
+                    <tr v-for="res in reservations" :key="res.reservation_id">
+                        <td>{{res.reservation_id}}</td>
+                        <td>{{res.room.room_number}}</td>
+                        <td>{{res.guest.guest_name | upText}}</td>
+                        <td>{{res.guest.guest_type}}</td>
+                        <td>{{res.guest.guest_number}}</td>
+                        <td>{{res.guest.created_at}}</td>
+                        <td>
+                            <button type="submit" class="btn btn-primary" @click="openViewModal(res.reservation_id)"><a title="View" data-toggle="tooltip"><i class="fas fa-eye"></i></a></button>
+                            <button type="submit" class="btn btn-success" @click="openEditModal(res.reservation_id)" ><a title="View" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
+                            <button type="submit" class="btn btn-danger" @click="cancelReservation(res.reservation_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+        <ADD ref="childADD"></ADD>
+        <EDIT ref="childEDIT"></EDIT>
     </div>
-    <div class="card-body table-responsive">
-        <table class="table table-sm p-0 m-2">
-            <thead class="thead-dark">
-                <th scope="col">Reservation Id</th>
-                <th scope="col">Room Number</th>
-                <th scope="col">Name</th>
-                <th scope="col">Id Type</th>
-                <th scope="col">Id Number</th>
-                <th scope="col">Created at</th>
-                <th scope="col">Actions</th>
-            </thead>
-            <tbody>
-                <tr v-for="res in reservations" :key="res.reservation_id">
-                    <td>{{res.reservation_id}}</td>
-                    <td>{{res.room.room_number}}</td>
-                    <td>{{res.guest.guest_name | upText}}</td>
-                    <td>{{res.guest.guest_type}}</td>
-                    <td>{{res.guest.guest_number}}</td>
-                    <td>{{res.guest.created_at}}</td>
-                    <td>
-                        <button type="submit" class="btn btn-primary" @click="openViewModal(res.reservation_id)"><a title="View" data-toggle="tooltip"><i class="fas fa-eye"></i></a></button>
-                        <button type="submit" class="btn btn-success" @click="openEditModal(res.reservation_id)" ><a title="View" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
-                        <button type="submit" class="btn btn-danger" @click="cancelReservation(res.reservation_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-            </tfoot>
-        </table>
-    </div>
-    <ADD ref="childADD"></ADD>
-    <EDIT ref="childEDIT"></EDIT>
 </div>
+
 
 
 </template>

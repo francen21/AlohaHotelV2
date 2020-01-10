@@ -16,10 +16,12 @@ class CreateRoomdataTable extends Migration
         Schema::create('rooms_data', function (Blueprint $table) {
             $table->bigIncrements('room_id');
             $table->string('room_floor', 20);
+            $table->string('room_floor', 20);
             $table->string('room_type', 20);
             $table->string('room_status', 20);
             $table->double('room_tarrif', 8, 2);
             $table->unsignedinteger('room_number');
+            $table->unsignedinteger('room')->default('');
             $table->unsignedinteger('room_sales')->nullable();
             $table->unsignedinteger('room_views')->nullable();
             $table->timestamps();

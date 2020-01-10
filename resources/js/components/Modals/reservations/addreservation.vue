@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header py-1">
-                <h5 class="modal-title" id="reserve">Modal title</h5>
+                <h5 class="modal-title" id="reserve">Reservation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,7 +20,7 @@
                         <div class="col">
                             <label for="room_number">Room Number</label>
                             <select v-model="form.room_number" class="form-control" id="room_number" name="room_number">
-                            <option v-for="room in rooms" :key="room.room_id" v-bind:value="room.room_number">{{room.room_number}}</option>
+                            <option v-for="room in rooms" :key="room.room_id" v-show="room.room_status === 'Available'" v-bind:value="room.room_number">{{room.room_number}}</option>
                             </select>
                         </div>
                     </div>
@@ -29,11 +29,17 @@
 
                     <div class="form-row">
 
-                        <div class="col-md-12 mb-2">
+                        <div class="col-md-6 mb-2">
                             <label for="guest_name">Name</label>
                             <input v-model="form.guest_name" type="text" class="form-control"
                             :class="{ 'is-invalid': form.errors.has('guest_name') }" name="guest_name" placeholder="Guest Name">
                             <has-error :form="form" field="guest_name"></has-error>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="guest_lastname">Last Name</label>
+                            <input v-model="form.guest_lastname"  type="text" class="form-control"
+                            :class="{ 'is-invalid': form.errors.has('guest_lastname') }" id="guest_lastname" placeholder="Last Name" />
+                            <has-error :form="form" field="guest_lastname"></has-error>
                         </div>
                     </div>
                     <div class="form-row">
@@ -121,6 +127,7 @@
                 form: new Form({
                     room_number: '',
                     guest_name: '',
+                    guest_lastname: '',
                     guest_cid: '',
                     guest_cod: '',
                     guest_cap: '',
@@ -137,6 +144,7 @@
                 console.log(this.form);
                 this.form.post('api/reservation').then(()=>{
                     Fire.$emit('resCreated');
+                    Fire.$emit('itmCreated');
                     $('#reserve').modal('hide')
                     Toast.fire({
                         icon: 'success',

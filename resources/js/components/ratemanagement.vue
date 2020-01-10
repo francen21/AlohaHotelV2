@@ -7,7 +7,8 @@
         <div class="card">
             <div class="card-header">
                 Base Rates
-                <button  type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Rate</button>
+                <button  type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Rate
+                </button>
             </div>
             <div class="card-body">
                 <table class="table table-sm p-0">

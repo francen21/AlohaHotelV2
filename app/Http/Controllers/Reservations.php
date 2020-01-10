@@ -20,16 +20,6 @@ class Reservations extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -85,17 +75,6 @@ class Reservations extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ReservationsData  $reservationsData
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($res)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -141,8 +120,8 @@ class Reservations extends Controller
         $reservation = ReservationsData::where('reservation_id',$res)->with('room')->first();
         RoomsData::where('room_number', $reservation->room_number)->update(['room_status' => 'Available']);
         if ($reservation != null) {
-        $reservation->delete();
+            $reservation->delete();
         }
-        return $reservation->room_number;
-    }
+        return $reservation;
+     }
 }

@@ -1,7 +1,9 @@
 <template>
-    <div class="card">
+
+<div class="container">
+<div class="card">
         <div class="card-header">
-            <h3 class="m-0 font-weight-bold text-primary">Guest List</h3>
+            <h3 class="m-0 font-weight-bold text-primary float-left">Guest List</h3>
             <button type="button" class="btn btn-info add-new float-right" @click="openAddModal"><i class="fa fa-plus"></i> Add New</button>
         </div>
         <div class="card-body">
@@ -48,11 +50,17 @@
                     <div class="modal-body">
 
                                 <div class="form-row">
-                                    <div class="form-group col-md-12">
+                                    <div class="form-group col-md-6">
                                         <label for="guest_name">Guest Name</label>
                                         <input v-model="guest_form.guest_name"  type="text" class="form-control"
                                         :class="{ 'is-invalid': guest_form.errors.has('guest_name') }" id="guest_name" placeholder="Name" />
                                         <has-error :form="guest_form" field="guest_name"></has-error>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="guest_lastname">Guest Last Name</label>
+                                        <input v-model="guest_form.guest_lastname"  type="text" class="form-control"
+                                        :class="{ 'is-invalid': guest_form.errors.has('guest_lastname') }" id="guest_lastname" placeholder="Last Name" />
+                                        <has-error :form="guest_form" field="guest_lastname"></has-error>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -105,6 +113,10 @@
         </div>
 
     </div>
+</div>
+
+
+
 </template>
 
 <script>

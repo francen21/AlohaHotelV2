@@ -150,7 +150,6 @@
                     this.eform.editguest_mobile = data.guest.guest_mobile,
                     this.eform.editguest_type = data.guest.guest_type,
                     this.eform.editguest_number = data.guest.guest_number
-
                 ));
 
             },

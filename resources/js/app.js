@@ -10,6 +10,8 @@ window.Form = Form;
 
 import $ from 'jquery';
 window.$ = window.jQuery = $;
+import dt from 'datatables.net';
+window.dt = dt;
 
 import 'jquery-ui/ui/widgets/datepicker.js';
 
@@ -21,6 +23,34 @@ Vue.use(VueRouter)
 import Gate from "./Gate";
 
 Vue.prototype.$gate = new Gate(window.user);
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+// This imports all the layout components such as <b-container>, <b-row>, <b-col>:
+import { LayoutPlugin } from 'bootstrap-vue'
+Vue.use(LayoutPlugin)
+
+// This imports <b-modal> as well as the v-b-modal directive as a plugin:
+import { ModalPlugin } from 'bootstrap-vue'
+Vue.use(ModalPlugin)
+
+// This imports <b-card> along with all the <b-card-*> sub-components as a plugin:
+import { CardPlugin } from 'bootstrap-vue'
+Vue.use(CardPlugin)
+
+// This imports directive v-b-scrollspy as a plugin:
+import { VBScrollspyPlugin } from 'bootstrap-vue'
+Vue.use(VBScrollspyPlugin)
+
+// This imports the dropdown and table plugins
+import { DropdownPlugin, TablePlugin } from 'bootstrap-vue'
+Vue.use(DropdownPlugin)
+Vue.use(TablePlugin)
 
 const routes = [
     { path: '/fo', component: require('./components/frontoffice.vue').default },//front office
@@ -31,7 +61,7 @@ const routes = [
     { path: '/gu', component: require('./components/guestprofile.vue').default }, //guests rate management usermanagement floormanagement userlog reports
     { path: '/gs', component: require('./components/guests.vue').default }, //guests rate management usermanagement floormanagement userlog reports
     { path: '/rm', component: require('./components/ratemanagement.vue').default }, //
-    { path: '/um', component: require('./components/housekeeping.vue').default }, //
+    { path: '/um', component: require('./components/users.vue').default }, //
     { path: '/fm', component: require('./components/housekeeping.vue').default }, //
     { path: '/lg', component: require('./components/housekeeping.vue').default }, //
     { path: '/rp', component: require('./components/housekeeping.vue').default }, //
@@ -109,6 +139,7 @@ Vue.component('reservations', require('./components/reservations.vue').default);
 Vue.component('floormanager', require('./components/floormanager.vue').default);
 Vue.component('housekeeping', require('./components/housekeeping.vue').default);
 Vue.component('guests', require('./components/guests.vue').default);
+Vue.component('users', require('./components/users.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

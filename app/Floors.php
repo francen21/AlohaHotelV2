@@ -12,8 +12,10 @@ class Floors extends Model
     protected $fillable = [
         'room_floor',
         'room_type',
+        'room',
         'room_status',
-        'room_number'
+        'room_number',
+        'room_tarrif'
     ];
 
     public function reservation()

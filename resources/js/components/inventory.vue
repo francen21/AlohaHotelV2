@@ -1,8 +1,12 @@
 <template>
-<div class="card">
+
+<div class="container">
+    <div class="card">
     <div class="card-header">
-        <h3 class="m-0 font-weight-bold text-primary">Inventory</h3>
-        <button @click="openAddModal" type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add New</button>
+        <h3 class="m-0 font-weight-bold float-left text-primary">Inventory</h3>
+        <button @click="openAddModal" type="button" class="btn btn-info add-new float-right">
+            <i class="fa fa-plus"></i> Add New
+        </button>
     </div>
     <div class="card-body">
         <table class="table table-sm p-0 m-2">
@@ -76,6 +80,11 @@
             </div>
     </div>
 </div>
+</div>
+
+
+
+
 </template>
 
 <script>

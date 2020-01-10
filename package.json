@@ -22,11 +22,14 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.20.1",
         "sass-loader": "7.*",
-        "vue": "^2.5.17",
+        "vue": "^2.6.11",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
         "admin-lte": "^3.0.1",
+        "bootstrap-vue": "^2.2.0",
+        "datatables.net": "^1.10.20",
+        "datatables.net-dt": "^1.10.20",
         "jquery-ui": "^1.12.1",
         "laravel-vue-pagination": "^2.3.1",
         "npm-update-all": "^1.0.1",

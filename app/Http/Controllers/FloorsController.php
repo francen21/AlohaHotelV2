@@ -10,14 +10,15 @@ class FloorsController extends Controller
 
     public function index()
     {
-        return Floors::latest()->with('reservation')->paginate(10);
+        return Floors::latest()->with('reservation.guest')->with('reservation')->paginate(10);
     }
 
     public function store(Request $request)
     {
 
         $this->validate($request,[
-            'room' => 'required|unique:rooms_data'
+            'room' => 'required|unique:rooms_data',
+            'room_tarrif' => 'required'
 
         ]);
 
@@ -25,6 +26,7 @@ class FloorsController extends Controller
             ['room_number' => $request['room_number'],'room_floor' => $request['room_floor']],
             [
                 'room_floor' => $request['room_floor'],
+                'room' => $request['room_floor'].$request['room_number'],
                 'room_tarrif' => $request['room_tarrif'],
                 'room_type' => $request['room_type'],
                 'room_status' => 'For Inspection',
@@ -33,7 +35,7 @@ class FloorsController extends Controller
             ]
         );
 
-        return $request;
+        return $room;
     }
 
     public function show($id)

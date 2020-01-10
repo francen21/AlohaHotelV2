@@ -14,11 +14,16 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="sidebar-mini layout-fixed" data-gr-c-s-loaded="true" style="height: auto;">
     <div class="wrapper" id="app">
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
             <ul class="navbar-nav ml-auto">
                 <h1 class="m-0 text-dark">Home Page</h1>
             </ul>
@@ -29,12 +34,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                 </li>
-                @if (Route::has('register'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                </li>
-                @endif
                 @else
+
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -166,13 +167,13 @@
             <!-- /.content-header -->
 
             <!-- Main content -->
-            <div class="content">
+            <section class="content">
                 <div class="container-fluid">
 
                     <router-view></router-view>
                     <vue-progress-bar></vue-progress-bar>
                 </div><!-- /.container-fluid -->
-            </div>
+            </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->

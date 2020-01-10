@@ -1,44 +1,51 @@
 <template>
-    <div class="card">
-    <div class="card-header">
-        <h3 class="m-0 font-weight-bold text-primary">House Keeping</h3>
-    </div>
-    <div class="card-body">
-        <table class="table table-sm p-0 m-2">
-            <thead class="thead-dark">
-                <th scope="col">Room Number</th>
-                <th scope="col">Room Type</th>
-                <th scope="col">Floor</th>
-                <th scope="col">Tariff</th>
-                <th scope="col">Status</th>
-                <th scope="col">Charges</th>
-                <th scope="col">Service</th>
-            </thead>
-            <tbody>
-                <tr v-for="room in rooms" :key="room.room_id">
-                    <td>{{room.room_number}}</td>
-                    <td>{{room.room_type  }}</td>
-                    <td>{{room.room_floor }}</td>
-                    <td>{{room.room_tarrif}}</td>
-                    <td>{{room.room_status}}</td>
-                    <td>
-                        <button class="btn btn-sm btn-success"  title="Add" data-toggle="tooltip"><i class="fa fa-plus"></i></button>
-                        <button class="btn btn-sm btn-danger"   title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></button>
-                        <button class="btn btn-sm btn-info"     title="Delete" data-toggle="tooltip"><i class="fas fa-trash"></i></button>
-                    </td>
-                     <td>
-                        <button @click="update(room, '3')" class="btn btn-sm btn-success" title="Available" data-toggle="tooltip"><i class="fa fa-plus"></i> Available</button>
-                        <button @click="update(room, '2')" class="btn btn-sm btn-danger" title="Cleaning" data-toggle="tooltip"><i class="fas fa-broom"></i> Cleaning</button>
-                        <button @click="update(room, '1')" class="btn btn-sm btn-info" title="Inspection" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Inspection</button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
 
-            </tfoot>
-        </table>
-    </div>
+<div class="container">
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="m-0 font-weight-bold text-primary">House Keeping</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm p-0 m-2">
+                <thead class="thead-dark">
+                    <th scope="col">Room Number</th>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">Floor</th>
+                    <th scope="col">Tariff</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Charges</th>
+                    <th scope="col">Service</th>
+                </thead>
+                <tbody>
+                    <tr v-for="room in rooms" :key="room.room_id">
+                        <td>{{room.room_number}}</td>
+                        <td>{{room.room_type  }}</td>
+                        <td>{{room.room_floor }}</td>
+                        <td>{{room.room_tarrif}}</td>
+                        <td>{{room.room_status}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success"  title="Add" data-toggle="tooltip"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-sm btn-danger"   title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></button>
+                            <button class="btn btn-sm btn-info"     title="Delete" data-toggle="tooltip"><i class="fas fa-trash"></i></button>
+                        </td>
+                        <td>
+                            <button @click="update(room, '3')" class="btn btn-sm btn-success" title="Available" data-toggle="tooltip"><i class="fa fa-plus"></i> Available</button>
+                            <button @click="update(room, '2')" class="btn btn-sm btn-danger" title="Cleaning" data-toggle="tooltip"><i class="fas fa-broom"></i> Cleaning</button>
+                            <button @click="update(room, '1')" class="btn btn-sm btn-info" title="Inspection" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Inspection</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+
+                </tfoot>
+            </table>
+        </div>
 </div>
+</div>
+
+
+
 </template>
 <script>
      export default {

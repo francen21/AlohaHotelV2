@@ -19,7 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResources([
     'reservation' => 'Reservations',
+    'userdata' => 'API\UserController',
     'room' => 'FloorsController',
+    'services' => 'Foservices',
     'house' => 'Rooms',
     'guest' => 'Guests',
     'inventory' => 'InventoryController',

@@ -10,6 +10,7 @@ class GuestsData extends Model
     protected $guarded = [];
     protected $fillable = [
         'guest_name',
+        'guest_lastname',
         'guest_mobile',
         'guest_type',
         'guest_number',
