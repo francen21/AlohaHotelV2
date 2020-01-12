@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 06, 2020 at 05:53 AM
+-- Generation Time: Jan 12, 2020 at 08:19 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -40,27 +40,22 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `floors`
---
-
-CREATE TABLE `floors` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `guests_data`
 --
 
 CREATE TABLE `guests_data` (
   `guest_id` bigint(20) UNSIGNED NOT NULL,
   `guest_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guest_mobile` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guest_type` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `guest_number` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_lastname` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guest_gender` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_city` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_country` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_remarks` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT 'No remarks',
+  `guest_email` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT 'undefined',
+  `guest_mobile` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guest_type` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guest_number` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `guest_checkin_points` bigint(20) UNSIGNED DEFAULT NULL,
   `guest_balance` double(8,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -71,12 +66,8 @@ CREATE TABLE `guests_data` (
 -- Dumping data for table `guests_data`
 --
 
-INSERT INTO `guests_data` (`guest_id`, `guest_name`, `guest_mobile`, `guest_type`, `guest_number`, `guest_checkin_points`, `guest_balance`, `created_at`, `updated_at`) VALUES
-(21, 'Zandree', '09498642445', 'Philippine Passport', 'w2rweag', NULL, NULL, '2019-12-26 12:00:23', '2019-12-26 15:35:13'),
-(23, 'Jolens', '3333333', 'School ID', '20981472', NULL, NULL, '2019-12-26 16:15:50', '2019-12-27 12:54:41'),
-(24, 'HOooosfswer', '09498642445', 'Integrated Bar of the Philippines ID', '23125234', NULL, NULL, '2019-12-26 16:20:50', '2019-12-26 16:20:50'),
-(25, 'Krypt', '3289465', 'GSIS ID or GSIS UMID Card', 'rwer34fs', NULL, NULL, '2020-01-04 18:37:05', '2020-01-04 18:37:05'),
-(26, 'POwe', '4353677', 'Government-issued ID proving Philippine citizenship', '7888454', NULL, NULL, '2020-01-04 18:39:01', '2020-01-04 18:40:03');
+INSERT INTO `guests_data` (`guest_id`, `guest_name`, `guest_lastname`, `guest_gender`, `guest_address`, `guest_city`, `guest_country`, `guest_remarks`, `guest_email`, `guest_mobile`, `guest_type`, `guest_number`, `guest_checkin_points`, `guest_balance`, `created_at`, `updated_at`) VALUES
+(1, 'Tommy', 'aCUESTAS', NULL, NULL, NULL, NULL, 'No remarks', 'undefined', '0923543', 'Philippine Passport', '124143', NULL, NULL, '2020-01-10 03:17:18', '2020-01-10 03:17:18');
 
 -- --------------------------------------------------------
 
@@ -86,9 +77,10 @@ INSERT INTO `guests_data` (`guest_id`, `guest_name`, `guest_mobile`, `guest_type
 
 CREATE TABLE `inventories` (
   `inventory_id` bigint(20) UNSIGNED NOT NULL,
-  `item_code` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `item_category` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `item_quantity` mediumint(120) UNSIGNED NOT NULL,
+  `item_code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_category` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_quantity` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_price` double(8,2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -97,9 +89,8 @@ CREATE TABLE `inventories` (
 -- Dumping data for table `inventories`
 --
 
-INSERT INTO `inventories` (`inventory_id`, `item_code`, `item_category`, `item_quantity`, `created_at`, `updated_at`) VALUES
-(1, 'ToothBrush', 'Category 1', 4, '2020-01-03 17:31:30', '2020-01-03 17:31:30'),
-(2, 'AB324', 'Category 2', 40, '2020-01-03 17:35:16', '2020-01-03 18:02:08');
+INSERT INTO `inventories` (`inventory_id`, `item_code`, `item_category`, `item_quantity`, `item_price`, `created_at`, `updated_at`) VALUES
+(1, 'AB324', 'Category 2', '33', 200.00, '2020-01-10 03:17:34', '2020-01-10 03:17:34');
 
 -- --------------------------------------------------------
 
@@ -120,17 +111,18 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_25_210742_create_reservationdata_table', 2),
-(5, '2019_12_25_213357_create_roomdata_table', 3),
-(6, '2019_12_25_214833_create_guestdata_table', 3),
-(7, '2019_12_27_235127_create_floors_table', 4),
-(8, '2020_01_01_185950_create_inventories_table', 4),
-(9, '2016_06_01_000001_create_oauth_auth_codes_table', 5),
-(10, '2016_06_01_000002_create_oauth_access_tokens_table', 5),
-(11, '2016_06_01_000003_create_oauth_refresh_tokens_table', 5),
-(12, '2016_06_01_000004_create_oauth_clients_table', 5),
-(13, '2016_06_01_000005_create_oauth_personal_access_clients_table', 5);
+(3, '2016_06_01_000001_create_oauth_auth_codes_table', 1),
+(4, '2016_06_01_000002_create_oauth_access_tokens_table', 1),
+(5, '2016_06_01_000003_create_oauth_refresh_tokens_table', 1),
+(6, '2016_06_01_000004_create_oauth_clients_table', 1),
+(7, '2016_06_01_000005_create_oauth_personal_access_clients_table', 1),
+(8, '2019_08_19_000000_create_failed_jobs_table', 1),
+(9, '2019_12_25_210742_create_reservationdata_table', 1),
+(10, '2019_12_25_213357_create_roomdata_table', 1),
+(11, '2019_12_25_214833_create_guestdata_table', 1),
+(12, '2020_01_01_185950_create_inventories_table', 1),
+(13, '2020_01_06_144625_create_rates_table', 1),
+(14, '2020_01_06_144717_create_occus_table', 1);
 
 -- --------------------------------------------------------
 
@@ -184,14 +176,6 @@ CREATE TABLE `oauth_clients` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `oauth_clients`
---
-
-INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'AlohaHotel Personal Access Client', 'cLttpPurF6OHtMNFB9S5rlcK8QRh83QRQb8C7hWv', 'http://localhost', 1, 0, 0, '2020-01-05 11:26:09', '2020-01-05 11:26:09'),
-(2, NULL, 'AlohaHotel Password Grant Client', 'coDjXilkQtsdL91MAdsc8jt2gYJHIUbOfPNBH4Fk', 'http://localhost', 0, 1, 0, '2020-01-05 11:26:09', '2020-01-05 11:26:09');
-
 -- --------------------------------------------------------
 
 --
@@ -204,13 +188,6 @@ CREATE TABLE `oauth_personal_access_clients` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `oauth_personal_access_clients`
---
-
-INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '2020-01-05 11:26:09', '2020-01-05 11:26:09');
 
 -- --------------------------------------------------------
 
@@ -228,6 +205,20 @@ CREATE TABLE `oauth_refresh_tokens` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `occus`
+--
+
+CREATE TABLE `occus` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `occupancy` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `adjustment` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_resets`
 --
 
@@ -240,6 +231,20 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rates`
+--
+
+CREATE TABLE `rates` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `room_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rate` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `reservations_data`
 --
 
@@ -247,20 +252,12 @@ CREATE TABLE `reservations_data` (
   `reservation_id` bigint(20) UNSIGNED NOT NULL,
   `room_number` bigint(20) UNSIGNED NOT NULL,
   `guest_id` bigint(20) UNSIGNED NOT NULL,
-  `guest_cap` smallint(255) UNSIGNED DEFAULT NULL,
+  `guest_cap` smallint(5) UNSIGNED NOT NULL,
   `check_in` date DEFAULT NULL,
   `check_out` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `reservations_data`
---
-
-INSERT INTO `reservations_data` (`reservation_id`, `room_number`, `guest_id`, `guest_cap`, `check_in`, `check_out`, `created_at`, `updated_at`) VALUES
-(8, 301, 21, 3, '2019-12-27', '2019-12-28', '2019-12-26 11:42:07', '2019-12-26 11:42:07'),
-(24, 301, 23, 5, '2019-12-27', '2019-12-28', '2019-12-26 16:15:50', '2019-12-27 12:49:22');
 
 -- --------------------------------------------------------
 
@@ -270,12 +267,12 @@ INSERT INTO `reservations_data` (`reservation_id`, `room_number`, `guest_id`, `g
 
 CREATE TABLE `rooms_data` (
   `room_id` bigint(20) UNSIGNED NOT NULL,
+  `room` int(20) UNSIGNED DEFAULT NULL,
   `room_floor` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `room_tarrif` float(8,2) NOT NULL,
   `room_number` int(10) UNSIGNED NOT NULL,
-  `room_tarrif` double(80,2) NOT NULL,
-  `room` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_sales` int(10) UNSIGNED DEFAULT NULL,
   `room_views` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -286,9 +283,8 @@ CREATE TABLE `rooms_data` (
 -- Dumping data for table `rooms_data`
 --
 
-INSERT INTO `rooms_data` (`room_id`, `room_floor`, `room_type`, `room_status`, `room_number`, `room_tarrif`, `room`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
-(3, '4', 'City Side', 'For Inspection', 4, 0.00, '44', NULL, NULL, '2019-12-29 04:21:34', '2019-12-29 04:21:34'),
-(4, '33', 'City Side', 'For Inspection', 5, 5983428.00, '335', NULL, NULL, '2019-12-29 04:21:58', '2019-12-30 11:16:27');
+INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `room_type`, `room_status`, `room_tarrif`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
+(16, 432, '4', 'City Side', 'Available', 5234.00, 32, NULL, NULL, '2020-01-09 08:47:18', '2020-01-10 04:23:22');
 
 -- --------------------------------------------------------
 
@@ -299,8 +295,8 @@ INSERT INTO `rooms_data` (`room_id`, `room_floor`, `room_type`, `room_status`, `
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -312,8 +308,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `type`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Zandree Tresvalles', 'admin@gmail.com', 'admin', NULL, '$2y$10$phdx9U0UahVVq5zdyRGDfOxuZs6SFR54PyabZk.p1.1vpXBKAkPte', 'KLpRUhbGq7EPpl84lfqkafqyOZ8SO9cSkOKMn7zZSMJOR4Xi3odjESHY5R4o', '2019-12-23 05:44:58', '2019-12-23 05:44:58');
+INSERT INTO `users` (`id`, `name`, `type`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Tommy', 'admin', 'admin@gmail.com', NULL, '$2y$10$phdx9U0UahVVq5zdyRGDfOxuZs6SFR54PyabZk.p1.1vpXBKAkPte', '0JtaBzobiKzgsXKomSY4QP7sz7kdLp8HOREGrDiInGSmKbQakRbJ9UcYCQca', '2020-01-09 16:00:00', NULL),
+(2, 'Umlas', 'admin', 'admin2@gmail.com', NULL, '$2y$10$3cZpK8vorKlokrh8X/khouCzdBc9MsarOG36qLK7HLdccAszXFvmi', NULL, '2020-01-09 09:44:04', '2020-01-09 09:44:04'),
+(3, 'Bry', 'admin', 'zandreetresvalles22@gmail.com', NULL, '$2y$10$yoefZ/XNRGteP5edlZ1f9OPtU/btGrOMAN0eW74LAeHWZQur0bpi6', NULL, '2020-01-09 10:12:53', '2020-01-09 10:12:53'),
+(4, 'Paul', 'admin', 'admin4@gmail.com', NULL, '$2y$10$D6XudMtbXpmNA1kFJwEAI.959gahTylgV6v2cjlwBNRPepRdpkNsq', NULL, '2020-01-09 11:47:37', '2020-01-09 11:47:37');
 
 --
 -- Indexes for dumped tables
@@ -323,12 +322,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `type`, `email_verified_at`, `passwo
 -- Indexes for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `floors`
---
-ALTER TABLE `floors`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -384,10 +377,22 @@ ALTER TABLE `oauth_refresh_tokens`
   ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
 
 --
+-- Indexes for table `occus`
+--
+ALTER TABLE `occus`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `rates`
+--
+ALTER TABLE `rates`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `reservations_data`
@@ -419,58 +424,64 @@ ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `floors`
---
-ALTER TABLE `floors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `guests_data`
 --
 ALTER TABLE `guests_data`
-  MODIFY `guest_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `guest_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `inventories`
 --
 ALTER TABLE `inventories`
-  MODIFY `inventory_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `inventory_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
 --
 ALTER TABLE `oauth_clients`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `oauth_personal_access_clients`
 --
 ALTER TABLE `oauth_personal_access_clients`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `occus`
+--
+ALTER TABLE `occus`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `rates`
+--
+ALTER TABLE `rates`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reservations_data`
 --
 ALTER TABLE `reservations_data`
-  MODIFY `reservation_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `reservation_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `rooms_data`
 --
 ALTER TABLE `rooms_data`
-  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

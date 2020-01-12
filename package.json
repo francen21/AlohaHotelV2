@@ -28,6 +28,7 @@
     "dependencies": {
         "admin-lte": "^3.0.1",
         "bootstrap-vue": "^2.2.0",
+        "chart.js": "^2.9.3",
         "datatables.net": "^1.10.20",
         "datatables.net-dt": "^1.10.20",
         "jquery-ui": "^1.12.1",
@@ -35,6 +36,7 @@
         "npm-update-all": "^1.0.1",
         "sweetalert2": "^9.5.4",
         "vform": "^1.0.1",
+        "vue-chartjs": "^3.5.0",
         "vue-paginate": "^3.6.0",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.1.3"

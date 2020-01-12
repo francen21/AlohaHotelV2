@@ -86,7 +86,7 @@
                         </button>
                     </td>
                     <td align="center" v-else>
-                        <button @click="openReserveModal()" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                        <button @click="openReserveModal(room.room_number)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                             aria-haspopup="true" aria-expanded="false"
                             style="padding: 0.25px 4.5px;">
                             <i class="fas fa-check-circle"></i> Reserve
@@ -252,7 +252,9 @@ import RESERVE from './Modals/reservations/addreservation'
             openViewPayModal(){
 
             },
-            openReserveModal(){
+            openReserveModal(ron){
+                this.$refs.reserve.form.reset();
+                this.$refs.reserve.form.room_number = ron;
                 $('#reserve').modal('show');
             },
             openModal(){

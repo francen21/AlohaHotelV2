@@ -171,7 +171,7 @@
         },
         created(){
             this.loadRooms();
-            this.form.reset();
+            //this.form.reset();
         }
     }
 </script>

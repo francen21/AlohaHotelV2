@@ -34,8 +34,8 @@ const routes = [
     { path: '/rm', component: require('./components/ratemanagement.vue').default }, //
     { path: '/um', component: require('./components/users.vue').default }, //
     { path: '/fm', component: require('./components/housekeeping.vue').default }, //
-    { path: '/lg', component: require('./components/housekeeping.vue').default }, //
-    { path: '/rp', component: require('./components/housekeeping.vue').default }, //
+    { path: '/lg', component: require('./components/userlog.vue').default }, //
+    { path: '/rp', component: require('./components/reports.vue').default }, //
     //{ path: '/rs', component: require('./components/reservations.vue').default },
 ]
 
