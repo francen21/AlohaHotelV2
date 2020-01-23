@@ -170,8 +170,6 @@
                     })
                     this.$Progress.fail()
                 });
-
-
             }
         },
         mounted() {

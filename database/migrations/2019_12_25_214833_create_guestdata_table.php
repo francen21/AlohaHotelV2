@@ -15,19 +15,32 @@ class CreateGuestdataTable extends Migration
     {
         Schema::create('guests_data', function (Blueprint $table) {
             $table->bigIncrements('guest_id');
-            $table->string('guest_name', 100);
-            $table->string('guest_lastname', 30);
-            $table->string('guest_gender', 30);
-            $table->string('guest_address', 200)->default('undefined');
-            $table->string('guest_city', 20)->default('undefined');
-            $table->string('guest_country', 40)->default('undefined');
-            $table->string('guest_remarks', 60)->default('No remarks');
-            $table->string('guest_email', 40);
-            $table->string('guest_mobile', 20);
-            $table->string('guest_type', 100)->nullable();
-            $table->string('guest_number', 100)->nullable();
+            $table->string('guest_tittle', 5);
+            $table->string('guest_name', 23);
+            $table->string('guest_lastname', 20);
+            $table->string('guest_gender', 10)->nullable()->default('Others');
+            $table->string('guest_address', 150)->default('Undefined');
+            $table->string('guest_city', 20)->default('Undefined');
+            $table->string('guest_country', 20)->default('Undefined');
+            $table->string('guest_email', 30);
+            $table->string('guest_mobile', 15)->nullable()->default('Undefined');
+            $table->string('guest_type', 40);
+            $table->string('guest_number', 80);
+            $table->string('guest_remarks', 200)->default('No remarks');
             $table->unsignedBigInteger('guest_checkin_points')->nullable();
             $table->double('guest_balance', 8, 2)->nullable();
+            $table->string('alter_name', 23);
+            $table->string('alter_lastname', 20);
+            $table->string('alter_city', 20)->default('Undefined');
+            $table->string('alter_country', 20)->default('Undefined');
+            $table->string('howFind', 150)->default('Undefined');
+            /**
+             * alternative firstname (optional)<
+             * alternative lastname (optional)<
+             * alternative city<
+             * alternative country<
+             * howfind<
+             */
             $table->timestamps();
         });
     }

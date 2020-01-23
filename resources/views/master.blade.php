@@ -75,7 +75,6 @@
                         <!-- Add icons to the links using the .nav-icon class
                                 with font-awesome or any other icon font library -->
                         <!-- Nav Item - Pages Collapse Menu -->
-                    @if(Gate::check('isAdmin'))
                         @if(Gate::check('isFo') || Gate::check('isAdmin'))
                         <li class="nav-item">
                             <router-link to="/fo" class="nav-link collapsed">
@@ -144,7 +143,6 @@
                             </a>
                         </li>
                         @endif
-                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -169,7 +167,6 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-
                     <router-view></router-view>
                     <vue-progress-bar></vue-progress-bar>
                 </div><!-- /.container-fluid -->

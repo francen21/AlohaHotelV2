@@ -15,6 +15,7 @@ class CreateLogActivityTable extends Migration
     {
         Schema::create('log_activity', function (Blueprint $table) {
             $table->bigIncrements('id');
+
             $table->timestamps();
         });
     }

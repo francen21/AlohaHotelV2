@@ -118,10 +118,6 @@
                             <a href="{{ url('/home') }}">Home</a>
                         @else
                             <a href="{{ route('login') }}">Login</a>
-
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}">Register</a>
-                            @endif
                         @endauth
                     </div>
                 @endif
@@ -133,7 +129,7 @@
 
                     <div class="links">
                         <a href="#">Services</a>
-                        <a href="#">Book</a>
+                        <a href="/book">Book</a>
                         <a href="#">Contact Us</a>
                         <a href="#">Faq</a>
                         <a href="#">Jobs</a>

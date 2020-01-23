@@ -86,9 +86,8 @@
                             <button v-show="editMode" type="submit" class="btn btn-sm btn-primary">Edit Item</button>
                         </div>
                     </form>
-                    </div>
                 </div>
-        </div>
+            </div>
         </div>
     </div>
 </div>

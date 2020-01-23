@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="m-0 font-weight-bold text-black float-left">Reservation</h3>
-                <button type="button" class="btn btn-info float-right" @click="openAddModal">
+                <button type="button" title="Add Reservation" class="btn btn-info float-right" @click="openAddModal">
                     <i class="fas fa-plus"></i> Add New
                 </button>
         </div>
@@ -27,8 +27,8 @@
                         <td>{{res.guest.guest_number}}</td>
                         <td>{{res.guest.created_at}}</td>
                         <td>
-                            <button type="submit" class="btn btn-primary" @click="openViewModal(res.reservation_id)"><a title="View" data-toggle="tooltip"><i class="fas fa-eye"></i></a></button>
-                            <button type="submit" class="btn btn-success" @click="openEditModal(res.reservation_id)" ><a title="View" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
+                            <button type="submit" class="btn btn-primary" @click="openViewModal(res)"><a title="View" data-toggle="tooltip"><i class="fas fa-eye"></i></a></button>
+                            <button type="submit" class="btn btn-success" @click="openEditModal(res)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
                             <button type="submit" class="btn btn-danger" @click="cancelReservation(res.reservation_id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
                         </td>
                     </tr>
@@ -38,7 +38,6 @@
             </table>
         </div>
         <ADD ref="childADD"></ADD>
-        <EDIT ref="childEDIT"></EDIT>
     </div>
 </div>
 
@@ -48,7 +47,6 @@
 
 <script>
 import ADD from './Modals/reservations/addreservation.vue';
-import EDIT from './Modals/reservations/editreservation.vue';
     export default {
         data() {
             return {
@@ -58,22 +56,28 @@ import EDIT from './Modals/reservations/editreservation.vue';
         },
         components: {
             ADD,
-            EDIT
         },
         methods:{
             openEditModal(res){
-                this.$refs.childEDIT.editMode = true;
-                this.$refs.childEDIT.loadReservation(res);
-                $('#editreserve').modal('show');
+                this.$refs.childADD.editMode = true;
+                this.$refs.childADD.viewMode = false;
+                this.$refs.childADD.reservationData.fill(res);
+                this.$refs.childADD.room.fill(res.room);
+                this.$refs.childADD.guest.fill(res.guest);
+
+                $('#reserve').modal('show');
             },
             openViewModal(res){
-                this.$refs.childEDIT.editMode = false;
-                this.$refs.childEDIT.loadReservation(res);
-                $('#editreserve').modal('show');
+                this.$refs.childADD.editMode = false;
+                this.$refs.childADD.viewMode = true;
+                this.$refs.childADD.reservationData.fill(res);
+                this.$refs.childADD.room.fill(res.room);
+                this.$refs.childADD.guest.fill(res.guest);
+                $('#reserve').modal('show');
             },
             openAddModal(){
-                let child = this.$refs.childADD.form;
-                child.reset();
+                this.$refs.childADD.editMode = false;
+                this.$refs.childADD.viewMode = false;
                 $('#reserve').modal('show')
             },
             cancelReservation(id){
@@ -116,7 +120,6 @@ import EDIT from './Modals/reservations/editreservation.vue';
                 this.$Progress.finish();
             },
             loadReservationsCont(){
-
                 axios.get('api/reservation')
                 .then(({data})=>(this.reservations = data.data));
 

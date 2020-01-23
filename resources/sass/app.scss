@@ -17,6 +17,7 @@ $fa-font-path:        "../webfonts";
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-vue/src/index.scss';
 @import '~datatables.net-bs4/css/dataTables.bootstrap4.css';
+@import '~vue-search-select/dist/VueSearchSelect.css';
 
 .router-link-active{
     background-color: rgb(108, 139, 173);

@@ -43,7 +43,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                     <form @submit.prevent="create()">
+                     <form @submit.prevent="editMode ? update() : create()">
                     <div class="modal-body">
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>

@@ -2,6 +2,6 @@
 
 @section('content')
 
-    <frontoffice></frontoffice>
+
 
 @endsection

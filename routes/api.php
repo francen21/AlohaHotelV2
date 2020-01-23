@@ -21,10 +21,12 @@ Route::apiResources([
     'reservation' => 'Reservations',
     'userdata' => 'API\UserController',
     'room' => 'FloorsController',
+    'checkin' => 'Rooms',
     'services' => 'Foservices',
     'house' => 'Rooms',
     'guest' => 'Guests',
     'inventory' => 'InventoryController',
     'occu' => 'OccuController',
     'rate' => 'RatesController',
+    'charge' => 'ChargesController',
 ]);

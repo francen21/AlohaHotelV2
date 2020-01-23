@@ -10,7 +10,7 @@ class Rooms extends Controller
 {
     public function index()
     {
-        return Floors::latest()->paginate(10);
+        return Floors::latest()->with('reservation')->with('charges')->paginate(10);
     }
     public function store($request)
     {
@@ -29,11 +29,8 @@ class Rooms extends Controller
     }
     public function update(Request $request)
     {
-        $this->validate($request,[
-            //'room' => 'required|unique:rooms_data'
-        ]);
         $gue = Floors::find($request['room_id']);
-        $gue->room_status =   $request['room_status'];
+        $gue->room_status = 'Occupied';
         $gue->save();
     }
     public function destroy($id)

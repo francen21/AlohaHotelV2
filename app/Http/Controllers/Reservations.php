@@ -9,105 +9,76 @@ use App\RoomsData;
 
 class Reservations extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return ReservationsData::latest()->with('room')->with('guest')->paginate(10);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request,[
-            'guest_name' => 'required|string|max:191',
-            //'guest_mobile' => 'required|max:14',
-            'guest_type' => 'required',
-            'guest_number' => 'required',
-            'guest_cid' => 'required|date|after:yesterday',
-            'guest_cod' => 'required|date|after:yesterday'
-
+            'guest.guest_name' => 'required|string|max:191',
+            'guest.guest_mobile' => 'required|max:14',
+            'guest.guest_type' => 'required',
+            'guest.guest_number' => 'required',
+            'check_in' => 'required|date|after:yesterday',
+            'check_out' => 'required|date|after:yesterday'
         ]);
 
-        $guest = GuestsData::updateOrCreate(
-            ['guest_name' => $request['guest_name'], 'guest_number' => $request['guest_number']],
-            [
-                'guest_mobile' => $request['guest_mobile'],
-                'guest_gender' => $request['guest_gender'],
-                'guest_lastname' => $request['guest_lastname'],
-                'guest_type' => $request['guest_type'],
-                'guest_number' => $request['guest_number'],
-                'guest_cap' => $request['guest_cap']
-            ]
-        );
-
-        $room = RoomsData::where('room_number', $request['room_number'])
+        $guest = GuestsData::firstOrNew($request->guest);
+        $guest->save();
+        $room = RoomsData::where('room_number', $request->room['room_number'])
                    ->update(['room_status' => 'Reserved']);
-
-        $reserve = new ReservationsData([
-        'room_number' => $request['room_number'],
-        'guest_id' => $guest->guest_id,
-        'guest_cap' => $request['guest_cap'],
-        'check_in' => $request['guest_cid'],
-        'check_out' => $request['guest_cod']
-        ]);
-
+        $reserve = new ReservationsData;
+        $reserve->room_number   = $request->room['room_number'];
+        $reserve->guest_id      = $guest->guest_id      ;
+        $reserve->guest_cap     = $request->number_persons     ;
+        $reserve->discount_type = $request->discount_type ;
+        $reserve->breakfast     = $request->breakfast     ;
+        $reserve->grace_time    = $request->grace_time    ;
+        $reserve->purpose_visit = $request->purpose_visit ;
+        $reserve->from          = $request->from          ;
+        $reserve->to            = $request->to            ;
+        $reserve->number_persons= $request->number_persons;
+        $reserve->male_         = $request->male_         ;
+        $reserve->female_       = $request->female_       ;
+        $reserve->children_     = $request->children_     ;
+        $reserve->check_in      = $request->check_in      ;
+        $reserve->check_out     = $request->check_out     ;
         $reserve->save();
-        return $guest;
+        return $request;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ReservationsData  $reservationsData
-     * @return \Illuminate\Http\Response
-     */
     public function show($res)
     {
 
         return ReservationsData::where('reservation_id', $res)->with('room')->with('guest')->first();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ReservationsData  $reservationsData
-     * @return \Illuminate\Http\Response
-     * editresid:'',
-     * editroom_number: '',
-     * editguest_name: '',
-     * editguest_cid: '',
-     * editguest_cod: '',
-     * editguest_cap: '',
-     * editguest_mobile: '',
-     * editguest_type: '',
-     * editguest_number: '',
-     */
     public function update(Request $request)
     {
-        $res = ReservationsData::find($request['editresid']);
-        $res->room_number = $request['editroom_number'];
-        $res->guest_cap =   $request['editguest_cap'];
-        $res->check_in =    $request['editguest_cid'];
-        $res->check_out =   $request['editguest_cod'];
-        $res->save();
+        $reserve = ReservationsData::find($request['reservation_id']);
+        $reserve->room_number   = $request->room_number;
+        $reserve->guest_id      = $request->guest_id      ;
+        $reserve->guest_cap     = $request->number_persons     ;
+        $reserve->discount_type = $request->discount_type ;
+        $reserve->breakfast     = $request->breakfast     ;
+        $reserve->grace_time    = $request->grace_time    ;
+        $reserve->purpose_visit = $request->purpose_visit ;
+        $reserve->from          = $request->from          ;
+        $reserve->to            = $request->to            ;
+        $reserve->number_persons= $request->number_persons;
+        $reserve->male_         = $request->male_         ;
+        $reserve->female_       = $request->female_       ;
+        $reserve->children_     = $request->children_     ;
+        $reserve->check_in      = $request->check_in      ;
+        $reserve->check_out     = $request->check_out     ;
+        $reserve->save();
 
-        $gue = GuestsData::find($request['editguest_id']);
-        $gue->guest_name =   $request['editguest_name'];
-        $gue->guest_mobile = $request['editguest_mobile'];
-        $gue->guest_type =   $request['editguest_type'];
-        $gue->guest_number = $request['editguest_number'];
-        $gue->save();
-        return [$res,$gue];
+        $gue = GuestsData::where('guest_id',$request->guest_id)
+        ->update($request->guest);
+        return $gue;
     }
 
     /**
