@@ -182,8 +182,7 @@
 
             </div>
             <!-- Default to the left -->
-            <strong>Aloha Hotel<a href="https://adminlte.io"> Powered by. AdminLTE.io</a>.</strong> All rights
-            reserved.
+            <strong>Aloha Hotel</strong>
         </footer>
     </div>
     <!-- ./wrapper -->
