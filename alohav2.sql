@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 23, 2020 at 03:05 PM
+-- Generation Time: Jan 26, 2020 at 11:51 PM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -100,7 +100,8 @@ CREATE TABLE `guests_data` (
 --
 
 INSERT INTO `guests_data` (`guest_id`, `guest_tittle`, `guest_name`, `guest_lastname`, `guest_gender`, `guest_address`, `guest_city`, `guest_country`, `guest_email`, `guest_mobile`, `guest_type`, `guest_number`, `guest_remarks`, `guest_checkin_points`, `guest_balance`, `alter_name`, `alter_lastname`, `alter_city`, `alter_country`, `howFind`, `created_at`, `updated_at`) VALUES
-(1, 'Mr.', 'Tommy', 'Aquestas', 'Male', 'Binondo St.', 'Manila', 'Philippines', 'tommy@gmail.com', '09483765555', 'PRC ID', '99999999', NULL, NULL, NULL, 'Tommy', 'Aquestas', 'Manila', 'Philippines', 'Social Media', '2020-01-20 12:33:12', '2020-01-20 14:59:37');
+(1, 'Mr.', 'Tommy', 'Aquestas', 'Male', 'Binondo St.', 'Manila', 'Philippines', 'tommy@gmail.com', '09483765555', 'PRC ID', '99999999', NULL, NULL, NULL, 'Tommy', 'Aquestas', 'Manila', 'Philippines', 'Social Media', '2020-01-20 12:33:12', '2020-01-20 14:59:37'),
+(4, 'Ms.', 'Jenny', 'Lynn', 'Female', 'Manila', 'Quezon City', 'Philippines', 'jenny@gmail.com', '092374736', 'GSIS ID or GSIS UMID Card', 'N03823HSD984', NULL, NULL, NULL, 'Mario', 'Luis', 'Taguig', 'Philippines', 'Social Media', '2020-01-25 10:25:46', '2020-01-25 10:25:46');
 
 -- --------------------------------------------------------
 
@@ -168,10 +169,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2020_01_06_144625_create_rates_table', 1),
 (14, '2020_01_06_144717_create_occus_table', 1),
 (15, '2020_01_09_170701_create_log_activity_table', 2),
-(18, '2020_01_19_113756_create_payments_table', 3),
 (20, '2019_12_25_210742_create_reservationdata_table', 4),
 (21, '2019_12_25_214833_create_guestdata_table', 4),
-(22, '2020_01_19_110659_create_charges_table', 4);
+(22, '2020_01_19_110659_create_charges_table', 4),
+(23, '2020_01_19_113756_create_payments_table', 5);
 
 -- --------------------------------------------------------
 
@@ -265,6 +266,18 @@ CREATE TABLE `occus` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `occus`
+--
+
+INSERT INTO `occus` (`id`, `occupancy`, `adjustment`, `created_at`, `updated_at`) VALUES
+(1, '50', 10, '2020-01-25 16:26:54', '2020-01-25 16:26:54'),
+(2, '70', 15, '2020-01-26 02:49:38', '2020-01-26 02:49:38'),
+(3, '90', 20, '2020-01-26 02:52:33', '2020-01-26 02:52:33'),
+(4, '95', 30, '2020-01-26 02:52:47', '2020-01-26 02:52:47'),
+(5, '15', 10, '2020-01-26 03:34:52', '2020-01-26 03:34:52'),
+(6, '5', 20, '2020-01-26 03:44:11', '2020-01-26 03:44:11');
+
 -- --------------------------------------------------------
 
 --
@@ -287,6 +300,7 @@ CREATE TABLE `payments` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `guest_id` bigint(20) UNSIGNED NOT NULL,
   `price` double(10,2) NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -305,6 +319,14 @@ CREATE TABLE `rates` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `rates`
+--
+
+INSERT INTO `rates` (`id`, `room_type`, `rate`, `created_at`, `updated_at`) VALUES
+(3, 'Suite', '4500', '2020-01-25 23:28:02', '2020-01-25 18:12:59'),
+(4, 'East Side', '1000', '2020-01-25 16:25:55', '2020-01-25 18:13:31');
+
 -- --------------------------------------------------------
 
 --
@@ -313,6 +335,7 @@ CREATE TABLE `rates` (
 
 CREATE TABLE `reservations_data` (
   `reservation_id` bigint(20) UNSIGNED NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 = reserved; 2 = checkedin; 3 = unpaid; 4 = late check_out;',
   `room_number` bigint(20) UNSIGNED NOT NULL,
   `guest_id` bigint(20) UNSIGNED NOT NULL,
   `guest_cap` smallint(5) UNSIGNED NOT NULL,
@@ -336,8 +359,9 @@ CREATE TABLE `reservations_data` (
 -- Dumping data for table `reservations_data`
 --
 
-INSERT INTO `reservations_data` (`reservation_id`, `room_number`, `guest_id`, `guest_cap`, `discount_type`, `breakfast`, `grace_time`, `purpose_visit`, `from`, `to`, `number_persons`, `male_`, `female_`, `children_`, `check_in`, `check_out`, `created_at`, `updated_at`) VALUES
-(1, 32, 1, 3, 'VIP', 'No Breakfast', '01:00:00', 'Vacation', 'Manila', 'Manila', 3, 1, 1, 1, '2020-01-29', '2020-01-30', '2020-01-20 12:36:02', '2020-01-20 12:36:02');
+INSERT INTO `reservations_data` (`reservation_id`, `status`, `room_number`, `guest_id`, `guest_cap`, `discount_type`, `breakfast`, `grace_time`, `purpose_visit`, `from`, `to`, `number_persons`, `male_`, `female_`, `children_`, `check_in`, `check_out`, `created_at`, `updated_at`) VALUES
+(1, 2, 32, 1, 3, 'VIP', 'No Breakfast', '01:00:00', 'Vacation', 'Manila', 'Manila', 3, 1, 1, 1, '2020-01-26', '2020-01-30', '2020-01-20 12:36:02', '2020-01-25 13:57:16'),
+(2, 1, 34, 4, 1, 'VIP', 'No Breakfast', '01:00:00', 'Vacation', 'Japan', 'Manila', 1, 0, 1, 0, '2020-01-28', '2020-01-29', '2020-01-25 10:25:46', '2020-01-25 10:25:46');
 
 -- --------------------------------------------------------
 
@@ -351,7 +375,6 @@ CREATE TABLE `rooms_data` (
   `room_floor` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `room_tarrif` float(8,2) NOT NULL,
   `room_number` int(10) UNSIGNED NOT NULL,
   `room_sales` int(10) UNSIGNED DEFAULT NULL,
   `room_views` int(10) UNSIGNED DEFAULT NULL,
@@ -363,8 +386,11 @@ CREATE TABLE `rooms_data` (
 -- Dumping data for table `rooms_data`
 --
 
-INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `room_type`, `room_status`, `room_tarrif`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
-(16, 432, '4', 'City Side', 'Occupied', 5234.00, 32, NULL, NULL, '2020-01-09 08:47:18', '2020-01-20 16:13:54');
+INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `room_type`, `room_status`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
+(16, 432, '4', 'City Side', 'Occupied', 32, NULL, NULL, '2020-01-09 08:47:18', '2020-01-25 13:57:16'),
+(17, 433, '4', 'Bay Side', 'For Inspection', 33, NULL, NULL, '2020-01-25 10:19:03', '2020-01-25 10:19:03'),
+(18, 434, '4', 'Suite', 'Reserved', 34, NULL, NULL, '2020-01-25 10:19:17', '2020-01-25 10:25:46'),
+(19, 435, '4', 'City Side', 'For Inspection', 35, NULL, NULL, '2020-01-25 10:19:37', '2020-01-25 10:19:37');
 
 -- --------------------------------------------------------
 
@@ -531,7 +557,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `guests_data`
 --
 ALTER TABLE `guests_data`
-  MODIFY `guest_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `guest_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `inventories`
@@ -549,7 +575,7 @@ ALTER TABLE `log_activity`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -567,7 +593,7 @@ ALTER TABLE `oauth_personal_access_clients`
 -- AUTO_INCREMENT for table `occus`
 --
 ALTER TABLE `occus`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -579,19 +605,19 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `rates`
 --
 ALTER TABLE `rates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `reservations_data`
 --
 ALTER TABLE `reservations_data`
-  MODIFY `reservation_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `reservation_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `rooms_data`
 --
 ALTER TABLE `rooms_data`
-  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `users`
