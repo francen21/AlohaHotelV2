@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('guest_id');
             $table->double('price', 10, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

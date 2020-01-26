@@ -10,7 +10,7 @@ class OccuController extends Controller
 
     public function index()
     {
-        return occu::latest()->paginate(10);
+        return occu::latest()->paginate(100);
     }
     public function store(Request $request)
     {

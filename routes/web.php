@@ -21,3 +21,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/book', 'OtherpageController@book')->name('book');
 
 Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d\/_.]+)?');
+

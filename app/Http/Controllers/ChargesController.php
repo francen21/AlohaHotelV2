@@ -10,14 +10,6 @@ class ChargesController extends Controller
     public function store(Request $request)
     {
 
-        /*
-        id: null
-        room_id: 16
-        guest_id: 1
-        code: "BES23A"
-        qty: "1"
-        price: 35
-        */
         $charge = new charges;
         $charge->room_id = $request->room_id;
         $charge->guest_id = $request->guest_id;
@@ -25,8 +17,8 @@ class ChargesController extends Controller
         $charge->qty= $request->qty;
         $charge->price= $request->price;
         $charge->save();
-
         return $request;
+
     }
 
     public function show($id)

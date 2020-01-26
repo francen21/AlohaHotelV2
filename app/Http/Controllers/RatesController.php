@@ -7,79 +7,34 @@ use Illuminate\Http\Request;
 
 class RatesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return rates::latest()->with('room')->paginate(100);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\rates  $rates
-     * @return \Illuminate\Http\Response
-     */
-    public function show(rates $rates)
-    {
-        //
-    }
+        $rate = new rates;
+        $rate->room_type = $request->room_type;
+        $rate->rate = $request->rate;
+        $rate->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\rates  $rates
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(rates $rates)
-    {
-        //
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\rates  $rates
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, rates $rates)
+    public function update(Request $request)
     {
-        //
+
+        $gue = rates::find($request['id']);
+        $gue->room_type =   $request->room_type;
+        $gue->rate =   $request->rate;
+        $gue->save();
+
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\rates  $rates
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(rates $rates)
+    public function destroy($id)
     {
-        //
+        $rate = rates::find($id)->first();
+        if ($rate != null) {
+            $rate->delete();
+        }
+        return $id;
     }
 }

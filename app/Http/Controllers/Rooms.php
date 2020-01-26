@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\RoomsData;
+use App\ReservationsData;
 use App\Floors;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class Rooms extends Controller
 {
     public function index()
     {
-        return Floors::latest()->with('reservation')->with('charges')->paginate(10);
+        return Floors::latest()->with('reservation')->with('charges')->paginate(100);
     }
     public function store($request)
     {
@@ -29,9 +30,13 @@ class Rooms extends Controller
     }
     public function update(Request $request)
     {
-        $gue = Floors::find($request['room_id']);
-        $gue->room_status = 'Occupied';
-        $gue->save();
+        $this->validate($request,[
+            'check_in' => 'required|date'
+        ]);
+        $gue = ReservationsData::where('room_number' , $request['room_number'])
+        ->update(['status' => '2']);
+        $room = Floors::where('room_number', $request['room_number'])
+        ->update(['room_status' => 'Occupied']);
     }
     public function destroy($id)
     {

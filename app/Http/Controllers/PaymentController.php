@@ -9,32 +9,32 @@ class PaymentController extends Controller
 {
     public function index()
     {
-        return payment::latest()->paginate(10);
+        return payment::latest()->paginate(1000);
     }
-
     public function store(Request $request)
     {
 
-        //$this->validate($request,[
-        //    'item_code' => 'required|unique:inventories',
-        //    'item_category' => 'required',
-        //    'item_quantity' => 'required',
-        //]);
+        $rate = new payment;
+        $rate->guest_id = $request->guest_id;
+        $rate->price = $request->price;
+        $rate->save();
 
-        //$stock = new payment();
-        //$stock->save();
-        return $request;
     }
-
     public function update(Request $request)
     {
-        //$inv = payment::find();
-        return $request;
-    }
 
+        $rate = payment::find($request['id']);
+        $rate->guest_id = $request->guest_id;
+        $rate->price = $request->price;
+        $rate->save();
+
+    }
     public function destroy($id)
     {
-        //payment::destroy($id);
+        $rate = payment::find($id)->first();
+        if ($rate != null) {
+            $rate->delete();
+        }
         return $id;
     }
 }

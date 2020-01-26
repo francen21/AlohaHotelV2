@@ -12,6 +12,10 @@ class RoomsData extends Model
     {
         return $this->hasOne('App\ReservationsData', 'room_number', 'room_number');
     }
+    public function rate()
+    {
+        return $this->hasOne('App\rates', 'room_type', 'room_type');
+    }
     public function charges()
     {
         return $this->hasMany('App\charges', 'room_id');

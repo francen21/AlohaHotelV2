@@ -22,6 +22,14 @@ class Floors extends Model
     {
         return $this->hasMany('App\ReservationsData', 'room_number', 'room_number');
     }
+    public function rate()
+    {
+        return $this->hasOne('App\rates', 'room_type', 'room_type');
+    }
+    public function occu()
+    {
+        return $this->hasOne('App\occu', 'room_type', 'room_type');
+    }
     public function charges()
     {
         return $this->hasMany('App\charges', 'room_id', 'room_id');

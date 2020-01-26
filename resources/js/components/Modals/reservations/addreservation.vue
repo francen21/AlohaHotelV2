@@ -44,26 +44,24 @@
                                             <div class="form-row">
                                                 <div class="col-md-6 mb-2">
                                                     <input type="text" class="form-control" placeholder="First name" v-model="guest.guest_name" required>
-                                                        <has-error :form="guest" field="guest_name"></has-error>
+
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <input type="text" class="form-control" placeholder="Last name" v-model="guest.guest_lastname" required>
-                                                    <has-error :form="guest" field="guest_lastname"></has-error>
+
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-12 mb-2">
-                                                    <label for="mobile_number">Mobile Number</label>
-                                                    <input v-model="guest.guest_mobile" type="text" class="form-control"
-                                                    :class="{ 'is-invalid': guest.errors.has('mobile_number') }" name="mobile_number" placeholder="09XX-XXX-XXXX">
-                                                    <has-error :form="guest" field="mobile_number"></has-error>
+                                                    <label for="guest_mobile">Mobile Number</label>
+                                                    <input v-model="guest.guest_mobile" type="text" class="form-control" name="guest_mobile" placeholder="09XX-XXX-XXXX">
+
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
                                                     <label for="guest_type">Id Type</label>
-                                                    <select v-model="guest.guest_type" class="form-control"
-                                                    :class="{ 'is-invalid': guest.errors.has('guest_type') }" name="guest_type">
+                                                    <select v-model="guest.guest_type" class="form-control" name="guest_type">
                                                         <option id="Driver's License">Driver's License</option>
                                                         <option id="Philippine Passport">Philippine Passport</option>
                                                         <option id="GSIS ID or GSIS UMID Card">GSIS ID or GSIS UMID Card</option>
@@ -81,15 +79,12 @@
                                                         <option id="Government-issued ID proving Philippine citizenship">Government-issued ID proving Philippine citizenship</option>
                                                         <option id="Alien CoR or ICoR">Alien CoR or ICoR</option>
                                                     </select>
-                                                    <has-error :form="guest" field="guest_type"></has-error>
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-12 mb-2">
                                                     <label for="guest_number">ID Number</label>
-                                                    <input v-model="guest.guest_number" type="text" class="form-control"
-                                                    :class="{ 'is-invalid': guest.errors.has('guest_number') }" placeholder="ID Number" name="guest_number">
-                                                    <has-error :form="guest" field="guest_number"></has-error>
+                                                    <input v-model="guest.guest_number" type="text" class="form-control" placeholder="ID Number" name="guest_number">
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -155,24 +150,29 @@
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
                                                         <label for="check_in">Check-in Date</label>
-                                                        <input v-model="reservationData.check_in" type='date' class="form-control"
-                                                        :class="{ 'is-invalid': reservationData.errors.has('check_in') }"  name="check_in" placeholder="yyyy/mm/dd">
-                                                        <has-error :form="reservationData" field="check_in"></has-error>
+                                                        <input v-model="reservationData.check_in" type='date' class="form-control" name="check_in" placeholder="yyyy/mm/dd">
+
                                                     </div>
 
                                                     <div class="col-md-6 mb-2">
                                                         <label for="check_out">Expected Check-out Date</label>
-                                                        <input v-model="reservationData.check_out" type="date" class="form-control"
-                                                        :class="{ 'is-invalid': reservationData.errors.has('check_out') }" name="check_out" placeholder="yyyy/mm/dd">
-                                                        <has-error :form="reservationData" field="check_out"></has-error>
+                                                        <input v-model="reservationData.check_out" type="date" class="form-control" name="check_out" placeholder="yyyy/mm/dd">
+
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="col">
+                                                    <div class="col-md-6">
                                                         <label for="editroom_number">Room Number</label>
                                                         <select v-model="room.room_number" class="form-control" name="room_number">
                                                             <option selected>Select Room</option>
-                                                            <option v-for="room in rooms" :key="room.room_id" v-show="room.room_status === 'Available'" v-bind:value="room.room_number">{{room.room_number}}</option>
+                                                            <option v-for="room in rooms" :key="room.room_id" :value="room.room_number">{{room.room_number}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="editroom_type">Room Type</label>
+                                                        <select v-model="rate" class="form-control" name="room_type">
+                                                            <option selected>Select Room Type</option>
+                                                            <option v-for="rate in rates" :key="rate.id" :value="rate">{{rate.room_type}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -180,7 +180,7 @@
 
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
-                                                        <input type="text" class="form-control" v-model="room.room_tarrif" readonly>
+                                                        <input type="text" class="form-control" v-model="rate.rate" readonly>
                                                     </div>
                                                     <div class="col mb-2">
                                                         <select class="form-control" v-model="reservationData.discount_type">
@@ -195,9 +195,9 @@
                                                         <label for="booking_addon">Breakfast</label>
                                                         <select v-model="reservationData.breakfast" class="form-control">
                                                             <option selected>No Breakfast</option>
-                                                            <option>Eggs & Bacon</option>
-                                                            <option>Egg Sandwitch</option>
-                                                            <option>Tuna Sandwitch</option>
+                                                            <option value="100">Eggs & Bacon</option>
+                                                            <option value="50">Egg Sandwitch</option>
+                                                            <option value="55">Tuna Sandwitch</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -207,13 +207,13 @@
                                                         <input v-model="guest.alter_name" type="text" class="form-control" placeholder="First Name" required>
                                                     </div>
                                                     <div class="col-md-6 mb-2">
-                                                        <input v-model="guest.alter_lastname" type="text" class="form-control" placeholder="Last Name" required>
+                                                        <input v-model="guest.alter_lastname" type="text" class="form-control" placeholder="Last Name" >
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
                                                         <label for="booking_guest_alter_city">City</label>
-                                                        <input v-model="guest.alter_city" type="text" class="form-control" placeholder="City" required>
+                                                        <input v-model="guest.alter_city" type="text" class="form-control" placeholder="City" >
                                                     </div>
                                                     <div class="col-md-6 mb-2">
                                                         <label for="booking_guest_alter_country">Country</label>
@@ -323,6 +323,11 @@
                 viewMode:false,
                 rooms:[],
                 guests:[],
+                rates:[],
+                occupancies:[],
+                rate:'',
+                todayreservations:'',
+                total_balance:'',
                 reservationData: new Form({
                     reservation_id:'',
                     room_number:'',
@@ -376,15 +381,30 @@
                     room_sales: '',
                     room_views: '',
                 }),
+                rate: new Form({
+                    id: '',
+                    room_type: '',
+                    rate: '',
+                }),
             }
         },
         computed: {
-            // a computed getter
             addPersons: function () {
-            // `this` points to the vm instance
                 var x = parseInt(this.reservationData.male_) + parseInt(this.reservationData.female_)+ parseInt(this.reservationData.children_);
                 this.reservationData.number_persons = x;
                 return x;
+            },
+            tarrif: function () {
+                 var x = this.rate.rate;
+                this.occupancies.forEach(element => {
+                    if(element.occupancy >= ((this.todayreservations/this.rooms.length)*100)){
+                        this.rate.rate = parseInt(x*(1+(element.adjustment/100)));
+                        return this.rate.rate;
+                    }else{
+                        return this.rate.rate;
+                    }
+                });
+
             }
         },
         methods:{
@@ -395,6 +415,7 @@
                 this.loadRooms();
                 this.$Progress.start();
                 this.reservationData.guest = this.guest.data();
+                this.reservationData.guest.guest_balance += this.rate.rate;
                 this.reservationData.room = this.room.data();
                 this.reservationData.post('api/reservation').then(()=>{
                     Fire.$emit('resCreated');
@@ -436,7 +457,7 @@
             },
             checkin(){
                 this.$Progress.start();
-                this.room.put('api/checkin/'+ this.room.room_id).then(()=>{
+                this.reservationData.put('api/checkin/'+ this.reservationData.room_number).then(()=>{
                     Fire.$emit('resCreated');
                     $('#reserve').modal('hide')
                     this.reservationData.reset();
@@ -459,11 +480,23 @@
             loadGuests(){
                 axios.get('api/guest').then(({data})=>(this.guests = data.data));
             },
-
+            loadRates(){
+                axios.get('api/rate').then(({data})=>(this.rates = data.data));
+            },
+            loadoccu(){
+                axios.get('api/occu').then(({data})=>(this.occupancies = data.data));
+            },
+            loadtoday(){
+                axios.get('api/resToday').then(({data})=>(this.todayreservations = data.todayRes));
+            },
         },
         mounted() {
             this.reservationData.reset();
+            this.loadRooms();
             this.loadGuests();
+            this.loadRates();
+            this.loadoccu();
+            this.loadtoday();
         },
         created(){
             //this.loadRooms();

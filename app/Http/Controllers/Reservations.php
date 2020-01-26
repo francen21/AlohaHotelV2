@@ -6,7 +6,7 @@ use App\ReservationsData;
 use Illuminate\Http\Request;
 use App\GuestsData;
 use App\RoomsData;
-
+use App\Rules\hasreservation;
 class Reservations extends Controller
 {
 
@@ -22,8 +22,7 @@ class Reservations extends Controller
             'guest.guest_mobile' => 'required|max:14',
             'guest.guest_type' => 'required',
             'guest.guest_number' => 'required',
-            'check_in' => 'required|date|after:yesterday',
-            'check_out' => 'required|date|after:yesterday'
+            'check_in' => ['required', new hasreservation($request->check_out,$request->room_number)]
         ]);
 
         $guest = GuestsData::firstOrNew($request->guest);
@@ -60,8 +59,8 @@ class Reservations extends Controller
     {
         $reserve = ReservationsData::find($request['reservation_id']);
         $reserve->room_number   = $request->room_number;
-        $reserve->guest_id      = $request->guest_id      ;
-        $reserve->guest_cap     = $request->number_persons     ;
+        $reserve->guest_id      = $request->guest_id;
+        $reserve->guest_cap     = $request->number_persons;
         $reserve->discount_type = $request->discount_type ;
         $reserve->breakfast     = $request->breakfast     ;
         $reserve->grace_time    = $request->grace_time    ;

@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header">
                 Base Rates
-                <button  type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Rate
+                <button @click="openRate()" type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Rate
                 </button>
             </div>
             <div class="card-body">
@@ -18,12 +18,12 @@
                         <th class="py-0" scope="col">Actions</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Default</td>
-                            <td>2,000</td>
+                        <tr v-for="rate in rates" :key="rate.id" >
+                            <td>{{rate.room_type}}</td>
+                            <td>{{rate.rate}}</td>
                             <td>
-                                <a title="Edit" data-toggle="tooltip"><i class="fas fa-pen my-1"></i></a>
-                                <a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt my-1"></i></a>
+                                <button type="submit" class="btn btn-success" @click="editRate(rate)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
+                                <button type="submit" class="btn btn-danger" @click="removeRate(rate.id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
                             </td>
                         </tr>
                     </tbody>
@@ -37,7 +37,7 @@
         <div class="card">
             <div class="card-header">
                 Occupancies
-                <button @click="openAddModal()" type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Occupancy</button>
+                <button @click="openOccu()" type="button" class="btn btn-info add-new float-right"><i class="fa fa-plus"></i> Add Occupancy</button>
             </div>
             <div class="card-body">
                 <table class="table table-sm p-0">
@@ -47,12 +47,12 @@
                         <th class="py-0" scope="col">Actions</th>
                     </thead>
                     <tbody>
-                        <tr v-for="occu in occup" :key="occu.id">
+                        <tr v-for="occu in occups" :key="occu.id">
                             <td>{{occu.occupancy}}</td>
                             <td>{{occu.adjustment}}</td>
                             <td>
-                                <a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a>
-                                <a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a>
+                                <button type="submit" class="btn btn-success" @click="editOccu(occu)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
+                                <button type="submit" class="btn btn-danger" @click="removeOccu(occu.id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
                             </td>
                         </tr>
                     </tbody>
@@ -64,20 +64,22 @@
     </div>
 </div>
 
-<div class="modal fade" id="addRate" tabindex="-1" role="dialog" aria-labelledby="addRate" aria-hidden="true">
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header py-1">
-                        <h5 v-show="editMode" class="modal-title">Edit Room</h5>
-                        <h5 v-show="!editMode" class="modal-title" id="editreserve">Add Occupancy Range</h5>
+                        <h5 v-show="editMode && occupancy" class="modal-title">Edit Occupancy</h5>
+                        <h5 v-show="!editMode && occupancy" class="modal-title" id="editreserve">Add Occupancy Range</h5>
+                        <h5 v-show="editMode && !occupancy" class="modal-title">Edit Rate</h5>
+                        <h5 v-show="!editMode && !occupancy" class="modal-title" id="editreserve">Add Rate</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent=" editMode ? updateRoom() : createOcc()">
+                    <form @submit.prevent=" editMode ? (!occupancy ? updateRate() : updateOccu() ):(!occupancy ? createRate(): createOccu())">
                     <div class="modal-body">
 
-                                <div class="form-row">
+                                <div class="form-row" v-if="occupancy">
                                     <div class="form-group col-md-12">
                                         <label for="occupancy">Occupancy Percentage</label>
                                         <input v-model="occup_form.occupancy" min="1" max="100" type="number" class="form-control"
@@ -85,18 +87,32 @@
                                         <has-error :form="occup_form" field="occupancy"></has-error>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="form-row" v-if="occupancy">
                                         <div class="form-group col-md-12">
-                                            <label for="adjustment">Floor</label>
-                                            <input v-model="occup_form.adjustment"  type="number" class="form-control" id="adjustment" placeholder="Range" required/>
+                                            <label for="adjustment">Adjustment</label>
+                                            <input v-model="occup_form.adjustment" min="1"  type="number" class="form-control" id="adjustment" placeholder="Range" required/>
+                                        </div>
+                                </div>
+                                <div class="form-row" v-if="!occupancy">
+                                        <div class="form-group col-md-12">
+                                            <label for="room_type">Room Type</label>
+                                            <input v-model="rate_form.room_type"  type="text" class="form-control" id="room_type" required/>
+                                        </div>
+                                </div>
+                                <div class="form-row" v-if="!occupancy">
+                                        <div class="form-group col-md-12">
+                                            <label for="rate">Rate</label>
+                                            <input v-model="rate_form.rate" min="1" type="number" class="form-control" id="rate" required/>
                                         </div>
                                 </div>
 
                     </div>
                     <div class="modal-footer py-0">
                         <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                        <button v-show="!editMode" type="submit" class="btn btn-sm btn-primary">Add Occupancy Range</button>
-                        <button v-show="editMode" type="submit" class="btn btn-sm btn-primary">Edit Occupancy Range</button>
+                        <button v-show="!editMode && occupancy" type="submit" class="btn btn-sm btn-primary">Add Occupancy Range</button>
+                        <button v-show="editMode && occupancy" type="submit" class="btn btn-sm btn-primary">Edit Occupancy Range</button>
+                        <button v-show="!editMode && !occupancy" type="submit" class="btn btn-sm btn-primary">Add Rate</button>
+                        <button v-show="editMode && !occupancy" type="submit" class="btn btn-sm btn-primary">Edit Rate</button>
                     </div>
                     </form>
                 </div>
@@ -113,11 +129,14 @@
         data(){
             return{
                 editMode: false,
-                rate:[],
+                occupancy:false,
+                rates:{},
+                occups:{},
                 rate_form: new Form({
-                    //room_id: '',
+                    id: '',
+                    room_type: '',
+                    rate: '',
                 }),
-                occup:[],
                 occup_form: new Form({
                     id: '',
                     occupancy: '',
@@ -126,28 +145,42 @@
             }
         },
         methods:{
-            openEditModal(data){
-                this.editMode = true;
-                $('#addRate').modal('show');
-            },
-            openAddModal(){
+            openRate(){
                 this.editMode = false;
-                $('#addRate').modal('show')
+                this.occupancy = false;
+                $('#add').modal('show');
             },
-            loadOcc_Rate(){
-                this.$Progress.start();
-                axios.get('api/occu').then(({data})=>(this.occup = data.data));
-                axios.get('api/rate').then(({data})=>(this.rate = data.data));
-                this.$Progress.finish();
+            editRate(data){
+                this.editMode = true;
+                this.occupancy = false;
+                this.rate_form.fill(data);
+                $('#add').modal('show');
             },
-            createOcc(){
+            openOccu(){
+                this.editMode = false;
+                this.occupancy = true;
+                $('#add').modal('show');
+            },
+            editOccu(data){
+                this.editMode = true;
+                this.occupancy = true;
+                this.occup_form.fill(data);
+                $('#add').modal('show');
+            },
+            loadTable1(){
+                axios.get('api/occu').then(({data})=>(this.occups = data.data));
+            },
+            loadTable2(){
+                axios.get('api/rate').then(({data})=>(this.rates = data.data));
+            },
+            createOccu(){
                 this.$Progress.start();
                 this.occup_form.post('api/occu').then(()=>{
-                    Fire.$emit('occCreated');
-                    $('#addRate').modal('hide')
+                    Fire.$emit('created');
+                    $('#add').modal('hide')
                     Toast.fire({
                         icon: 'success',
-                        title: 'Room added successfully'
+                        title: 'Occupation added successfully'
                     })
                     this.$Progress.finish();
                     this.loadReservationsCont();
@@ -159,21 +192,141 @@
                     this.$Progress.fail()
                 });
             },
-            remove(id){
-
+            createRate(){
+                this.$Progress.start();
+                this.rate_form.post('api/rate').then(()=>{
+                    Fire.$emit('created');
+                    $('#add').modal('hide')
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Rate added successfully'
+                    })
+                    this.$Progress.finish();
+                    this.loadReservationsCont();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
             },
-            update(){
+            removeOccu(id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
 
+                        if (result.value) {
+                            axios.delete('api/occu/'+id).then(()=>{
+
+                                    Swal.fire(
+                                    'Deleted!',
+                                    'Reservation has been canceled.',
+                                    'success'
+                                    )
+                                    Fire.$emit('created');
+
+                            }).catch(()=>{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+
+                                })
+                            });
+                        }
+
+                })
+            },
+            removeRate(id){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+
+                        if (result.value) {
+                            axios.delete('api/rate/'+id).then(()=>{
+
+                                    Swal.fire(
+                                    'Deleted!',
+                                    'Reservation has been canceled.',
+                                    'success'
+                                    )
+                                    Fire.$emit('created');
+
+                            }).catch(()=>{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Something went wrong!'
+
+                                })
+                            });
+                        }
+
+                })
+            },
+            updateOccu(){
+                this.$Progress.start();
+                this.occup_form.put('api/occu/'+ this.occup_form.id).then(()=>{
+                    Fire.$emit('resCreated');
+                    $('#add').modal('hide')
+                    this.occup_form.reset();
+                    Toast.fire({
+                            icon: 'success',
+                            title: 'Occupancy Updated'
+                    })
+                    this.$Progress.finish();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
+            },
+            updateRate(){
+                this.$Progress.start();
+                this.rate_form.patch('api/rate/'+ this.rate_form.id).then(()=>{
+                    Fire.$emit('resCreated');
+                    $('#add').modal('hide')
+                    this.rate_form.reset();
+                    Toast.fire({
+                            icon: 'success',
+                            title: 'Rate Updated'
+                    })
+                    this.$Progress.finish();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
             },
 
         },
         mounted() {
             console.log('Component mounted.')
+
         },
         created(){
-            this.loadOcc_Rate();
-            Fire.$on('occCreated',()=>{
-                 this.loadOcc_Rate();
+            this.loadTable1();
+            this.loadTable2();
+            Fire.$on('created',()=>{
+                 this.loadTable1();
+                 this.loadTable2();
         });
         }
     }

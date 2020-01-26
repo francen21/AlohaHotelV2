@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered " role="document" v-bind:class="{ 'modal-sm': !checkedin , 'modal-xl' : checkedin}">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" v-bind:class="{ 'modal-sm': !checkedin , 'modal-xl' : checkedin}">
             <div class="modal-content">
                 <div class="modal-header py-1">
                     <h5 class="modal-title" id="detailsModal">Room Information</h5>
@@ -10,23 +10,24 @@
                         <div v-bind:class="{ 'col-12': !checkedin}">
 
                                     <table class="table table-borderless table-sm p-0 m-0">
+                                        <thead class="thead-dark">
+                                            <th scope="col">Room Number</th>
+                                            <th scope="col">Guest</th>
+                                            <th scope="col">Number of Persons</th>
+                                            <th scope="col">Adults</th>
+                                            <th scope="col">Children</th>
+                                            <th scope="col">Check In Date</th>
+                                            <th scope="col">Check Out Date</th>
+                                        </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Room Number: </td>
-                                                <td>{{form.room_number}}</td>
-                                            </tr>
-                                            <h3 class="ml-1" v-show="!checkedin">Reservations Pending</h3>
-                                            <tr v-show="checkedin">
-                                                <td>Booking Remarks: </td>
-                                                <td id="remarks"></td>
-                                            </tr>
-                                            <tr v-show="checkedin">
-                                                <th >Check-In Date: </th>
-                                                <td id="roomcd"></td>
-                                            </tr>
-                                            <tr v-show="checkedin">
-                                                <td>Check-Out Date: </td>
-                                                <td id="roomcod"></td>
+                                            <tr v-for="res in reservations" :key="res.reservation_id">
+                                                <td>{{res.room_number}}</td>
+                                                <td>{{res.guest.guest_name + ' ' + res.guest.guest_lastname}}</td>
+                                                <td>{{res.number_persons}}</td>
+                                                <td>{{res.male_ + res.female_}}</td>
+                                                <td>{{res.children_}}</td>
+                                                <td>{{res.check_in}}</td>
+                                                <td>{{res.check_out}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -35,7 +36,7 @@
 
                                         <div class="info-box-content">
                                           <span class="info-box-text">Pending Reservations</span>
-                                          <span class="info-box-number">{{form.reservation_number}}</span>
+                                          <span class="info-box-number">{{reservations.length}}</span>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -162,8 +163,8 @@
         data(){
             return{
                 checkedin: false,
+                reservations:{},
                 form: new Form({
-                    reservation_number:'',
                     room_number:'',
                     checkin_date:'',
                     checkout_date:''
