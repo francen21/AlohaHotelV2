@@ -75,7 +75,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary btn-sm">Print Receipt</button>
-                    <button type="button" class="btn btn-primary btn-sm">Proceed Checkout</button>
+                    <button type="button" @click="remove()" class="btn btn-primary btn-sm">Proceed Checkout</button>
                 </div>
             </div>
         </div>
@@ -89,21 +89,25 @@
             return{
                 charges:{},
                 total:'',
+                resid   :'',
                 room_form: new Form({
                     room_id: '',
                     room: '',
                     room_number: '',
                     room_type: '',
                     room_floor: '',
-                    room_tarrif: ''
+                    room_tarrif: '',
+                    rate: [],
                 }),
             }
         },
         computed: {
             totalbill: function () {
-            var x = this.room_form.room_tarrif;
+            var x = parseFloat(this.room_form.rate.rate);
+            this.room_form.room_tarrif = this.room_form.rate.rate;
             for (let index = 0; index < this.charges.length; index++) {
-                x += this.charges[index].price;
+                x += parseFloat(this.charges[index].price);
+
             }
                  return x;
 
@@ -121,7 +125,7 @@
             loadcharges(){
 
             },
-            remove(id){
+            remove(){
 
             },
             update(){

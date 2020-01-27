@@ -27,7 +27,7 @@ class FloorsController extends Controller
             [
                 'room_floor' => $request['room_floor'],
                 'room' => $request['room_floor'].$request['room_number'],
-                'room_tarrif' => $request['room_tarrif'],
+                'room_cap' => $request['room_cap'],
                 'room_type' => $request['room_type'],
                 'room_status' => 'For Inspection',
                 'room_number' => $request['room_number'],

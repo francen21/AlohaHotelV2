@@ -12,7 +12,7 @@ class Reservations extends Controller
 
     public function index()
     {
-        return ReservationsData::latest()->with('room')->with('guest')->paginate(10);
+        return ReservationsData::latest()->with('room.rate')->with('guest')->paginate(10);
     }
 
     public function store(Request $request)
@@ -90,7 +90,7 @@ class Reservations extends Controller
     {
         //$reservationsData->delete();
         $reservation = ReservationsData::where('reservation_id',$res)->with('room')->first();
-        RoomsData::where('room_number', $reservation->room_number)->update(['room_status' => 'Available']);
+        RoomsData::where('room_number', $reservation->room_number)->update(['room_status' => 'Dirty']);
         if ($reservation != null) {
             $reservation->delete();
         }

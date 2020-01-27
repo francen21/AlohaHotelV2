@@ -62,9 +62,9 @@
                                     </div>
                                     <div class="form-group col-md-9">
                                         <label for="room_type">Room Type</label>
-                                        <select v-model="room_form.room_type" class="form-control" name="room_type">
+                                        <select v-model="rate" class="form-control" name="room_type">
                                             <option selected>Choose Side..</option>
-                                            <option v-for="type in types" :key="type.id" :value="type.room_type">{{type.room_type}}</option>
+                                            <option v-for="type in types" :key="type.id" :value="type">{{type.room_type}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -73,9 +73,13 @@
                                             <label for="floor">Floor</label>
                                             <input v-model="room_form.room_floor"  type="number" min="1" class="form-control" id="floor" placeholder="Room Floor" required/>
                                         </div>
-                                        <div class="form-group col-md-8">
-                                            <label for="tarrif">Tarrif</label>
-                                            <input v-model.number="room_form.room_tarrif" type="number" class="form-control" id="tarrif" placeholder="PHP Amount" required/>
+                                        <div class="form-group col-md-4">
+                                            <label for="tarrif">Capacity</label>
+                                            <input v-model.number="room_form.room_tarrif" type="number" min="1" class="form-control" id="tarrif" placeholder="" required/>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="rate">Price</label>
+                                            <input v-model.number="rate.rate" type="number" min="1" class="form-control" id="rate" placeholder="" required/>
                                         </div>
                                 </div>
 
@@ -113,6 +117,11 @@ export default {
                     room_type: '',
                     room_floor: '',
                     room_tarrif: '',
+                }),
+                rate: new Form({
+                    id: '',
+                    room_type: '',
+                    rate: '',
                 })
             }
     },
@@ -141,6 +150,7 @@ export default {
             axios.get('api/room').then(({data})=>(this.rooms = data.data));
         },
         createRoom(){
+                this.room_form = this.rate.room_type;
                 this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
                 this.room_form.room_tarrif = parseFloat(this.room_form.room_tarrif).toFixed(2);
                 this.$Progress.start();

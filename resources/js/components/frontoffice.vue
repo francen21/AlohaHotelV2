@@ -4,42 +4,6 @@
         <div class="card">
             <div class="card-header py-2">
                 <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Rooms</h3>
-                <div class="float-right">
-                    <div class="btn-group">
-                        <datepicker :value="datepicked" v-model="datepicked" @input="updateNow()"></datepicker>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle butroomss my-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Floor </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                        </div>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle butroomss my-1" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Room Side
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                        </div>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle butroomss my-1" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Room Type
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                            <a class="dropdown-item" href="#">Thing</a>
-                        </div>
-                    </div>
-
-                </div>
             </div>
             <div class="card-body pt-0">
                 <table class="table table-sm p-0 my-2" id="frontPanel">
@@ -47,6 +11,7 @@
                         <th class="text-center">Room Number</th>
                         <th class="text-center">Floor</th>
                         <th class="text-center">Room Type</th>
+                        <th class="text-center">Room Status</th>
                         <th class="text-center">Actions </th>
                         <th class="text-center">Services </th>
                         <th class="text-center">HouseKeeping</th>
@@ -56,6 +21,7 @@
                             <td align="text-center">{{room.room_number}}</td>
                             <td align="center">{{room.room_floor}}</td>
                             <td align="center">{{room.room_type}}</td>
+                            <td align="center">{{room.room_status}}</td>
                             <!-- <td align="center" v-if="room.reservation">
                                 <button @click="openDetailsModal(room.reservation,room)" type="button" class="btn btn-sm"
                                     aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
@@ -85,65 +51,6 @@
                                     </div>
                                 </div>
                             </td>
-                        <!--
-                            <td align="center"  >
-                                <button @click="openCheckinModal(room)" type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                    aria-haspopup="true" aria-expanded="false"
-                                    style="padding: 0.25px 4.5px;"  v-text="room.reservation ? '': ''">
-                                    <i class="fas fa-check-circle"></i> Check In
-                                </button>
-                            </td>
-                            <td align="center" v-else-if="room.room_status === 'Occupied'">
-                                <button @click="checkout(room)" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                    aria-haspopup="true" aria-expanded="false"
-                                    style="padding: 0.25px 4.5px;">
-                                    <i class="fas fa-check-circle"></i> Check Out
-                                </button>
-                            </td>
-                            <td align="center" v-else>
-                                <button @click="openReserveModal(room)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                    aria-haspopup="true" aria-expanded="false"
-                                    style="padding: 0.25px 4.5px;">
-                                    <i class="fas fa-check-circle"></i> Reserve
-                                </button>
-                            </td>
-
-                            <td align="center" v-if="room.room_status !== 'Available'">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
-                                        <i class="fas fa-concierge-bell"></i>Services
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-header">Other Services </div>
-                                        <a class="dropdown-item" @click="openChangeRoomModal(room.reservation)" data-toggle="modal">Change room</a>
-                                        <a class="dropdown-item" @click="openEditGuestModal(room.reservation[0].guest)" data-toggle="modal">Edit Guest</a>
-                                        <a class="dropdown-item" @click="cancelReservation(room.reservation)" data-toggle="modal">Cancel Booking</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td align="center" v-else>
-                            </td>
-
-                            <td align="center" v-else>
-                                <button @click="cleanReq()" class="btn btn-sm btn-danger font-weight-light" style="padding: 0.25px 4.5px;" title="Clean Request" data-toggle="tooltip"><i class="fas fa-broom"></i> Clean Request</button>
-                            </td>
-                            <td align="center" v-if="room.room_status !== 'Available'">
-                                <div class="dropdown">
-                                    <button type="button"
-                                        class="btn btn-danger btn-sm dropdown-toggle font-weight-light butrooms"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                                        style="padding: 0.25px 4.5px;">
-                                        <i class="fas fa-file-invoice-dollar"></i> Payment
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-header">Payments</div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal">Add Payment</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal">Delete Payment</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal">View Payment</a>
-                                    </div>
-                                </div>
-                            </td>
-                        -->
                         </tr>
                     </tbody>
                     <tfoot>
@@ -155,6 +62,11 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Reservations</h3>
+                <div class="float-right">
+                    <div class="btn-group">
+                        <datepicker :value="datepicked" v-model="datepicked" @input="updateNow()"></datepicker>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
             <table class="table table-sm p-0 my-2" id="reservations">
@@ -168,16 +80,10 @@
                         <th scope="col">Actions</th>
                     </thead>
                     <tbody>
-                        <tr v-for="(res, index) in reservations" :key="res.reservation_id" v-bind:class='{"bg-warning" : res.status == 1, "bg-success" : res.status == 2}'>
+                        <tr v-for="(res, index) in reservations" :key="res.reservation_id" v-bind:class='{"bg-primary" : res.status == 1, "bg-success" : res.status == 2}'>
                             <td align="center" width="3%">{{res.reservation_id}}</td>
                             <td align="center" width="4%">{{res.room_number}}</td>
-                            <td align="center" class=" col-lg-3">{{res.guest.guest_tittle+' '+res.guest.guest_name+' '+res.guest.guest_lastname}}</td>
-                            <!-- <td align="center" v-if="room.reservation">
-                                <button @click="openDetailsModal(room.reservation,room)" type="button" class="btn btn-sm"
-                                    aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
-                                    <i class="fas fa-info-circle"></i> Details
-                                </button>
-                            </td> -->
+                            <td align="center" width="24%">{{res.guest.guest_name+' '+res.guest.guest_lastname}}</td>
                             <td align="center">{{res.guest.guest_number}}</td>
                             <td align="center" width="12%">{{res.check_in}}</td>
                             <td align="center" width="12%">{{res.check_out}}</td>
@@ -194,20 +100,9 @@
                                             <a class="dropdown-item" @click="cancelReservation(room.reservation)" data-toggle="modal">Cancel Booking</a>
                                         </div>
                                     </div>
-                                    <div class="btn-group">
-                                        <button type="button"
-                                            class="btn btn-danger btn-sm dropdown-toggle"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <i class="fas fa-file-invoice-dollar"></i> Payment
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <div class="dropdown-header">Payments</div>
-                                            <a class="dropdown-item" href="#" data-toggle="modal">Add Payment</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal">Delete Payment</a>
-                                            <a class="dropdown-item" href="#" data-toggle="modal">View Payment</a>
-                                        </div>
-                                    </div>
-
+                                    <button @click="openAddPayModal()" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true">
+                                        <i class="fas fa-file-invoice-dollar"></i>Payment
+                                    </button>
                                     <button @click="checkout(res)" v-if="res.check_out >= datenow && res.status == 2" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-check-circle"></i> Check Out
@@ -232,6 +127,7 @@
                 <RESERVE ref="reserve"></RESERVE>
                 <EDITGUEST ref="editguest"></EDITGUEST>
                 <CHANGEROOM ref="changeroom"></CHANGEROOM>
+                <PAYMENT ref="payment"></PAYMENT>
     </div>
 
 
@@ -248,6 +144,7 @@ import Datepicker from 'vuejs-datepicker';
     import CHANGEROOM from './Modals/m_frontoffice/changeroom'
     import RESERVE from './Modals/reservations/addreservation'
     import CHECKOUT from './Modals/m_frontoffice/checkout'
+    import PAYMENT from './Modals/m_frontoffice/payment'
     export default {
         data() {
               return {
@@ -272,9 +169,7 @@ import Datepicker from 'vuejs-datepicker';
         methods:{
             loadRooms(){
                 this.$Progress.start();
-
                 axios.get('api/room').then(({data})=>(this.rooms = data.data));
-
                 this.$Progress.finish();
             },
             cancelReservation(id){
@@ -331,6 +226,7 @@ import Datepicker from 'vuejs-datepicker';
                         this.$refs.checkout.charges = data
                     ));
                 this.$refs.checkout.room_form = data.room;
+                this.$refs.checkout.resid = data.reservation_id;
                 $('#checkout').modal('show');
             },
             openChangeRoomModal(res){
@@ -342,6 +238,7 @@ import Datepicker from 'vuejs-datepicker';
                 $('#editGuest').modal('show');
             },
             openAddPayModal(){
+                $('#payment').modal('show');
             },
             openViewPayModal(){
             },
@@ -350,7 +247,6 @@ import Datepicker from 'vuejs-datepicker';
                 this.$refs.reserve.guest.reset();
                 this.$refs.reserve.room.fill(data);
                 this.$refs.reserve.rooms = this.rooms;
-
                 $('#reserve').modal('show');
             },
             openModal(){
@@ -362,9 +258,7 @@ import Datepicker from 'vuejs-datepicker';
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
-
-                 this.datenow = yyyy + '-' + mm + '-' + dd;
-
+                this.datenow = yyyy + '-' + mm + '-' + dd;
             },
             loadReservationsOnce(){
                 this.reservations = '';
@@ -393,6 +287,7 @@ import Datepicker from 'vuejs-datepicker';
             CHANGEROOM,
             CHECKOUT,
             Datepicker,
+            PAYMENT,
         }
     }
 </script>
