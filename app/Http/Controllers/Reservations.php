@@ -24,9 +24,49 @@ class Reservations extends Controller
             'guest.guest_number' => 'required',
             'check_in' => ['required', new hasreservation($request->check_out,$request->room['room_number'])]
         ]);
-
-       $guest = GuestsData::firstOrNew($request->guest);
-       $guest->save();
+            /**
+             * guest_id= $request->guest_name;
+                    guest_tittle= $request->guest_name;
+                    guest_name= $request->guest_name;
+                    $guest->guest_lastname= $request->guest_name;
+                    $guest->guest_gender= $request->guest_name;
+                    $guest->guest_address= $request->guest_name;
+                    $guest->guest_city= $request->guest_name;
+                    $guest->guest_country= $request->guest_name;
+                    $guest->guest_email= $request->guest_name;
+                    $guest->guest_mobile= $request->guest_name;
+                    $guest->guest_type= $request->guest_name;
+                    $guest->guest_number= $request->guest_name;
+                    $guest->guest_remarks= $request->guest_name;
+                    $guest->guest_checkin_points= $request->guest_name;
+                    $guest->guest_balance= $request->guest_name;
+                    $guest->alter_name= $request->guest_name;
+                    $guest->alter_lastname= $request->guest_name;
+                    $guest->alter_country= $request->guest_name;
+                    $guest->alter_city= $request->guest_name;
+                    $guest->howFind= $request->guest_name;
+             */
+        $guest = new GuestsData;
+        $guest->guest_tittle = $request->guest_tittle;
+        $guest->guest_name = $request->guest_name;
+        $guest->guest_lastname = $request->guest_lastname;
+        $guest->guest_gender= $request->guest_gender;
+        $guest->guest_address= $request->guest_address;
+        $guest->guest_city= $request->guest_city;
+        $guest->guest_country= $request->guest_country;
+        $guest->guest_email= $request->guest_email;
+        $guest->guest_mobile= $request->guest_mobile;
+        $guest->guest_type= $request->guest_type;
+        $guest->guest_number= $request->guest_number;
+        $guest->guest_remarks= $request->guest_remarks;
+        $guest->guest_checkin_points= $request->guest_checkin_points;
+        $guest->guest_balance= $request->guest_balance;
+        $guest->alter_name= $request->alter_name;
+        $guest->alter_lastname= $request->alter_lastname;
+        $guest->alter_country= $request->alter_country;
+        $guest->alter_city= $request->alter_city;
+        $guest->howFind= $request->howFind;
+        $guest->save();
        $room = RoomsData::where('room_number', $request->room['room_number'])
                   ->update(['room_status' => 'Reserved']);
        $reserve = new ReservationsData;
