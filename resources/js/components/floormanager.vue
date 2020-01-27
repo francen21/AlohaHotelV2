@@ -79,7 +79,7 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="rate">Price</label>
-                                            <input v-model.number="rate.rate" type="number" min="1" class="form-control" id="rate" placeholder="" required/>
+                                            <input v-model.number="rate.rate" type="number" class="form-control" id="rate" placeholder="" readonly/>
                                         </div>
                                 </div>
 
@@ -230,8 +230,6 @@ export default {
 
     },
     mounted() {
-
-        console.log("Component mounted.");
     },
     created(){
         this.room_form.reset();
