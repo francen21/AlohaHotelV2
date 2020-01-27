@@ -275,7 +275,7 @@ import Datepicker from 'vuejs-datepicker';
         created(){
             $('#frontPanel').DataTable();
             Fire.$on('itmCreated',()=>{
-
+                this.loadReservationsOnce();
                  this.loadRooms();
             });
         },

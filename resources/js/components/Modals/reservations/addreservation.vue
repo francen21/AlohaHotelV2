@@ -462,7 +462,7 @@
             checkin(){
                 this.$Progress.start();
                 this.reservationData.put('api/checkin/'+ this.reservationData.room_number).then(()=>{
-                    Fire.$emit('resCreated');
+                    Fire.$emit('itmCreated');
                     $('#reserve').modal('hide')
                     this.reservationData.reset();
                     Toast.fire({

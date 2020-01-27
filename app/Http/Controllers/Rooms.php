@@ -33,10 +33,11 @@ class Rooms extends Controller
         $this->validate($request,[
             'check_in' => 'required|date'
         ]);
-        $gue = ReservationsData::where('room_number' , $request['room_number'])
+        $gue = ReservationsData::where('room_number' , $request->room['room_number'])
         ->update(['status' => '2']);
-        $room = Floors::where('room_number', $request['room_number'])
+        $room = Floors::where('room_number', $request->room['room_number'])
         ->update(['room_status' => 'Occupied']);
+
     }
     public function destroy($id)
     {
