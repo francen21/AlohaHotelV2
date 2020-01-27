@@ -30,8 +30,9 @@ class hasreservation implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(ReservationsData::where('room_number',$this->roomnumber)->whereBetween('check_in' , [$value, $this->checkout])
-        ->orwhereBetween('check_out' , [$value, $this->checkout])->count()){
+        $check = ReservationsData::where('room_number', '=', $this->roomnumber)->whereBetween('check_in' , [$value, $this->checkout])->whereBetween('check_out' , [$value, $this->checkout])->count();
+        if($check){
+            $this->req = $check;
             return false;
         }
             return true;

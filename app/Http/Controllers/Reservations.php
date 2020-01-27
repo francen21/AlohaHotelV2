@@ -22,31 +22,31 @@ class Reservations extends Controller
             'guest.guest_mobile' => 'required|max:14',
             'guest.guest_type' => 'required',
             'guest.guest_number' => 'required',
-            'check_in' => ['required', new hasreservation($request->check_out,$request->room_number)]
+            'check_in' => ['required', new hasreservation($request->check_out,$request->room['room_number'])]
         ]);
 
-        $guest = GuestsData::firstOrNew($request->guest);
-        $guest->save();
-        $room = RoomsData::where('room_number', $request->room['room_number'])
-                   ->update(['room_status' => 'Reserved']);
-        $reserve = new ReservationsData;
-        $reserve->room_number   = $request->room['room_number'];
-        $reserve->guest_id      = $guest->guest_id      ;
-        $reserve->guest_cap     = $request->number_persons     ;
-        $reserve->discount_type = $request->discount_type ;
-        $reserve->breakfast     = $request->breakfast     ;
-        $reserve->grace_time    = $request->grace_time    ;
-        $reserve->purpose_visit = $request->purpose_visit ;
-        $reserve->from          = $request->from          ;
-        $reserve->to            = $request->to            ;
-        $reserve->number_persons= $request->number_persons;
-        $reserve->male_         = $request->male_         ;
-        $reserve->female_       = $request->female_       ;
-        $reserve->children_     = $request->children_     ;
-        $reserve->check_in      = $request->check_in      ;
-        $reserve->check_out     = $request->check_out     ;
-        $reserve->save();
-        return $request;
+       $guest = GuestsData::firstOrNew($request->guest);
+       $guest->save();
+       $room = RoomsData::where('room_number', $request->room['room_number'])
+                  ->update(['room_status' => 'Reserved']);
+       $reserve = new ReservationsData;
+       $reserve->room_number   = $request->room['room_number'];
+       $reserve->guest_id      = $guest->guest_id      ;
+       $reserve->guest_cap     = $request->number_persons     ;
+       $reserve->discount_type = $request->discount_type ;
+       $reserve->breakfast     = $request->breakfast     ;
+       $reserve->grace_time    = $request->grace_time    ;
+       $reserve->purpose_visit = $request->purpose_visit ;
+       $reserve->from          = $request->from          ;
+       $reserve->to            = $request->to            ;
+       $reserve->number_persons= $request->number_persons;
+       $reserve->male_         = $request->male_         ;
+       $reserve->female_       = $request->female_       ;
+       $reserve->children_     = $request->children_     ;
+       $reserve->check_in      = $request->check_in      ;
+       $reserve->check_out     = $request->check_out     ;
+       $reserve->save();
+       return $request;
     }
 
     public function show($res)

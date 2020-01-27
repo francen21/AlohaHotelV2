@@ -43,11 +43,11 @@
                                             <label for="guest_name">Guest name</label>
                                             <div class="form-row">
                                                 <div class="col-md-6 mb-2">
-                                                    <input type="text" class="form-control" placeholder="First name" v-model="guest.guest_name" required>
+                                                    <input type="text" class="form-control" placeholder="First name" v-model="guest.guest_name" >
 
                                                 </div>
                                                 <div class="col-md-6 mb-2">
-                                                    <input type="text" class="form-control" placeholder="Last name" v-model="guest.guest_lastname" required>
+                                                    <input type="text" class="form-control" placeholder="Last name" v-model="guest.guest_lastname" >
 
                                                 </div>
                                             </div>
@@ -102,14 +102,14 @@
                                                 <div class="col-md-12 mb-2">
                                                     <label for="guest_addr">Address</label>
                                                     <input type="text" class="form-control" v-model="guest.guest_address"
-                                                        placeholder="Street Address" required>
+                                                        placeholder="Street Address" >
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-6 mb-2">
                                                     <label for="guest_addr_city">City</label>
                                                     <input type="text" class="form-control" v-model="guest.guest_city"
-                                                        placeholder="State" required>
+                                                        placeholder="State" >
                                                 </div>
                                                 <div class="col-md-6 mb-2">
                                                     <label for="guest_addr_country">Country</label>
@@ -124,7 +124,7 @@
                                                 <div class="col-md-12 mb-2">
                                                     <label for="guest_email">E-mail</label>
                                                     <input type="text" class="form-control" v-model="guest.guest_email"
-                                                        placeholder="email.com" required>
+                                                        placeholder="email.com" >
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -166,10 +166,10 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-md-6">
-                                                        <label for="editroom_number">Room Number</label>
-                                                        <select v-model="room.room_number" class="form-control" name="room_number">
+                                                        <label for="editroom_number">Room</label>
+                                                        <select v-model="room" class="form-control" name="room_number">
                                                             <option selected>Select Room</option>
-                                                            <option v-for="room in rooms" :key="room.room_id" :value="room.room_number">{{room.room_number}}</option>
+                                                            <option v-for="room in rooms" :key="room.room_id" :value="room">{{room.room_number}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
@@ -208,7 +208,7 @@
                                                 <label for="booking_guest_alter_first">Alternative Guest Name</label>
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
-                                                        <input v-model="guest.alter_name" type="text" class="form-control" placeholder="First Name" required>
+                                                        <input v-model="guest.alter_name" type="text" class="form-control" placeholder="First Name">
                                                     </div>
                                                     <div class="col-md-6 mb-2">
                                                         <input v-model="guest.alter_lastname" type="text" class="form-control" placeholder="Last Name" >
@@ -336,7 +336,6 @@
                 total_balance:'',
                 reservationData: new Form({
                     reservation_id:'',
-                    room_number:'',
                     guest_id:'',
                     guest_cap:'',
                     discount_type:'',
