@@ -414,9 +414,9 @@
             createReservation(){
                 this.loadRooms();
                 this.$Progress.start();
-                this.reservationData.guest = this.guest.data();
+                this.reservationData.guest = this.guest;
                 this.reservationData.guest.guest_balance += this.rate.rate;
-                this.reservationData.room = this.room.data();
+                this.reservationData.room = this.room;
                 this.reservationData.post('api/reservation').then(()=>{
                     Fire.$emit('resCreated');
                     $('#reserve').modal('hide')
