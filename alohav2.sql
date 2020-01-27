@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2020 at 11:51 PM
+-- Generation Time: Jan 27, 2020 at 06:12 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -325,7 +325,13 @@ CREATE TABLE `rates` (
 
 INSERT INTO `rates` (`id`, `room_type`, `rate`, `created_at`, `updated_at`) VALUES
 (3, 'Suite', '4500', '2020-01-25 23:28:02', '2020-01-25 18:12:59'),
-(4, 'East Side', '1000', '2020-01-25 16:25:55', '2020-01-25 18:13:31');
+(4, 'East Side', '1000', '2020-01-25 16:25:55', '2020-01-25 18:13:31'),
+(5, 'City Side Deluxe Single', '3500', '2020-01-26 20:15:02', '2020-01-26 20:15:02'),
+(6, 'City Side Deluxe Twin', '3500', '2020-01-26 20:15:20', '2020-01-26 20:15:20'),
+(7, 'Bay Side Deluxe Twin', '4000', '2020-01-26 20:15:42', '2020-01-26 20:15:42'),
+(8, 'Bay Side Deluxe Single', '4000', '2020-01-26 20:15:56', '2020-01-26 20:15:56'),
+(9, 'Suite Family Room', '6000', '2020-01-26 20:16:30', '2020-01-26 20:16:30'),
+(10, 'Suite Tripple Sharing', '2500', '2020-01-26 20:16:54', '2020-01-26 20:16:54');
 
 -- --------------------------------------------------------
 
@@ -373,7 +379,8 @@ CREATE TABLE `rooms_data` (
   `room_id` bigint(20) UNSIGNED NOT NULL,
   `room` int(20) UNSIGNED DEFAULT NULL,
   `room_floor` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `room_type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cap` tinyint(4) NOT NULL DEFAULT 1,
+  `room_type` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `room_number` int(10) UNSIGNED NOT NULL,
   `room_sales` int(10) UNSIGNED DEFAULT NULL,
@@ -386,11 +393,9 @@ CREATE TABLE `rooms_data` (
 -- Dumping data for table `rooms_data`
 --
 
-INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `room_type`, `room_status`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
-(16, 432, '4', 'City Side', 'Occupied', 32, NULL, NULL, '2020-01-09 08:47:18', '2020-01-25 13:57:16'),
-(17, 433, '4', 'Bay Side', 'For Inspection', 33, NULL, NULL, '2020-01-25 10:19:03', '2020-01-25 10:19:03'),
-(18, 434, '4', 'Suite', 'Reserved', 34, NULL, NULL, '2020-01-25 10:19:17', '2020-01-25 10:25:46'),
-(19, 435, '4', 'City Side', 'For Inspection', 35, NULL, NULL, '2020-01-25 10:19:37', '2020-01-25 10:19:37');
+INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `cap`, `room_type`, `room_status`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
+(16, 432, '4', 1, 'City Side Deluxe Single', 'Occupied', 32, NULL, NULL, '2020-01-09 08:47:18', '2020-01-25 13:57:16'),
+(18, 434, '4', 3, 'Suite Triple Sharing', 'Reserved', 34, NULL, NULL, '2020-01-25 10:19:17', '2020-01-25 10:25:46');
 
 -- --------------------------------------------------------
 
@@ -605,7 +610,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `rates`
 --
 ALTER TABLE `rates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `reservations_data`
