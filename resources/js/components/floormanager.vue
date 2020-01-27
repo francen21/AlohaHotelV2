@@ -150,7 +150,7 @@ export default {
             axios.get('api/room').then(({data})=>(this.rooms = data.data));
         },
         createRoom(){
-                this.room_form = this.rate.room_type;
+                this.room_form.room_type = this.rate.room_type;
                 this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
                 this.room_form.room_tarrif = parseFloat(this.room_form.room_tarrif).toFixed(2);
                 this.$Progress.start();
