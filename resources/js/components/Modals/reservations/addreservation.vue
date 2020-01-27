@@ -150,13 +150,17 @@
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
                                                         <label for="check_in">Check-in Date</label>
-                                                        <input v-model="reservationData.check_in" type='date' class="form-control" name="check_in" placeholder="yyyy/mm/dd">
+                                                        <input v-model="reservationData.check_in" type='date' class="form-control" name="check_in" placeholder="yyyy/mm/dd"
+                                                        :class="{ 'is-invalid': reservationData.errors.has('check_in') }">
+                                                        <has-error :form="reservationData" field="check_in"></has-error>
 
                                                     </div>
 
                                                     <div class="col-md-6 mb-2">
                                                         <label for="check_out">Expected Check-out Date</label>
-                                                        <input v-model="reservationData.check_out" type="date" class="form-control" name="check_out" placeholder="yyyy/mm/dd">
+                                                        <input v-model="reservationData.check_out" type="date" class="form-control" name="check_out" placeholder="yyyy/mm/dd"
+                                                        :class="{ 'is-invalid': reservationData.errors.has('check_out') }">
+                                                        <has-error :form="reservationData" field="check_out"></has-error>
 
                                                     </div>
                                                 </div>
@@ -227,7 +231,9 @@
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
                                                         <label for="booking_gracep">Grace Time</label>
-                                                        <select v-model="reservationData.grace_time" class="form-control">
+                                                        <select v-model="reservationData.grace_time" class="form-control"
+                                                        :class="{ 'is-invalid': reservationData.errors.has('grace_time') }">
+                                                        <has-error :form="reservationData" field="grace_time"></has-error>
                                                             <option value="">Select Hours</option>
                                                             <option value="01:00:00">1 Hr</option>
                                                             <option value="02:00:00">2 Hrs</option>
@@ -398,8 +404,9 @@
                  var x = this.rate.rate;
                 this.occupancies.forEach(element => {
                     if(element.occupancy >= ((this.todayreservations/this.rooms.length)*100)){
-                        this.rate.rate = parseInt(x*(1+(element.adjustment/100)));
-                        return this.rate.rate;
+                        x = parseInt(x*(1+(element.adjustment/100)));
+                        this.room.room_tarrif = x;
+                        return x;
                     }else{
                         return this.rate.rate;
                     }
@@ -415,7 +422,6 @@
                 this.loadRooms();
                 this.$Progress.start();
                 this.reservationData.guest = this.guest;
-                this.reservationData.guest.guest_balance += this.rate.rate;
                 this.reservationData.room = this.room;
                 this.reservationData.post('api/reservation').then(()=>{
                     Fire.$emit('resCreated');
