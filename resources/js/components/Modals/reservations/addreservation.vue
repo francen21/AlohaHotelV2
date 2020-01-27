@@ -11,7 +11,6 @@
             </div>
             <form @submit.prevent="editMode ? updateReservation() : viewMode ? checkin() : createReservation()">
             <div class="modal-body">
-
                 <div class="row">
                     <div class="col-6">
                         <div class="card shadow mb-2">
