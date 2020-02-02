@@ -30,4 +30,5 @@ Route::apiResources([
     'occu' => 'OccuController',
     'rate' => 'RatesController',
     'charge' => 'ChargesController',
+    'pay' => 'PaymentController',
 ]);

@@ -14,6 +14,7 @@ class ChargesController extends Controller
         $charge->room_id = $request->room_id;
         $charge->guest_id = $request->guest_id;
         $charge->code= $request->code;
+        $charge->category= $request->category;
         $charge->qty= $request->qty;
         $charge->price= $request->price;
         $charge->save();

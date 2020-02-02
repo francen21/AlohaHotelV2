@@ -35,6 +35,25 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <table class="table table-sm p-0 m-2">
+                                <thead class="table">
+                                    <tr>
+                                        <th scope="col" colspan="4">
+                                            Guest Payments
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <thead class="table table-striped">
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Payment Date</th>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="pay in payments" :key="pay.id">
+                                        <td>{{pay.price}}</td>
+                                        <td>{{pay.created_at}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="col-6">
                                 <div class="form-row">
@@ -73,12 +92,13 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary btn-sm">Print Receipt</button>
-                    <button type="button" @click="remove()" class="btn btn-primary btn-sm">Proceed Checkout</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+
+                    <button v-show="totalbill <= 0" type="button" @click="remove()" class="btn btn-primary btn-sm">Proceed Checkout</button>
                 </div>
             </div>
         </div>
+
     </div>
 
 </template>
@@ -88,6 +108,7 @@
         data(){
             return{
                 charges:{},
+                payments:{},
                 total:'',
                 resid   :'',
                 room_form: new Form({
@@ -109,9 +130,14 @@
                 x += parseFloat(this.charges[index].price);
 
             }
-                 return x;
-
-
+            for (let index = 0; index < this.payments.length; index++) {
+                x -= parseFloat(this.payments[index].price);
+            }
+            if(x < 0){
+                return x = 0;
+            }else{
+                return x;
+                }
             }
         },
         methods:{
@@ -126,7 +152,24 @@
 
             },
             remove(){
-
+                axios.post('/checkout', {
+                            id: this.resid
+                        }).then(()=>{
+                    Fire.$emit('itmCreated');
+                    $('#reserve').modal('hide')
+                    this.reservationData.reset();
+                    Toast.fire({
+                            icon: 'success',
+                            title: 'Reservation Updated'
+                    })
+                    this.$Progress.finish();
+                }).catch(()=>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something is not right.'
+                    })
+                    this.$Progress.fail()
+                });
             },
             update(){
 

@@ -122,6 +122,8 @@ Vue.component('floormanager', require('./components/floormanager.vue').default);
 Vue.component('housekeeping', require('./components/housekeeping.vue').default);
 Vue.component('guests', require('./components/guests.vue').default);
 Vue.component('users', require('./components/users.vue').default);
+Vue.component('reports', require('./components/reports.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

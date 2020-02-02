@@ -2,153 +2,116 @@
     <div class="container-fluid">
         <div class="row">
           <div class="col-md-6">
-            <!-- AREA CHART -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Area Chart</h3>
 
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                  <line :chart-data="datacollection"></line>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <!-- DONUT CHART -->
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title">Donut Chart</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                <canvas id="donutChart" style="height: 230px; min-height: 230px; display: block; width: 465px;" width="465" height="230" class="chartjs-render-monitor"></canvas>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <!-- PIE CHART -->
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title">Pie Chart</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                <canvas id="pieChart" style="height: 230px; min-height: 230px; display: block; width: 465px;" width="465" height="230" class="chartjs-render-monitor"></canvas>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+            <highcharts :options="chartOptions" :constructor-type="'stockChart'"></highcharts>
+            <highcharts :options="futurechartOptions" :constructor-type="'stockChart'"></highcharts>
 
           </div>
-          <!-- /.col (LEFT) -->
-          <div class="col-md-6">
-            <!-- LINE CHART -->
-            <div class="card card-info">
-              <div class="card-header">
-                <h3 class="card-title">Line Chart</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                  <canvas id="lineChart" style="height: 250px; min-height: 250px; display: block; width: 465px;" width="465" height="250" class="chartjs-render-monitor"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <!-- BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Bar Chart</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                  <canvas id="barChart" style="height: 230px; min-height: 230px; display: block; width: 465px;" width="465" height="230" class="chartjs-render-monitor"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <!-- STACKED BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Stacked Bar Chart</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                  <canvas id="stackedBarChart" style="height: 230px; min-height: 230px; display: block; width: 465px;" width="465" height="230" class="chartjs-render-monitor"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-          </div>
-          <!-- /.col (RIGHT) -->
         </div>
-        <!-- /.row -->
       </div>
-
 </template>
 
 <script>
-    //import LineChart from './LineChart.js'
-    export default {
-        components: {
-            //LineChart
+import Highcharts from 'highcharts'
+import stockInit from 'highcharts/modules/stock'
+stockInit(Highcharts)
+import {Chart} from 'highcharts-vue'
+let sales2 = [  [Date.parse("2020-2-01"), 2   ],
+                [Date.parse("2020-2-04"), 3 ],
+                [Date.parse("2020-2-08"), 1 ],
+                [Date.parse("2020-2-09"), 4 ],
+                [Date.parse("2020-2-24"), 5 ],
+                [Date.parse("2020-2-29"), 7 ]];
+let sales = new Array();
+export default {
+  components: {
+      highcharts: Chart
+  },
+  data(){
+    return {
+        reservations:[],
+        found:'',
+        chartOptions: {
+            title: {
+                text: 'Recorded Sales'
+            },
+            subtitle: {
+                text: 'reservation data recorded by the system.'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Sales'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'spline',
+                color: "#ff2424",
+                name: 'Recorded Sale',
+                data: sales,
+                    }
+                ]
         },
-        data(){
-            return{
-                datacollection: null
-            }
-        },
-        methods:{
-
-        },
-        mounted() {
-            console.log('Component mounted.');
-            this.renderChart(this.chartdata, this.options);
-        },
-        created(){
-
+        futurechartOptions: {
+             chart: {
+                type: 'spline',
+                animation: {
+                    enabled: false
+                }
+            },
+            title: {
+                text: 'Forecast Sales'
+            },
+            subtitle: {
+                text: 'Forecast sales from reservation data recorded by the system.'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Sales'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'spline',
+                name: 'Forecast Sale',
+                data: sales2
+                }
+                    ]
         }
     }
+  },
+  mounted () {
+        let found;
+        let date;
+        axios.get('api/reservation').then(({data})=>(
+           this.reservations = data.data,
+          this.reservations.forEach(element => {
+                date = (element) => element =  Date.parse(element.check_in)
+                found = Object.values(element).findIndex(date)
+                if(found > 0){
+                    sales.push([Date.parse(element.check_in), found])
+                    console.log("matched"+found)
+                }else{
+                    sales.push([Date.parse(element.check_in), 1])
+                }
+                found = 0;
+        })
+
+
+      ));
+  },
+  methods: {
+
+  }
+}
 </script>

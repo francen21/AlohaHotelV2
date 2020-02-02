@@ -12,7 +12,7 @@ class Reservations extends Controller
 
     public function index()
     {
-        return ReservationsData::latest()->with('room.rate')->with('guest')->paginate(10);
+        return ReservationsData::orderBy('check_in')->where('status', '!=', '5')->with('room.rate')->with('guest.payments')->paginate(10);
     }
 
     public function store(Request $request)
@@ -24,28 +24,6 @@ class Reservations extends Controller
             'guest.guest_number' => 'required',
             'check_in' => ['required', new hasreservation($request->check_out,$request->room['room_number'])]
         ]);
-            /**
-             * guest_id= $request->guest_name;
-                    guest_tittle= $request->guest_name;
-                    guest_name= $request->guest_name;
-                    $guest->guest_lastname= $request->guest_name;
-                    $guest->guest_gender= $request->guest_name;
-                    $guest->guest_address= $request->guest_name;
-                    $guest->guest_city= $request->guest_name;
-                    $guest->guest_country= $request->guest_name;
-                    $guest->guest_email= $request->guest_name;
-                    $guest->guest_mobile= $request->guest_name;
-                    $guest->guest_type= $request->guest_name;
-                    $guest->guest_number= $request->guest_name;
-                    $guest->guest_remarks= $request->guest_name;
-                    $guest->guest_checkin_points= $request->guest_name;
-                    $guest->guest_balance= $request->guest_name;
-                    $guest->alter_name= $request->guest_name;
-                    $guest->alter_lastname= $request->guest_name;
-                    $guest->alter_country= $request->guest_name;
-                    $guest->alter_city= $request->guest_name;
-                    $guest->howFind= $request->guest_name;
-             */
         $guest = new GuestsData;
         $guest->guest_tittle = $request->guest['guest_tittle'];
         $guest->guest_name = $request->guest['guest_name'];
@@ -61,24 +39,16 @@ class Reservations extends Controller
         $guest->guest_remarks= $request->guest['guest_remarks'];
         $guest->guest_checkin_points= $request->guest['guest_checkin_points'];
         $guest->guest_balance= $request->guest['guest_balance'];
-        $guest->alter_name= $request->guest['alter_name'];
-        $guest->alter_lastname= $request->guest['alter_lastname'];
-        $guest->alter_country= $request->guest['alter_country'];
-        $guest->alter_city= $request->guest['alter_city'];
         $guest->howFind= $request->guest['howFind'];
         $guest->save();
        $room = RoomsData::where('room_number', $request->room['room_number'])
                   ->update(['room_status' => 'Reserved']);
        $reserve = new ReservationsData;
        $reserve->room_number   = $request->room['room_number'];
-       $reserve->guest_id      = $guest->guest_id      ;
+       $reserve->guest_id      = $guest->guest_id           ;
        $reserve->guest_cap     = $request->number_persons     ;
        $reserve->discount_type = $request->discount_type ;
        $reserve->breakfast     = $request->breakfast     ;
-       $reserve->grace_time    = $request->grace_time    ;
-       $reserve->purpose_visit = $request->purpose_visit ;
-       $reserve->from          = $request->from          ;
-       $reserve->to            = $request->to            ;
        $reserve->number_persons= $request->number_persons;
        $reserve->male_         = $request->male_         ;
        $reserve->female_       = $request->female_       ;
@@ -103,7 +73,6 @@ class Reservations extends Controller
         $reserve->guest_cap     = $request->number_persons;
         $reserve->discount_type = $request->discount_type ;
         $reserve->breakfast     = $request->breakfast     ;
-        $reserve->grace_time    = $request->grace_time    ;
         $reserve->purpose_visit = $request->purpose_visit ;
         $reserve->from          = $request->from          ;
         $reserve->to            = $request->to            ;

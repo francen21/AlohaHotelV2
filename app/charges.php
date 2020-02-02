@@ -20,8 +20,4 @@ class charges extends Model
     {
         return $this->belongsTo('App\RoomsData', 'room_id');
     }
-    public function payments()
-    {
-        return $this->hasMany('App\payment', 'pay_id');
-    }
 }

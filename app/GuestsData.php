@@ -13,4 +13,8 @@ class GuestsData extends Model
     {
         return $this->hasMany('App\charges', 'c_id');
     }
+    public function payments()
+    {
+        return $this->hasMany('App\payment', 'guest_id', 'guest_id');
+    }
 }

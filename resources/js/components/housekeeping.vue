@@ -85,7 +85,7 @@
 
 
                             <div class="col">
-                                <form id="addItem" @submit.prevent=" editMode ? updateCharge() : create()">
+                                <form id="addItem" @submit.prevent="create()">
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="item_category">Item Code</label>
@@ -138,6 +138,7 @@
                     room_id: '',
                     guest_id: '',
                     code: '',
+                    category: '',
                     qty: '',
                     price: '',
                 }),
@@ -179,6 +180,7 @@
                 this.$Progress.start();
                 this.charge.room_id = this.room_id;
                 this.charge.guest_id = this.guest_id;
+                this.charge.category = this.stock.item_category;
                 this.charge.post('api/charge').then(()=>{
                     Fire.$emit('itmCreated');
                     this.charge.reset();
