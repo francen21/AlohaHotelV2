@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="form-group col-md-9">
                                         <label for="room_type">Room Type</label>
-                                        <select v-model="rate" class="form-control" name="room_type" :class="{ 'is-invalid': room_for.errors.has('room_type') }">
+                                        <select v-model="rate" class="form-control" name="room_type" :class="{ 'is-invalid': room_form.errors.has('room_type') }">
                                             <option selected>Choose Side..</option>
                                             <option v-for="type in types" :key="type.id" :value="type">{{type.type}}</option>
                                         </select>

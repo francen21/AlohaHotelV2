@@ -15,7 +15,7 @@
                         <th class="text-center">Actions </th>
                     </thead>
                     <tbody>
-                        <tr  v-for="room in rooms" :key="room.room_id" v-bind:class='{"bg-secondary" : room.room_status == "Maintenance", "bg-success" : room.room_status == "Available", "bg-info" : room.room_status == "For Inspection", "bg-danger" : room.room_status == "Cleaning" , "bg-warning" : room.room_status == "Reserved", "bg-primary" : room.room_status == "Occupied"}'>
+                        <tr  v-for="room in rooms" :key="room.room_id" v-bind:class='{"bg-secondary" : room.room_status == "Maintenance", "bg-primary" : room.room_status == "Available", "bg-info" : room.room_status == "For Inspection", "bg-danger" : room.room_status == "Cleaning" , "bg-warning" : room.room_status == "Reserved", "bg-success" : room.room_status == "Occupied"}'>
                             <td align="text-center">{{room.room_number}}</td>
                             <td align="center">{{room.room_floor}}</td>
                             <td align="center">{{room.room_type}}</td>
@@ -37,7 +37,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Reservations</h3>
+                <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Active Rooms</h3>
                 <div class="float-right">
                     <div class="btn-group">
                         <datepicker :value="datepicked" v-model="datepicked" @input="updateNow()"></datepicker>

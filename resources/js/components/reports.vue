@@ -16,13 +16,26 @@ import Highcharts from 'highcharts'
 import stockInit from 'highcharts/modules/stock'
 stockInit(Highcharts)
 import {Chart} from 'highcharts-vue'
+let sales = [
+                [Date.parse("2020-1-01"), 2],
+                [Date.parse("2020-1-04"), 3],
+                [Date.parse("2020-1-05"), 2],
+                [Date.parse("2020-1-08"), 1],
+                [Date.parse("2020-1-09"), 4],
+                [Date.parse("2020-1-14"), 4],
+                [Date.parse("2020-1-19"), 4],
+                [Date.parse("2020-1-24"), 5],
+                [Date.parse("2020-1-29"), 7],
+                [Date.parse("2020-2-1"), 7],
+                ]
+
 let sales2 = [  [Date.parse("2020-2-01"), 2   ],
                 [Date.parse("2020-2-04"), 3 ],
                 [Date.parse("2020-2-08"), 1 ],
                 [Date.parse("2020-2-09"), 4 ],
                 [Date.parse("2020-2-24"), 5 ],
-                [Date.parse("2020-2-29"), 7 ]];
-let sales = new Array();
+                [Date.parse("2020-2-29"), 7 ]]
+
 export default {
   components: {
       highcharts: Chart
@@ -105,10 +118,7 @@ export default {
                     sales.push([Date.parse(element.check_in), 1])
                 }
                 found = 0;
-        })
-
-
-      ));
+        })));
   },
   methods: {
 
