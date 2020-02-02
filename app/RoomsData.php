@@ -14,7 +14,7 @@ class RoomsData extends Model
     }
     public function rate()
     {
-        return $this->hasOne('App\rates', 'room_type', 'room_type');
+        return $this->hasOne('App\rates', 'type', 'room_type');
     }
     public function charges()
     {

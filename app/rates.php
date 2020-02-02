@@ -11,7 +11,7 @@ class rates extends Model
     protected $table = 'rates';
     public function room()
     {
-        return $this->belongsTo('App\Floors' , 'room_number' , 'room_number');
+        return $this->belongsTo('App\RoomsData' , 'room_type' , 'type');
     }
     public function occu(){
         return $this->hasMany('App\occu');

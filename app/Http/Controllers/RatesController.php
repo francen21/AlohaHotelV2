@@ -15,7 +15,8 @@ class RatesController extends Controller
     {
 
         $rate = new rates;
-        $rate->room_type = $request->room_type;
+        $rate->type = $request->type;
+        $rate->capacity = $request->capacity;
         $rate->rate = $request->rate;
         $rate->save();
 
@@ -24,14 +25,15 @@ class RatesController extends Controller
     {
 
         $gue = rates::find($request['id']);
-        $gue->room_type =   $request->room_type;
+        $gue->type =   $request->type;
+        $gue->capacity =   $request->capacity;
         $gue->rate =   $request->rate;
         $gue->save();
 
     }
     public function destroy($id)
     {
-        $rate = rates::find($id)->first();
+        $rate = rates::find($id);
         if ($rate != null) {
             $rate->delete();
         }

@@ -38,9 +38,11 @@
         data(){
             return{
                 rooms:[],
+
                 form: new Form({
                     reservation_id:'',
-                    room_number:'',
+                    old_roomnumber:'',
+                    new_roomnumber:'',
                 }),
             }
         },

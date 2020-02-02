@@ -78,6 +78,7 @@ import ADD from './Modals/reservations/addreservation.vue';
             openAddModal(){
                 this.$refs.childADD.editMode = false;
                 this.$refs.childADD.viewMode = false;
+                this.$refs.childADD.reserve = true;
                 $('#reserve').modal('show')
             },
             cancelReservation(id){

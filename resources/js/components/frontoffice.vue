@@ -13,43 +13,19 @@
                         <th class="text-center">Room Type</th>
                         <th class="text-center">Room Status</th>
                         <th class="text-center">Actions </th>
-                        <th class="text-center">Services </th>
-                        <th class="text-center">HouseKeeping</th>
                     </thead>
                     <tbody>
-                        <tr  v-for="room in rooms" :key="room.room_id" >
+                        <tr  v-for="room in rooms" :key="room.room_id" v-bind:class='{"bg-secondary" : room.room_status == "Maintenance", "bg-success" : room.room_status == "Available", "bg-info" : room.room_status == "For Inspection", "bg-danger" : room.room_status == "Cleaning" , "bg-warning" : room.room_status == "Reserved", "bg-primary" : room.room_status == "Occupied"}'>
                             <td align="text-center">{{room.room_number}}</td>
                             <td align="center">{{room.room_floor}}</td>
                             <td align="center">{{room.room_type}}</td>
                             <td align="center">{{room.room_status}}</td>
-                            <!-- <td align="center" v-if="room.reservation">
-                                <button @click="openDetailsModal(room.reservation,room)" type="button" class="btn btn-sm"
-                                    aria-haspopup="true" aria-expanded="false" style="padding: 0.25px 4.5px;">
-                                    <i class="fas fa-info-circle"></i> Details
-                                </button>
-                            </td> -->
                             <td align="center">
                                 <button @click="openReserveModal(room)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                     aria-haspopup="true" aria-expanded="false"
-                                    style="padding: 0.25px 4.5px;">
+                                    style="padding: 0.25px 4.5px;" v-if="room.room_status == 'Available'">
                                     <i class="fas fa-check-circle"></i> Reserve
                                 </button>
-                            </td>
-                            <td align="center">
-                            </td>
-                            <td align="center">
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle font-weight-light"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        style="padding: 0.25px 4.5px;">
-                                        <i class="fas fa-broom"></i> Housekeeping
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <div class="dropdown-header"> House Keeping </div>
-                                        <a @click="openAddService()" class="dropdown-item">Add Service</a>
-                                        <a class="dropdown-item">Delete Service</a>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -61,7 +37,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h3 class="m-0 font-weight-bold text-primary float-left pt-1"></h3>
+                <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Reservations</h3>
                 <div class="float-right">
                     <div class="btn-group">
                         <datepicker :value="datepicked" v-model="datepicked" @input="updateNow()"></datepicker>
@@ -89,17 +65,20 @@
                             <td align="center" width="12%">{{res.check_out}}</td>
                             <td align="center" class="col">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <!--
+                            House
+
+                            -->
                                     <div class="btn-group">
                                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-concierge-bell"></i>Services
                                         </button>
                                         <div class="dropdown-menu">
                                             <div class="dropdown-header">House Keeping </div>
-                                            <a class="dropdown-item" @click="cleanReq(res)" data-toggle="modal">Add HouseKeeping Service</a>
-                                            <div class="dropdown-header">Other Services </div>
-                                             <a class="dropdown-item" @click="openChangeRoomModal(room.reservation)" data-toggle="modal">Laundry</a>
-                                             <a class="dropdown-item" @click="cancelReservation(res.reservation_id)" data-toggle="modal">Cancel Reservation</a>
-                                             <a class="dropdown-item" @click="openChangeRoomModal(room.reservation)" data-toggle="modal">Laundry</a>
+                                             <a class="dropdown-item" @click="service('Laundry',res, true)" data-toggle="modal">Laundry</a>
+                                             <a class="dropdown-item" @click="service('MiniBar',res, false)" data-toggle="modal">MiniBar</a>
+                                             <a class="dropdown-item" @click="changeRoomM(res)" data-toggle="modal">Change Room</a>
+                                             <a class="dropdown-item" @click="service('Others',res, true)" data-toggle="modal">Others</a>
                                         </div>
                                     </div>
                                     <button @click="openpay(res.guest_id)" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true">
@@ -129,35 +108,36 @@
                 <RESERVE ref="reserve"></RESERVE>
                 <EDITGUEST ref="editguest"></EDITGUEST>
                 <CHANGEROOM ref="changeroom"></CHANGEROOM>
+                <SERVICE ref="service"></SERVICE>
                 <PAYMENT ref="payment"></PAYMENT>
-               <div class="modal fade" id="paymentmodal" tabindex="-1" role="dialog" aria-labelledby="paymentmodalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                        <div class="modal-header py-0">
-                            <h5 class="modal-title" id="paymentmodalLabel">Insert Payment</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form  @submit.prevent="payment()">
-                                <div class="row">
-                                    <div class="col">
-                                    <input v-model="payment_form.price" type="number" min="0" class="form-control" placeholder="First name">
-                                    </div>
-                                    <div class="col">
-                                    <button type="submit" class="btn btn-primary">Pay</button>
-                                    </div>
+            <div class="modal fade" id="paymentmodal" tabindex="-1" role="dialog" aria-labelledby="paymentmodalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header py-0">
+                        <h5 class="modal-title" id="paymentmodalLabel">Insert Payment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form  @submit.prevent="payment()">
+                            <div class="row">
+                                <div class="col">
+                                <input v-model="payment_form.price" type="number" min="0" class="form-control" placeholder="First name">
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer py-0">
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary btn-sm">Save changes</button>
-                        </div>
-                        </div>
+                                <div class="col">
+                                <button type="submit" class="btn btn-primary">Pay</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer py-0">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                    </div>
                     </div>
                 </div>
+            </div>
     </div>
 
 
@@ -175,6 +155,7 @@ import Datepicker from 'vuejs-datepicker';
     import RESERVE from './Modals/reservations/addreservation'
     import CHECKOUT from './Modals/m_frontoffice/checkout'
     import PAYMENT from './Modals/m_frontoffice/payment'
+    import SERVICE from './Modals/m_frontoffice/services'
     export default {
         data() {
               return {
@@ -208,6 +189,7 @@ import Datepicker from 'vuejs-datepicker';
             }
         },
         computed: {
+
         },
         methods:{
             loadRooms(){
@@ -257,12 +239,14 @@ import Datepicker from 'vuejs-datepicker';
             openCheckinModal(data){
                 this.$refs.reserve.editMode = false;
                 this.$refs.reserve.viewMode = true;
+                this.$refs.reserve.reserve = false;
                 this.$refs.reserve.reservationData.fill(data);
                 this.$refs.reserve.guest.fill(data.guest);
                 this.$refs.reserve.room.fill(data.room);
                 this.$refs.reserve.rooms = this.rooms;
                 $('#reserve').modal('show');
             },
+
             checkout(data,payments){
                 axios.get('api/charge/'+data.room.room_id)
                     .then(({data})=>(
@@ -274,62 +258,25 @@ import Datepicker from 'vuejs-datepicker';
                 this.$refs.checkout.resid = data.reservation_id;
                 $('#checkout').modal('show');
             },
-                openEditGuestModal(res){
-                    this.$refs.editguest.form.fill(res);
-                    $('#editGuest').modal('show');
-                },
-                openpay(id){
-                    this.payment_form.guest_id = id;
-                     $('#paymentmodal').modal('show');
-                },
-                payment(){
-                    //$('#payment').modal('show');
-                     //this.$refs.payment.showModal();
-                    this.$Progress.start();
-                    this.payment_form.post('api/pay').then(()=>{
-                        Fire.$emit('itmCreated');
-                        $('#paymentmodal').modal('hide')
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Room added successfully'
-                        })
-                        this.$Progress.finish();
-                        this.load();
-                    }).catch(()=>{
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Something is not right.'
-                        })
-                        this.$Progress.fail()
-                    });
-                },
-                openViewPayModal(){
-                },
-                openReserveModal(data){
-                    this.$refs.reserve.reservationData.reset();
-                    this.$refs.reserve.guest.reset();
-                    this.$refs.reserve.room.fill(data);
-                    this.$refs.reserve.rooms = this.rooms;
-                    $('#reserve').modal('show');
-                },
-                openModal(){
-                },
-            laundry(){
-                this.charge.room_id = data.room.room_id;
-                this.charge.guest_id = data.guest_id;
-                this.charge.code = 'Laundry';
-                this.charge.category = 'Laundry';
-                this.charge.price = 60;
-                this.charge.qty = 1;
-                this.charge.post('api/charge').then(()=>{
-                    Fire.$emit('itmCreated');
-                    this.charge.reset();
+            openEditGuestModal(res){
+                this.$refs.editguest.form.fill(res);
+                $('#editGuest').modal('show');
+            },
+            openpay(id){
+                this.payment_form.guest_id = id;
+                $('#paymentmodal').modal('show');
+            },
+            payment(){
+                this.$Progress.start();
+                this.payment_form.post('api/pay').then(()=>{
+                    $('#paymentmodal').modal('hide')
+                    this.payment_form.reset();
                     Toast.fire({
                         icon: 'success',
-                        title: 'Guest charged'
+                        title: 'Room added successfully'
                     })
                     this.$Progress.finish();
-                    Fire.$emit('itmCreated');
+                    this.load();
                 }).catch(()=>{
                     Toast.fire({
                         icon: 'error',
@@ -338,22 +285,22 @@ import Datepicker from 'vuejs-datepicker';
                     this.$Progress.fail()
                 });
             },
-            cleanReq(data){
-                this.charge.room_id = data.room.room_id;
-                this.charge.guest_id = data.guest_id;
-                this.charge.code = 'HKCLE';
-                this.charge.category = 'Housekeeping';
-                this.charge.price = 800;
-                this.charge.qty = 1;
-                this.charge.post('api/charge').then(()=>{
+            changeRoomM(data){
+                this.$refs.changeroom.form.reservation_id = data.reservation_id;
+                this.$refs.changeroom.form.old_roomnumber = data.room_number;
+                $('#changeRoom').modal('show');
+            },
+            changeRoom(){
+                this.$Progress.start();
+                this.room_form.post('/changeroom').then(()=>{
                     Fire.$emit('itmCreated');
-                    this.charge.reset();
+                    $('#changeRoom').modal('hide')
                     Toast.fire({
                         icon: 'success',
-                        title: 'Guest charged'
+                        title: 'Room added successfully'
                     })
                     this.$Progress.finish();
-                    Fire.$emit('itmCreated');
+                    this.load();
                 }).catch(()=>{
                     Toast.fire({
                         icon: 'error',
@@ -361,6 +308,20 @@ import Datepicker from 'vuejs-datepicker';
                     })
                     this.$Progress.fail()
                 });
+            },
+            openReserveModal(data){
+                this.$refs.reserve.reservationData.reset();
+                this.$refs.reserve.guest.reset();
+                this.$refs.reserve.room.fill(data);
+                this.$refs.reserve.rooms = this.rooms;
+                $('#reserve').modal('show');
+            },
+            service(categ,data, external){
+                this.$refs.service.charge.room_id = data.room.room_id;
+                this.$refs.service.charge.guest_id = data.guest_id;
+                this.$refs.service.charge.category = categ;
+                this.$refs.service.external = external;
+                $('#actionService').modal('show');
             },
             updateNow() {
                 var today = new Date(this.datepicked);
@@ -368,9 +329,6 @@ import Datepicker from 'vuejs-datepicker';
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 this.datenow = yyyy + '-' + mm + '-' + dd;
-            },
-            loadReservationsOnce(){
-                this.reservations = '';
             },
         },
         mounted() {
@@ -392,7 +350,7 @@ import Datepicker from 'vuejs-datepicker';
             CHANGEROOM,
             CHECKOUT,
             Datepicker,
-            PAYMENT,
+            PAYMENT,SERVICE
         }
     }
 </script>

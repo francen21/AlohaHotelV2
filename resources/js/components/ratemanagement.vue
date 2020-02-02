@@ -19,8 +19,8 @@
                     </thead>
                     <tbody>
                         <tr v-for="rate in rates" :key="rate.id" >
-                            <td>{{rate.room_type}}</td>
-                            <td>{{rate.rate}}</td>
+                            <td>{{rate.type}}</td>
+                            <td>&#x20B1; {{rate.rate}}</td>
                             <td>
                                 <button type="submit" class="btn btn-success" @click="editRate(rate)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
                                 <button type="submit" class="btn btn-danger" @click="removeRate(rate.id)"><a title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a></button>
@@ -95,8 +95,8 @@
                                 </div>
                                 <div class="form-row" v-if="!occupancy">
                                         <div class="form-group col-md-12">
-                                            <label for="room_type">Room Type</label>
-                                            <input v-model="rate_form.room_type"  type="text" class="form-control" id="room_type" required/>
+                                            <label for="type">Room Type</label>
+                                            <input v-model="rate_form.type"  type="text" class="form-control" id="type" required/>
                                         </div>
                                 </div>
                                 <div class="form-row" v-if="!occupancy">
@@ -104,6 +104,10 @@
                                             <label for="rate">Rate</label>
                                             <input v-model="rate_form.rate" min="1" type="number" class="form-control" id="rate" required/>
                                         </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="cap">Room Capacity</label>
+                                    <input v-model="rate_form.capacity" min="2" type="number" class="form-control" id="cap" required/>
                                 </div>
 
                     </div>
@@ -134,7 +138,8 @@
                 occups:{},
                 rate_form: new Form({
                     id: '',
-                    room_type: '',
+                    type: '',
+                    capacity: '',
                     rate: '',
                 }),
                 occup_form: new Form({
@@ -167,10 +172,8 @@
                 this.occup_form.fill(data);
                 $('#add').modal('show');
             },
-            loadTable1(){
+            load(){
                 axios.get('api/occu').then(({data})=>(this.occups = data.data));
-            },
-            loadTable2(){
                 axios.get('api/rate').then(({data})=>(this.rates = data.data));
             },
             createOccu(){
@@ -227,7 +230,7 @@
 
                                     Swal.fire(
                                     'Deleted!',
-                                    'Reservation has been canceled.',
+                                    'Occupation has been removed.',
                                     'success'
                                     )
                                     Fire.$emit('created');
@@ -260,7 +263,7 @@
 
                                     Swal.fire(
                                     'Deleted!',
-                                    'Reservation has been canceled.',
+                                    'Rate has been removed.',
                                     'success'
                                     )
                                     Fire.$emit('created');
@@ -280,7 +283,7 @@
             updateOccu(){
                 this.$Progress.start();
                 this.occup_form.put('api/occu/'+ this.occup_form.id).then(()=>{
-                    Fire.$emit('resCreated');
+                    Fire.$emit('created');
                     $('#add').modal('hide')
                     this.occup_form.reset();
                     Toast.fire({
@@ -298,8 +301,8 @@
             },
             updateRate(){
                 this.$Progress.start();
-                this.rate_form.patch('api/rate/'+ this.rate_form.id).then(()=>{
-                    Fire.$emit('resCreated');
+                this.rate_form.put('api/rate/'+ this.rate_form.id).then(()=>{
+                    Fire.$emit('created');
                     $('#add').modal('hide')
                     this.rate_form.reset();
                     Toast.fire({
@@ -317,16 +320,10 @@
             },
 
         },
-        mounted() {
-            console.log('Component mounted.')
-
-        },
         created(){
-            this.loadTable1();
-            this.loadTable2();
+            this.load();
             Fire.$on('created',()=>{
-                 this.loadTable1();
-                 this.loadTable2();
+                 this.load();
         });
         }
     }

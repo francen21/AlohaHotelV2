@@ -22,16 +22,6 @@
                                         <div class="form-group">
                                             <div class="form-row">
                                                 <div class="col-md-6 mb-2">
-                                                    <label for="guest_tittle">Tittle</label>
-                                                    <select class="form-control" v-model="guest.guest_tittle">
-                                                        <option selected>-Mr./Ms.-</option>
-                                                        <option>Mr.</option>
-                                                        <option>Ms.</option>
-                                                        <option>Mrs</option>
-                                                        <option>Miss</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6 mb-2">
                                                     <label for="guest_return">Returning Guest?</label>
                                                     <div class="input-group input-group">
                                                         <model-list-select :list="guests" v-model="guest" option-value="guest_id" :custom-text="firstnamelastname" placeholder="select item">
@@ -57,7 +47,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col">
                                                     <label for="guest_type">Id Type</label>
                                                     <select v-model="guest.guest_type" class="form-control" name="guest_type">
@@ -80,13 +70,13 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col-md-12 mb-2">
                                                     <label for="guest_number">ID Number</label>
                                                     <input v-model="guest.guest_number" type="text" class="form-control" placeholder="ID Number" name="guest_number">
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col mb-2">
                                                     <label for="guest_gender">Gender</label>
                                                     <select class="form-control" v-model="guest.guest_gender">
@@ -97,20 +87,20 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col-md-12 mb-2">
                                                     <label for="guest_addr">Address</label>
                                                     <input type="text" class="form-control" v-model="guest.guest_address"
                                                         placeholder="Street Address" >
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col-md-6 mb-2">
                                                     <label for="guest_addr_city">City</label>
                                                     <input type="text" class="form-control" v-model="guest.guest_city"
                                                         placeholder="State" >
                                                 </div>
-                                                <div class="col-md-6 mb-2">
+                                                <div class="col-md-6 mb-2" v-if="!reserve">
                                                     <label for="guest_addr_country">Country</label>
                                                     <select class="form-control" v-model="guest.guest_country">
                                                         <option value="" selected>Select Country</option>
@@ -126,7 +116,7 @@
                                                         placeholder="email.com" >
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <div class="form-row" v-if="!reserve">
                                                 <div class="col-md-12 mb-2">
                                                     <label for="room_remarks">Remarks</label>
                                                     <textarea class="form-control" rows="5"
@@ -165,85 +155,25 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-md-6">
-                                                        <label for="editroom_number">Room</label>
-                                                        <select v-model="room" class="form-control" name="room_number">
-                                                            <option selected>Select Room</option>
-                                                            <option v-for="room in rooms" :key="room.room_id" :value="room">{{room.room_number}}</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
                                                         <label for="editroom_type">Room Type</label>
-                                                        <select v-model="rate" class="form-control" name="room_type">
-                                                            <option selected>Select Room Type</option>
-                                                            <option v-for="rate in rates" :key="rate.id" :value="rate">{{rate.room_type}}</option>
+                                                        <select v-model="rate" class="form-control" name="editroom_type" :class="{ 'is-invalid': reservationData.errors.has('room_type') }">
+                                                            <option value="" selected>Select Room Type</option>
+                                                            <option v-for="rate in rates" :key="rate.id" :value="rate">{{rate.type}}</option>
                                                         </select>
+                                                        <has-error :form="reservationData" field="editroom_type"></has-error>
                                                     </div>
                                                 </div>
                                                 <label for="booking_tarrif">Tariff</label>
-
                                                 <div class="form-row">
                                                     <div class="col-md-6 mb-2">
                                                         <input type="text" class="form-control" v-model="rate.rate" readonly>
                                                     </div>
-                                                    <div class="col mb-2">
-                                                        <select class="form-control" v-model="reservationData.discount_type">
-                                                            <option selected>Discount Type</option>
-                                                            <option>VIP</option>
-                                                            <option>Regular</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col mb-2">
-                                                        <label for="booking_addon">Breakfast</label>
-                                                        <select v-model="reservationData.breakfast" class="form-control">
-                                                            <option selected>No Breakfast</option>
-                                                            <option value="100">Eggs & Bacon</option>
-                                                            <option value="50">Egg Sandwitch</option>
-                                                            <option value="55">Tuna Sandwitch</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <label for="booking_guest_alter_first">Alternative Guest Name</label>
-                                                <div class="form-row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <input v-model="guest.alter_name" type="text" class="form-control" placeholder="First Name">
-                                                    </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <input v-model="guest.alter_lastname" type="text" class="form-control" placeholder="Last Name" >
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="booking_guest_alter_city">City</label>
-                                                        <input v-model="guest.alter_city" type="text" class="form-control" placeholder="City" >
-                                                    </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="booking_guest_alter_country">Country</label>
-                                                        <select v-model="guest.alter_country" class="form-control">
-                                                            <option selected>-Select Country-</option>
-                                                            <option>Philippines</option>
-                                                            <option>United States of America</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="booking_gracep">Grace Time</label>
-                                                        <select v-model="reservationData.grace_time" class="form-control"
-                                                        :class="{ 'is-invalid': reservationData.errors.has('grace_time') }">
-                                                        <has-error :form="reservationData" field="grace_time"></has-error>
-                                                            <option value="">Select Hours</option>
-                                                            <option value="01:00:00">1 Hr</option>
-                                                            <option value="02:00:00">2 Hrs</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="booking_find">How did you find us?</label>
-                                                        <select class="form-control" v-model="guest.howFind">
-                                                            <option value="">Select Medium</option>
-                                                            <option value="Social Media">Social Media</option>
-                                                            <option value="News Paper">Newspaper</option>
+                                                    <div class="col-auto my-1">
+                                                        <label class="mr-sm-2" for="inlineFormCustomSelect">Aditional</label>
+                                                        <select v-model="additional" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                                                            <option value="0" selected>Choose...</option>
+                                                            <option value="1">One</option>
+                                                            <option value="2">Two</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -251,58 +181,7 @@
                                         </div>
                             </div>
                         </div>
-                        <div class="card shadow mb-2">
-                            <div class="card-header py-1">
-                                <h6 class="m-0 font-weight-bold text-primary">Official Purpose</h6>
-                            </div>
-                            <div class="card-body">
-                                        <div class="col float-left px-0" style="padding-right:0;">
-                                            <div class="form-group">
-                                                <div class="form-row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="guest_from">From</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="" v-model="reservationData.from">
-                                                    </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="guest_to">To</label>
-                                                        <input type="text" class="form-control" placeholder=""
-                                                            v-model="reservationData.to">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="guest_purpose">Purpose of Visit</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="vacation" v-model="reservationData.purpose_visit">
-                                                    </div>
-                                                    <div class="col-md-6 mb-2">
-                                                        <label for="guest_cap">Number of Person/s: n</label>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="# Persons" :value="addPersons" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-4 mb-2">
-                                                        <label for="guest_male_cap">Male:</label>
-                                                        <input type="number" class="form-control"
-                                                            placeholder="no. male" v-model="reservationData.male_">
-                                                    </div>
-                                                    <div class="col-4 mb-2">
-                                                        <label for="guest_female_cap">Female:</label>
-                                                        <input type="number" class="form-control"
-                                                            placeholder="no. female" v-model="reservationData.female_">
-                                                    </div>
-                                                    <div class="col-4 mb-2">
-                                                        <label for="guest_child_cap">Children:</label>
-                                                        <input type="number" class="form-control"
-                                                            placeholder="no. children" v-model="reservationData.children_">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -324,29 +203,15 @@
     export default {
         data() {
             return{
-                editMode:false,
-                viewMode:false,
-                rooms:[],
-                guests:[],
-                rates:[],
-                occupancies:[],
+                editMode:false,viewMode:false,reserve:true,
+                rooms:[],guests:[],rates:[],occupancies:[],
                 rate:'',
+                additional:0,
                 todayreservations:'',
                 total_balance:'',
                 reservationData: new Form({
                     reservation_id:'',
                     guest_id:'',
-                    guest_cap:'',
-                    discount_type:'',
-                    breakfast:'',
-                    grace_time:'',
-                    purpose_visit:'',
-                    from:'',
-                    to:'',
-                    number_persons:'',
-                    male_:0,
-                    female_:0,
-                    children_:0,
                     check_in:'',
                     check_out:'',
                     created_at:'',
@@ -355,7 +220,6 @@
                 }),
                 guest: new Form({
                     guest_id:'',
-                    guest_tittle:'',
                     guest_name:'',
                     guest_lastname:'',
                     guest_gender:'',
@@ -369,10 +233,6 @@
                     guest_remarks:'',
                     guest_checkin_points:'',
                     guest_balance:'',
-                    alter_name:'',
-                    alter_lastname:'',
-                    alter_country:'',
-                    alter_city:'',
                     howFind:'',
                 }),
                 room: new Form({
@@ -387,17 +247,22 @@
                 }),
                 rate: new Form({
                     id: '',
-                    room_type: '',
+                    type: '',
+                    capacity: '',
                     rate: '',
+                }),
+                charge: new Form({
+                    id: '',
+                    room_id: '',
+                    guest_id: '',
+                    code: '',
+                    category: '',
+                    price: '',
+                    qty: '',
                 }),
             }
         },
         computed: {
-            addPersons: function () {
-                var x = parseInt(this.reservationData.male_) + parseInt(this.reservationData.female_)+ parseInt(this.reservationData.children_);
-                this.reservationData.number_persons = x;
-                return x;
-            },
             tarrif: function () {
                  var x = this.rate.rate;
                 this.occupancies.forEach(element => {
@@ -420,6 +285,7 @@
                 this.loadRooms();
                 this.$Progress.start();
                 this.reservationData.guest = this.guest;
+                this.room.room_type = this.rate.type;
                 this.reservationData.room = this.room;
                 this.reservationData.post('api/reservation').then(()=>{
                     Fire.$emit('resCreated');
@@ -459,8 +325,19 @@
                     this.$Progress.fail()
                 });
             },
+            additionalcharge(){
+                    this.charge.code = 'ADPRSN';
+                    this.charge.price = 500;
+                    this.charge.qty = this.additional;
+                    this.charge.category = 'Additional Person';
+                    this.charge.post('api/charge');
+            },
             checkin(){
                 this.$Progress.start();
+                if(this.additional > 0){
+                    this.additionalcharge();
+                }
+                this.reservationData.guest = this.guest;
                 this.reservationData.put('api/checkin/'+ this.reservationData.room_number).then(()=>{
                     Fire.$emit('itmCreated');
                     $('#reserve').modal('hide')

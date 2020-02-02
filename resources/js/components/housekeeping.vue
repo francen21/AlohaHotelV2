@@ -34,6 +34,7 @@
                             <button @click="update(room, '3')" class="btn btn-sm btn-success" title="Available" data-toggle="tooltip"><i class="fa fa-plus"></i> Available</button>
                             <button @click="update(room, '2')" class="btn btn-sm btn-danger" title="Cleaning" data-toggle="tooltip"><i class="fas fa-broom"></i> Cleaning</button>
                             <button @click="update(room, '1')" class="btn btn-sm btn-info" title="Inspection" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Inspection</button>
+                            <button @click="update(room, '4')" class="btn btn-sm btn-info" title="Inspection" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Maintenance</button>
                         </td>
                     </tr>
                 </tbody>
@@ -150,7 +151,15 @@
                     item_price: '',
                     created_at: '',
                     updated_at: '',
-                })
+                }),
+                room: new Form({
+                    room_id: '',
+                    room: '',
+                    room_floor: '',
+                    room_type: '',
+                    room_status: '',
+                    room_number: ''
+                }),
 
             }
         },
@@ -278,19 +287,20 @@
             update(room, service1){
                 if (service1 == 3) {
                     room.room_status = 'Available';
-                }else if(service1 == 2){
+                }
+                else if(service1 == 2){
                     room.room_status = 'Cleaning';
                 }
-                 else {
+                else if(service1 == 4){
+                    room.room_status = 'Maintenance';
+                }
+                else {
                     room.room_status = 'For Inspection';
                 }
-                console.log(room.room_status);
-                console.log(service1);
-                this.room_form.fill(room);
+                this.room.fill(room);
                 this.$Progress.start();
-                this.room_form.put('api/charge/'+this.room_form.room_id).then(()=>{
+                this.room.post('/roomstatus').then(()=>{
                     Fire.$emit('romCreated');
-                    this.room_form.reset();
                     Toast.fire({
                             icon: 'success',
                             title: 'Room Updated'

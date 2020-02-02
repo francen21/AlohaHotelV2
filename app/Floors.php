@@ -9,14 +9,7 @@ class Floors extends Model
     //
     protected $primaryKey = 'room_id';
     protected $table = 'rooms_data';
-    protected $fillable = [
-        'room_floor',
-        'room_type',
-        'room',
-        'room_status',
-        'room_number',
-        'room_tarrif'
-    ];
+    protected $guarded = [];
 
     public function reservation()
     {
@@ -24,7 +17,7 @@ class Floors extends Model
     }
     public function rate()
     {
-        return $this->hasOne('App\rates', 'room_type', 'room_type');
+        return $this->hasOne('App\rates', 'type', 'room_type');
     }
     public function occu()
     {

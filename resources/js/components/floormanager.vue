@@ -20,7 +20,6 @@
                     <th scope="col">Room Number</th>
                     <th scope="col">Room Type</th>
                     <th scope="col">Floor</th>
-                    <th scope="col">Tariff</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                 </thead>
@@ -29,7 +28,6 @@
                         <td>{{room.room_number}}</td>
                         <td>{{room.room_type  }}</td>
                         <td>{{room.room_floor }}</td>
-                        <td>{{room.room_tarrif}}</td>
                         <td>{{room.room_status}}</td>
                         <td>
                         <button type="submit" class="btn btn-success" @click="openEditModal(room)" ><a title="Edit" data-toggle="tooltip"><i class="fas fa-pen"></i></a></button>
@@ -62,10 +60,11 @@
                                     </div>
                                     <div class="form-group col-md-9">
                                         <label for="room_type">Room Type</label>
-                                        <select v-model="rate" class="form-control" name="room_type">
+                                        <select v-model="rate" class="form-control" name="room_type" :class="{ 'is-invalid': room_for.errors.has('room_type') }">
                                             <option selected>Choose Side..</option>
-                                            <option v-for="type in types" :key="type.id" :value="type">{{type.room_type}}</option>
+                                            <option v-for="type in types" :key="type.id" :value="type">{{type.type}}</option>
                                         </select>
+                                        <has-error :form="room_form" field="room"></has-error>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -74,12 +73,12 @@
                                             <input v-model="room_form.room_floor"  type="number" min="1" class="form-control" id="floor" placeholder="Room Floor" required/>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <label for="tarrif">Capacity</label>
-                                            <input v-model.number="room_form.room_tarrif" type="number" min="1" class="form-control" id="tarrif" placeholder="" required/>
+                                            <label for="capacity">Capacity</label>
+                                            <input v-model.number="rate.capacity" type="number" min="1" class="form-control" id="capacity" readonly disabled/>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="rate">Price</label>
-                                            <input v-model.number="rate.rate" type="number" class="form-control" id="rate" placeholder="" readonly/>
+                                            <input v-model.number="rate.rate" type="number" class="form-control" id="rate" readonly disabled/>
                                         </div>
                                 </div>
 
@@ -108,19 +107,18 @@ export default {
      data() {
             return {
                 editMode:true,
-                rooms:{},
-                types:{},
+                rooms:{}, types:{},
                 room_form: new Form({
                     room_id: '',
                     room: '',
                     room_number: '',
                     room_type: '',
-                    room_floor: '',
-                    room_tarrif: '',
+                    room_floor: ''
                 }),
                 rate: new Form({
                     id: '',
-                    room_type: '',
+                    type: '',
+                    capacity: '',
                     rate: '',
                 })
             }
@@ -132,30 +130,21 @@ export default {
             $('#addRoom').modal('show');
         },
         openAddModal(){
+            this.room_form.reset();
             this.editMode = false;
             $('#addRoom').modal('show')
         },
-        loadRooms(){
-            if(this.$gate.isHk){
-                this.$Progress.start();
-                axios.get('api/room').then(({data})=>(this.rooms = data.data));
-                this.$Progress.finish();
-            }
-
-        },
-        loadRates(){
+        load(){
                 axios.get('api/rate').then(({data})=>(this.types = data.data));
-        },
-        loadReservationsCont(){
-            axios.get('api/room').then(({data})=>(this.rooms = data.data));
+                axios.get('api/room').then(({data})=>(this.rooms = data.data));
         },
         createRoom(){
-                this.room_form.room_type = this.rate.room_type;
+                this.room_form.room_type = this.rate.type;
                 this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
                 this.room_form.room_tarrif = parseFloat(this.room_form.room_tarrif).toFixed(2);
                 this.$Progress.start();
                 this.room_form.post('api/room').then(()=>{
-                    Fire.$emit('romCreated');
+                    Fire.$emit('action');
                     $('#addRoom').modal('hide')
                     this.room_form.reset();
                     Toast.fire({
@@ -186,7 +175,7 @@ export default {
 
                         if (result.value) {
                             axios.delete('api/room/'+id).then(()=>{
-                                    Fire.$emit('romCreated');
+                                    Fire.$emit('action');
                                     Swal.fire(
                                     'Deleted!',
                                     'The room has been deleted.',
@@ -208,8 +197,11 @@ export default {
         },
         updateRoom(){
                 this.$Progress.start();
+                this.room_form.room_type = this.rate.type;
+                this.room_form.room = this.room_form.room_floor.concat(this.room_form.room_number);
+                this.room_form.room_tarrif = parseFloat(this.room_form.room_tarrif).toFixed(2);
                 this.room_form.put('api/room/'+ this.room_form.room_id).then(()=>{
-                    Fire.$emit('romCreated');
+                    Fire.$emit('action');
                     $('#addRoom').modal('hide')
                     this.room_form.reset();
                     Toast.fire({
@@ -232,12 +224,9 @@ export default {
     mounted() {
     },
     created(){
-        this.room_form.reset();
-        this.loadRooms();
-        this.loadRates();
-        Fire.$on('romCreated',()=>{
-                 this.loadReservationsCont();
-
+        this.load();
+        Fire.$on('action',()=>{
+                 this.load();
         });
 
     },

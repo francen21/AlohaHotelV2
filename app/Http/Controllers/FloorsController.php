@@ -27,7 +27,6 @@ class FloorsController extends Controller
             [
                 'room_floor' => $request['room_floor'],
                 'room' => $request['room_floor'].$request['room_number'],
-                'room_cap' => $request['room_cap'],
                 'room_type' => $request['room_type'],
                 'room_status' => 'For Inspection',
                 'room_number' => $request['room_number'],
@@ -46,14 +45,12 @@ class FloorsController extends Controller
     public function update(Request $request)
     {
 
-        $gue = Floors::find($request['room_id']);
-        $gue->room_floor =   $request['room_floor'];
-        $gue->room_type = $request['room_type'];
-        $gue->room_number =   $request['room_number'];
-        $gue->room_tarrif = $request['room_tarrif'];
-        $gue->room = $request['room_floor'].$request['room_number'];
+        $gue = Floors::find($request->room_id);
+        $gue->room_floor =   $request->room_floor;
+        $gue->room_type = $request->room_type;
+        $gue->room_number =   $request->room_number;
+        $gue->room = $request->room_floor.$request->room_number;
         $gue->save();
-        return $gue;
 
     }
 
