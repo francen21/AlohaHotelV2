@@ -24,9 +24,10 @@ let sales = [
                 [Date.parse("2020-1-09"), 4],
                 [Date.parse("2020-1-14"), 4],
                 [Date.parse("2020-1-19"), 4],
+                [Date.parse("2020-1-220"), 5],
                 [Date.parse("2020-1-24"), 5],
-                [Date.parse("2020-1-29"), 7],
-                [Date.parse("2020-2-1"), 7],
+                [Date.parse("2020-1-29"), 4],
+                [Date.parse("2020-2-1"), 3],
                 ]
 
 let sales2 = [  [Date.parse("2020-2-01"), 2   ],
