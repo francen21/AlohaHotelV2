@@ -3,8 +3,9 @@
         <div class="row">
           <div class="col-md-6">
 
-            <highcharts :options="chartOptions" :constructor-type="'stockChart'"></highcharts>
+            <highcharts :options="sales" :constructor-type="'stockChart'"></highcharts>
             <highcharts :options="futurechartOptions" :constructor-type="'stockChart'"></highcharts>
+            <highcharts :options="chartOptions" :constructor-type="'stockChart'"></highcharts>
 
           </div>
         </div>
@@ -16,21 +17,9 @@ import Highcharts from 'highcharts'
 import stockInit from 'highcharts/modules/stock'
 stockInit(Highcharts)
 import {Chart} from 'highcharts-vue'
-let sales = [
-                [Date.parse("2020-1-01"), 2],
-                [Date.parse("2020-1-04"), 3],
-                [Date.parse("2020-1-05"), 2],
-                [Date.parse("2020-1-08"), 1],
-                [Date.parse("2020-1-09"), 4],
-                [Date.parse("2020-1-14"), 4],
-                [Date.parse("2020-1-19"), 4],
-                [Date.parse("2020-1-22"), 5],
-                [Date.parse("2020-1-24"), 5],
-                [Date.parse("2020-1-29"), 4],
-                [Date.parse("2020-2-1"), 3],
-                ]
-
-let sales2 = [  [Date.parse("2020-2-01"), 2   ],
+let sales = new Array()
+let reservations = new Array()
+let fsales   = [  [Date.parse("2020-2-01"), 2   ],
                 [Date.parse("2020-2-04"), 3 ],
                 [Date.parse("2020-2-08"), 1 ],
                 [Date.parse("2020-2-09"), 4 ],
@@ -98,7 +87,38 @@ export default {
             series: [{
                 type: 'spline',
                 name: 'Forecast Sale',
-                data: sales2
+                data: fsales
+                }
+                    ]
+        },
+        sales: {
+             chart: {
+                type: 'spline',
+                animation: {
+                    enabled: false
+                }
+            },
+            title: {
+                text: 'Reservations'
+            },
+            subtitle: {
+                text: 'From reservation data recorded by the system.'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'Sales'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'spline',
+                name: 'Reservation',
+                data: reservations
                 }
                     ]
         }
