@@ -117,12 +117,12 @@ import ADD from './Modals/reservations/addreservation.vue';
             loadReservationsOnce(){
                 this.$Progress.start();
                 axios.get('api/reservation')
-                .then(({data})=>(this.reservations = data.data));
+                .then(({data})=>(this.reservations = data));
                 this.$Progress.finish();
             },
             loadReservationsCont(){
                 axios.get('api/reservation')
-                .then(({data})=>(this.reservations = data.data));
+                .then(({data})=>(this.reservations = data));
 
             },
 

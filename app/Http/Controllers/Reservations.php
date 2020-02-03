@@ -14,7 +14,7 @@ class Reservations extends Controller
 
     public function index()
     {
-        return ReservationsData::orderBy('check_in')->where('status', '==', '5')->with('room.rate')->with('guest.payments')->paginate(10);
+        return ReservationsData::orderBy('check_in')->where('status', '!=', '5')->with('room.rate')->with('guest')->with('payments')->get();
     }
 
     public function store(Request $request)

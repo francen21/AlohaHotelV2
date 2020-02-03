@@ -195,7 +195,7 @@ import Datepicker from 'vuejs-datepicker';
             loadRooms(){
                 this.$Progress.start();
                     axios.get('api/room').then(({data})=>(this.rooms = data.data));
-                    axios.get('api/reservation').then(({data})=>(this.reservations = data.data));
+                    axios.get('api/reservation').then(({data})=>(this.reservations = data));
                 this.$Progress.finish();
             },
             cancelReservation(id){

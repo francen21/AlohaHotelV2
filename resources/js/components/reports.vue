@@ -3,9 +3,9 @@
         <div class="row">
           <div class="col-md-6">
 
-            <highcharts :options="sales" :constructor-type="'stockChart'"></highcharts>
-            <highcharts :options="futurechartOptions" :constructor-type="'stockChart'"></highcharts>
             <highcharts :options="chartOptions" :constructor-type="'stockChart'"></highcharts>
+            <highcharts :options="futurechartOptions" :constructor-type="'stockChart'"></highcharts>
+            <highcharts :options="sales" :constructor-type="'stockChart'"></highcharts>
 
           </div>
         </div>
@@ -33,7 +33,8 @@ export default {
   data(){
     return {
         reservations:[],
-        found:'',
+        sales:[],
+        found:0,
         chartOptions: {
             title: {
                 text: 'Recorded Sales'
@@ -127,19 +128,29 @@ export default {
   mounted () {
         let found;
         let date;
+        let cash = 0;
         axios.get('api/reservation').then(({data})=>(
-           this.reservations = data.data,
-          this.reservations.forEach(element => {
-                date = (element) => element =  Date.parse(element.check_in)
-                found = Object.values(element).findIndex(date)
+        this.reservations = data,
+
+            this.reservations.forEach((element, index) => {
+                    this.reservations.forEach((x) => {
+                        if(x.check_in == element.check_in){
+                            found++
+                            x.payments.forEach(pay => cash += pay.price)
+
+                        }
+                    })
                 if(found > 0){
-                    sales.push([Date.parse(element.check_in), found])
+                    reservations.push([Date.parse(element.check_in), found])
+                    sales.push([Date.parse(element.check_in), cash])
+                    element[index] = null
                     console.log("matched"+found)
-                }else{
-                    sales.push([Date.parse(element.check_in), 1])
                 }
-                found = 0;
-        })));
+                found = 0
+                cash = 0
+            })
+        ));
+
   },
   methods: {
 
