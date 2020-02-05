@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form @submit.prevent="editMode ? updateReservation() : viewMode ? checkin() : createReservation()">
+            <form @submit.prevent="editMode ? updateReservation() : !reserve ? checkin() : createReservation()">
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
@@ -157,8 +157,8 @@
                                                     <div class="col-md-6">
                                                         <label for="editroom_type">Room Type</label>
                                                         <select v-model="rate" class="form-control" name="editroom_type" :class="{ 'is-invalid': reservationData.errors.has('room_type') }">
-                                                            <option value="" selected>Select Room Type</option>
-                                                            <option v-for="rate in rates" :key="rate.id" :value="rate">{{rate.type}}</option>
+                                                            <option :selected="rate" :value="rate">{{rate.type}}</option>
+                                                            <option v-for="rate in rates" :key="rate.id" :value="rate" >{{rate.type}}</option>
                                                         </select>
                                                         <has-error :form="reservationData" field="editroom_type"></has-error>
                                                     </div>
@@ -187,9 +187,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button v-if="!editMode && !viewMode" type="submit" class="btn btn-primary">Add Reservation</button>
-                <button v-if="editMode && !viewMode" type="submit" class="btn btn-primary">Update Reservation</button>
-                <button v-if="!editMode && viewMode" type="submit" class="btn btn-success">Check In</button>
+                <button v-if="!editMode && !viewMode && reserve" type="submit" class="btn btn-primary">Add Reservation</button>
+                <button v-if="editMode && !viewMode && !reserve" type="submit" class="btn btn-primary">Update Reservation</button>
+                <button v-if="!editMode && !viewMode && !reserve" type="submit" class="btn btn-success">Check In</button>
             </div>
             </form>
         </div>
@@ -277,12 +277,20 @@
 
             }
         },
+        /**
+         *  This Loads
+         *  reservations:{},
+            form
+            room_number:'',
+            checkin_date:'',
+            checkout_date:''
+        */
         methods:{
             firstnamelastname(data) {
                 return `${data.guest_name} ${data.guest_lastname}`
             },
             createReservation(){
-                this.loadRooms();
+                this.load();
                 this.$Progress.start();
                 this.reservationData.guest = this.guest;
                 this.room.room_type = this.rate.type;
@@ -355,29 +363,17 @@
                     this.$Progress.fail()
                 });
             },
-            loadRooms(){
+            load(){
                 axios.get('api/room').then(({data})=>(this.rooms = data.data));
-            },
-            loadGuests(){
                 axios.get('api/guest').then(({data})=>(this.guests = data.data));
-            },
-            loadRates(){
                 axios.get('api/rate').then(({data})=>(this.rates = data.data));
-            },
-            loadoccu(){
                 axios.get('api/occu').then(({data})=>(this.occupancies = data.data));
-            },
-            loadtoday(){
                 axios.get('api/resToday').then(({data})=>(this.todayreservations = data.todayRes));
             },
         },
         mounted() {
             this.reservationData.reset();
-            this.loadRooms();
-            this.loadGuests();
-            this.loadRates();
-            this.loadoccu();
-            this.loadtoday();
+            this.load();
         },
         created(){
             //this.loadRooms();

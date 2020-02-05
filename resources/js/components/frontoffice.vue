@@ -4,112 +4,71 @@
         <div class="card">
             <div class="card-header py-2">
                 <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Rooms</h3>
-            </div>
-            <div class="card-body pt-0">
-                <table class="table table-sm p-0 my-2" id="frontPanel">
-                    <thead class="thead-dark">
-                        <th class="text-center">Room Number</th>
-                        <th class="text-center">Floor</th>
-                        <th class="text-center">Room Type</th>
-                        <th class="text-center">Room Status</th>
-                        <th class="text-center">Actions </th>
-                    </thead>
-                    <tbody>
-                        <tr  v-for="room in rooms" :key="room.room_id" v-bind:class='{"bg-secondary" : room.room_status == "Maintenance", "bg-primary" : room.room_status == "Available", "bg-info" : room.room_status == "For Inspection", "bg-danger" : room.room_status == "Cleaning" , "bg-warning" : room.room_status == "Reserved", "bg-success" : room.room_status == "Occupied"}'>
-                            <td align="text-center">{{room.room_number}}</td>
-                            <td align="center">{{room.room_floor}}</td>
-                            <td align="center">{{room.room_type}}</td>
-                            <td align="center">{{room.room_status}}</td>
-                            <td align="center">
-                                <button @click="openReserveModal(room)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                    aria-haspopup="true" aria-expanded="false"
-                                    style="padding: 0.25px 4.5px;" v-if="room.room_status == 'Available'">
-                                    <i class="fas fa-check-circle"></i> Reserve
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-            </div>
-
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h3 class="m-0 font-weight-bold text-primary float-left pt-1">Active Rooms</h3>
                 <div class="float-right">
                     <div class="btn-group">
-                        <datepicker :value="datepicked" v-model="datepicked" @input="updateNow()"></datepicker>
+
+                        <datepicker :value="datepicked" @input="updateNow()"></datepicker>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-            <table class="table table-sm p-0 my-2" id="reservations">
-                    <thead class="thead-dark">
-                        <th scope="col">Id</th>
-                        <th scope="col">Room</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Id Num</th>
-                        <th scope="col">Check In</th>
-                        <th scope="col">Check out</th>
-                        <th scope="col">Actions</th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(res, index) in reservations" :key="res.reservation_id" v-bind:class='{"bg-primary" : res.status == 1, "bg-success" : res.status == 2, "bg-danger" : res.check_out <= datenow && res.status == 2}'>
-                            <td align="center" width="3%">{{res.reservation_id}}</td>
-                            <td align="center" width="4%">{{res.room_number}}</td>
-                            <td align="center" width="24%">{{res.guest.guest_name+' '+res.guest.guest_lastname}}</td>
-                            <td align="center">{{res.guest.guest_number}}</td>
-                            <td align="center" width="12%">{{res.check_in}}</td>
-                            <td align="center" width="12%">{{res.check_out}}</td>
-                            <td align="center" class="col">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                            <!--
-                            House
+            <div class="card-body pt-0">
+                <b-table id="my-table" :filter="filter" :striped="true" :fields="fields" :borderless="true" :outlined="false" :items="rooms"
+                    :per-page="perPage" :current-page="currentPage" :head-variant="headVariant" :tbody-tr-class="rowClass" small>
+                    <template v-slot:cell(Guest)="row">
 
-                            -->
+                        <button @click="openReserveModal(row.item)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                    aria-haspopup="true" aria-expanded="false"
+                                    style="padding: 0.25px 4.5px;" v-if="row.item.room_status == 'Available' || row.item.room_status == 'Reserved'">
+                                    <i class="fas fa-check-circle"></i> Reserve
+                        </button>
+                        <div v-else>
+                            {{hasreservation(row.item)}}
+                        </div>
+                    </template>
+                    <template v-slot:cell(Actions)="row">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example" v-if="row.item.room_status == 'Occupied'">                                                     <!--House-->
                                     <div class="btn-group">
                                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-concierge-bell"></i>Services
                                         </button>
                                         <div class="dropdown-menu">
                                             <div class="dropdown-header">House Keeping </div>
-                                             <a class="dropdown-item" @click="service('Laundry',res, true)" data-toggle="modal">Laundry</a>
-                                             <a class="dropdown-item" @click="service('MiniBar',res, false)" data-toggle="modal">MiniBar</a>
-                                             <a class="dropdown-item" @click="changeRoomM(res)" data-toggle="modal">Change Room</a>
-                                             <a class="dropdown-item" @click="service('Others',res, true)" data-toggle="modal">Others</a>
+                                             <a class="dropdown-item" @click="service('Laundry',row.item, true)" data-toggle="modal">Laundry</a>
+                                             <a class="dropdown-item" @click="service('MiniBar',row.item, false)" data-toggle="modal">MiniBar</a>
+                                             <a class="dropdown-item" @click="changeRoomM(row.item)" data-toggle="modal">Change Room</a>
+                                             <a class="dropdown-item" @click="service('Others',row.item, true)" data-toggle="modal">Others</a>
                                         </div>
                                     </div>
-                                    <button @click="openpay(res.guest_id)" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true">
+                                    <!-- <button @click="openpay(row.item.guest_id)" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true">
                                         <i class="fas fa-file-invoice-dollar"></i>Payment
-                                    </button>
-                                    <button @click="checkout(res,res.guest.payments)" v-if="res.check_out <= datenow && res.status == 2" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    </button> -->
+                                    <button @click="checkout(row.item,row.item.guest.payments)" v-if="row.item.check_out <= datepicked && row.item.status == 2" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-check-circle"></i> Check Out
                                     </button>
-                                    <button @click="openCheckinModal(res)" v-if="res.check_in === datenow && res.status == 1" type="button" class="btn btn-success btn-sm"  data-toggle="modal"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-check-circle"></i> Check In
-                                    </button>
                                 </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-
+                            <button @click="openpay(row.item.guest_id)" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true" v-if="row.item.room_status == 'Occupied' || row.item.room_status == 'Reserved' ">
+                                <i class="fas fa-file-invoice-dollar"></i>Payment
+                            </button>
+                            <div class="btn-group btn-group-sm" role="group" v-else>
+                                <button @click="update(row.item, '3')" class="btn btn-sm btn-success" title="Available" data-toggle="tooltip"><i class="fa fa-plus"></i> Available</button>
+                                <button @click="update(row.item, '2')" class="btn btn-sm btn-danger" title="Cleaning" data-toggle="tooltip"><i class="fas fa-broom"></i> Cleaning</button>
+                                <button @click="update(row.item, '1')" class="btn btn-sm btn-info" title="Inspection" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Inspection</button>
+                                <button @click="update(row.item, '4')" class="btn btn-sm btn-light" title="Maintenance" data-toggle="tooltip"><i class="fas fa-quidditch"></i> Maintenance</button>
+                            </div>
+                    </template>
+                </b-table>
+                <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="my-table" class="float-right">
+                </b-pagination>
             </div>
         </div>
-                <DETAILS ref="details"></DETAILS>
-                <CHECKIN ref="checkin"></CHECKIN>
-                <CHECKOUT ref="checkout"></CHECKOUT>
-                <RESERVE ref="reserve"></RESERVE>
-                <EDITGUEST ref="editguest"></EDITGUEST>
-                <CHANGEROOM ref="changeroom"></CHANGEROOM>
-                <SERVICE ref="service"></SERVICE>
-                <PAYMENT ref="payment"></PAYMENT>
+            <DETAILS ref="details"></DETAILS>
+            <CHECKOUT ref="checkout"></CHECKOUT>
+            <RESERVE ref="reserve"></RESERVE>
+            <EDITGUEST ref="editguest"></EDITGUEST>
+            <CHANGEROOM ref="changeroom"></CHANGEROOM>
+            <SERVICE ref="service"></SERVICE>
+            <PAYMENT ref="payment"></PAYMENT>
             <div class="modal fade" id="paymentmodal" tabindex="-1" role="dialog" aria-labelledby="paymentmodalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -144,11 +103,14 @@
 </template>
 
 <script>
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 import Datepicker from 'vuejs-datepicker';
 
-// Use v-calendar & v-date-picker components
-
-    import CHECKIN from './Modals/m_frontoffice/checkin'
+    let datepicked;
+    let datenow;
     import DETAILS from './Modals/m_frontoffice/details'
     import EDITGUEST from './Modals/m_frontoffice/editguest'
     import CHANGEROOM from './Modals/m_frontoffice/changeroom'
@@ -159,10 +121,16 @@ import Datepicker from 'vuejs-datepicker';
     export default {
         data() {
               return {
-                editMode:true,
-                rooms:{},
-                reservations:[],
-                res:'',
+                perPage: 10, currentPage: 1, headVariant: 'dark', filter: null,
+                editMode:true,rooms:[],reservations:[],res:'',
+                fields: [
+                    { key: 'room_number', label: 'Room  ' , sortable: true},
+                    'Guest',
+                    { key: 'room_floor', label: 'Floor', sortable: true },
+                    { key: 'room_type', label: 'Type' ,sortable: true},
+                    { key: 'room_status', label: 'Status' , sortable: true },
+                    'Actions',
+                    ],
                 room_form: new Form({
                     room_id: '',
                     room: '',
@@ -180,18 +148,36 @@ import Datepicker from 'vuejs-datepicker';
                     qty: '',
                     price: '',
                 }),
-                datenow:'',
                 datepicked:'',
+                datenow:'',
                 payment_form: new Form({
                     guest_id: '',
                     price: '',
                 }),
             }
         },
-        computed: {
-
+        computed:{
+            rows() {
+                return this.rooms.length
+            },
         },
         methods:{
+            hasreservation(room){
+                let reserved = room.reservation.find(function(element) {return element.check_in <= datenow})
+                if(reserved){
+                    return reserved.guest.guest_name;
+                }else{
+                    return;
+                }
+            },
+            rowClass(item, type) {
+                if (!item || type !== 'row') return
+                if (item.room_status == 'Available') return 'table-success'
+                if (item.room_status == 'Occupied') return 'table-primary'
+                if (item.room_status == 'Reserved') return 'table-warning'
+                if (item.room_status == 'For Inspection') return 'table-secondary'
+                if (item.room_status == 'Maintenance') return 'table-light'
+            },
             loadRooms(){
                 this.$Progress.start();
                     axios.get('api/room').then(({data})=>(this.rooms = data.data));
@@ -236,17 +222,12 @@ import Datepicker from 'vuejs-datepicker';
                 this.$refs.details.reservations = res;
                 $('#detailsModal').modal('show');
             },
-            openCheckinModal(data){
-                this.$refs.reserve.editMode = false;
-                this.$refs.reserve.viewMode = true;
-                this.$refs.reserve.reserve = false;
-                this.$refs.reserve.reservationData.fill(data);
-                this.$refs.reserve.guest.fill(data.guest);
-                this.$refs.reserve.room.fill(data.room);
-                this.$refs.reserve.rooms = this.rooms;
-                $('#reserve').modal('show');
+            openAddModal(){
+                this.$refs.childADD.editMode = false;
+                this.$refs.childADD.viewMode = false;
+                this.$refs.childADD.reserve = true;
+                $('#reserve').modal('show')
             },
-
             checkout(data,payments){
                 axios.get('api/charge/'+data.room.room_id)
                     .then(({data})=>(
@@ -324,16 +305,62 @@ import Datepicker from 'vuejs-datepicker';
                 $('#actionService').modal('show');
             },
             updateNow() {
-                var today = new Date(this.datepicked);
+                var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
+                datenow = yyyy + '-' + mm + '-' + dd;
                 this.datenow = yyyy + '-' + mm + '-' + dd;
+                this.datepicked = yyyy + '-' + mm + '-' + dd;
             },
+            update(room, service1){
+                if (service1 == 3) {
+                    room.room_status = 'Available';
+                }
+                else if(service1 == 2){
+                    room.room_status = 'Cleaning';
+                }
+                else if(service1 == 4){
+                    room.room_status = 'Maintenance';
+                }
+                else {
+                    room.room_status = 'For Inspection';
+                }
+                Swal.fire({
+                    title: 'Changing status to ' + room.room_status +'?',
+                    text: "You're changing room "+room.room_number+" status to "+room.room_status+".",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, change it!'
+                    }).then((result) => {
+                        if (result.value) {
+                            this.room.fill(room);
+                            this.$Progress.start();
+                            this.room.post('/roomstatus').then(()=>{
+                                Fire.$emit('romCreated');
+                                Toast.fire({
+                                        icon: 'success',
+                                        title: 'Room Updated'
+                                })
+                                this.$Progress.finish();
+                            }).catch(()=>{
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Something is not right.'
+                                })
+                                this.$Progress.fail()
+                            });
+                        }
+
+                    })
+
+            }
         },
         mounted() {
             this.loadRooms();
-            this.datepicked = new Date();
+            datepicked = new Date();
             this.updateNow();
         },
         created(){
@@ -343,7 +370,6 @@ import Datepicker from 'vuejs-datepicker';
             });
         },
         components: {
-            CHECKIN,
             DETAILS,
             RESERVE,
             EDITGUEST,

@@ -10,7 +10,7 @@ class RoomsData extends Model
     protected $guarded = [];
     public function reservation()
     {
-        return $this->hasOne('App\ReservationsData', 'room_number', 'room_number');
+        return $this->hasMany('App\ReservationsData', 'room_number', 'room_number');
     }
     public function rate()
     {

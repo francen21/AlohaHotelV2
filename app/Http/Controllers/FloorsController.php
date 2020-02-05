@@ -10,7 +10,7 @@ class FloorsController extends Controller
 
     public function index()
     {
-        return Floors::latest()->with('reservation.guest')->with('reservation')->with('rate')->paginate(100);
+        return Floors::orderBy('room')->with('reservation.guest')->with('reservation')->with('rate')->paginate(1000);
     }
 
     public function store(Request $request)
