@@ -7,13 +7,13 @@
                 <div class="float-right">
                     <div class="btn-group">
 
-                        <datepicker :value="datepicked" @input="updateNow()"></datepicker>
+                        <datepicker v-model="datepicked" :value="datepicked" @input="updateNow()"></datepicker>
                     </div>
                 </div>
             </div>
             <div class="card-body pt-0">
                 <b-table id="my-table" :filter="filter" :striped="true" :fields="fields" :borderless="true" :outlined="false" :items="rooms"
-                    :per-page="perPage" :current-page="currentPage" :head-variant="headVariant" :tbody-tr-class="rowClass" small>
+                    :per-page="perPage" :current-page="currentPage" :head-variant="headVariant" small>
                     <template v-slot:cell(Guest)="row">
 
                         <button @click="openReserveModal(row.item)" type="button" class="btn btn-warning btn-sm" data-toggle="modal"
@@ -21,7 +21,7 @@
                                     style="padding: 0.25px 4.5px;" v-if="row.item.room_status == 'Available' || row.item.room_status == 'Reserved'">
                                     <i class="fas fa-check-circle"></i> Reserve
                         </button>
-                        <div v-else>
+                        <div>
                             {{hasreservation(row.item)}}
                         </div>
                     </template>
@@ -42,7 +42,7 @@
                                     <!-- <button @click="openpay(row.item.guest_id)" type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="true">
                                         <i class="fas fa-file-invoice-dollar"></i>Payment
                                     </button> -->
-                                    <button @click="checkout(row.item,row.item.guest.payments)" v-if="row.item.check_out <= datepicked && row.item.status == 2" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                    <button @click="checkout(row.item,row.item.guest.payments)" v-if="row.item.check_out <= datenow && row.item.status == 2" type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-check-circle"></i> Check Out
                                     </button>
@@ -160,28 +160,65 @@ import Datepicker from 'vuejs-datepicker';
             rows() {
                 return this.rooms.length
             },
+            formartedItems () {
+                if (!this.rooms) return []
+                return this.rooms.map(item => {
+                //item._rowVariant  = this.getVariant(item)
+                return item
+                })
+            }
         },
         methods:{
             hasreservation(room){
-                let reserved = room.reservation.find(function(element) {return element.check_in <= datenow})
+                let reserved = room.reservation.find(function(element) {return (element.check_in >= datenow)})
                 if(reserved){
-                    return reserved.guest.guest_name;
-                }else{
+                   /*  reserved.forEach(element => {
+                         console.log(element.room_number+" "+datenow);
+
+                        if(element.check_out >= datenow){
+                            item._rowVariant = 'danger'
+                        }else if(element.check_out <= datenow){
+                            console.log(element.check_out+" "+datenow);
+                            item._rowVariant = 'primary'
+                        }
+                    }); */
+                    if(reserved.status == 1){
+                        room._rowVariant = 'warning'
+                        return reserved.guest.guest_name+" "+reserved.guest.guest_lastname;
+                    }
+                    if(reserved.status == 2){
+                        room._rowVariant = 'primary'
+                        return reserved.guest.guest_name+" "+reserved.guest.guest_lastname;
+                    }
+                }
+                else if(room.room_status == 'Available'){
+                    room._rowVariant = 'success'
+                    return;
+                }
+                else if(room.room_status == 'For Inspection'){
+                    room._rowVariant = 'secondary'
+                    return;
+                }
+                else if(room.room_status == 'Maintenance'){
+                    room._rowVariant = 'light'
                     return;
                 }
             },
-            rowClass(item, type) {
-                if (!item || type !== 'row') return
-                if (item.room_status == 'Available') return 'table-success'
-                if (item.room_status == 'Occupied') return 'table-primary'
-                if (item.room_status == 'Reserved') return 'table-warning'
-                if (item.room_status == 'For Inspection') return 'table-secondary'
-                if (item.room_status == 'Maintenance') return 'table-light'
+            getVariant (status) {
+                switch (status.room_status) {
+                case 'Occupied':
+                console.log('Occu');
+                    return 'primary'
+                case 'Available':
+                console.log('Avail');
+                    return 'success'
+                default:
+                    return 'light'
+                }
             },
             loadRooms(){
                 this.$Progress.start();
                     axios.get('api/room').then(({data})=>(this.rooms = data.data));
-                    axios.get('api/reservation').then(({data})=>(this.reservations = data));
                 this.$Progress.finish();
             },
             cancelReservation(id){
@@ -194,23 +231,19 @@ import Datepicker from 'vuejs-datepicker';
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
-
                         if (result.value) {
                             axios.delete('api/reservation/'+id).then(()=>{
-
                                     Swal.fire(
                                     'Deleted!',
                                     'Reservation has been canceled.',
                                     'success'
                                     )
                                     Fire.$emit('resCreated');
-
                             }).catch(()=>{
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Oops...',
                                     text: 'Something went wrong!'
-
                                 })
                             });
                         }
@@ -233,7 +266,6 @@ import Datepicker from 'vuejs-datepicker';
                     .then(({data})=>(
                         this.$refs.checkout.charges = data
                     ));
-
                 this.$refs.checkout.payments = payments;
                 this.$refs.checkout.room_form = data.room;
                 this.$refs.checkout.resid = data.reservation_id;
@@ -305,13 +337,13 @@ import Datepicker from 'vuejs-datepicker';
                 $('#actionService').modal('show');
             },
             updateNow() {
-                var today = new Date();
+                var today = new Date(this.datepicked);
                 var dd = String(today.getDate()).padStart(2, '0');
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
-                datenow = yyyy + '-' + mm + '-' + dd;
                 this.datenow = yyyy + '-' + mm + '-' + dd;
-                this.datepicked = yyyy + '-' + mm + '-' + dd;
+                datenow = yyyy + '-' + mm + '-' + dd;
+                return datenow;
             },
             update(room, service1){
                 if (service1 == 3) {
@@ -360,7 +392,7 @@ import Datepicker from 'vuejs-datepicker';
         },
         mounted() {
             this.loadRooms();
-            datepicked = new Date();
+            this.datepicked = new Date();
             this.updateNow();
         },
         created(){

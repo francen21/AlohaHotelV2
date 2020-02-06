@@ -26,9 +26,6 @@ class OtherController extends Controller
     {
         Floors::find($request->room_id)->update(['room_status' => $request->room_status]);
     }
-    public function reports()
-    {
-        ReservationsData::latest()->with('room.rate')->with('guest')->with('payments')->get();
-    }
+
 
 }

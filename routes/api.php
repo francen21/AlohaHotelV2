@@ -30,4 +30,5 @@ Route::apiResources([
     'rate' => 'RatesController',
     'charge' => 'ChargesController',
     'pay' => 'PaymentController',
+    'reports' => 'ReportsController',
 ]);

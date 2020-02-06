@@ -129,7 +129,7 @@ export default {
         let found;
         let date;
         let cash = 0;
-        axios.get('api/reservation').then(({data})=>(
+        axios.get('api/reports').then(({data})=>(
         this.reservations = data,
 
             this.reservations.forEach((element, index) => {
