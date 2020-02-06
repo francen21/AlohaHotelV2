@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2020 at 04:58 PM
+-- Generation Time: Feb 06, 2020 at 07:42 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -97,7 +97,6 @@ CREATE TABLE `guests_data` (
 
 INSERT INTO `guests_data` (`guest_id`, `guest_name`, `guest_lastname`, `guest_gender`, `guest_address`, `guest_city`, `guest_country`, `guest_email`, `guest_mobile`, `guest_type`, `guest_number`, `guest_remarks`, `guest_checkin_points`, `guest_balance`, `howFind`, `created_at`, `updated_at`) VALUES
 (4, 'Jenny', 'Lynn', 'Female', 'Manila', 'Quezon City', 'Philippines', 'jenny@gmail.com', '092374736', 'GSIS ID or GSIS UMID Card', 'N03823HSD984', NULL, NULL, NULL, 'Social Media', '2020-01-25 10:25:46', '2020-01-25 10:25:46'),
-(5, 'Zandree', 'Tresvalles', 'Male', 'Residencias De Manila Building 8, Room 4A16, Jesus Street', 'Manila', 'Philippines', 'zandreetresvalles22@gmail.com', '09498642445', 'GSIS ID or GSIS UMID Card', '7888454', NULL, NULL, NULL, 'News Paper', '2020-01-26 23:18:16', '2020-01-26 23:18:16'),
 (11, 'Tommy', 'Acuestas', 'Male', 'asdf', 'dsfasfd', 'Philippines', 'tommy@gmail.com', '094356764', 'PRC ID', 'fas43522rewfd', 'No remarks', NULL, NULL, 'Undefined', '2020-02-02 04:58:57', '2020-02-02 06:15:27'),
 (12, 'Jenny', 'Lyyn', 'Others', 'Undefined', 'Undefined', 'Undefined', 'jenny@gmail.xom', '0923486234', NULL, NULL, 'No remarks', NULL, NULL, 'Undefined', '2020-02-02 07:53:17', '2020-02-02 07:53:17');
 
@@ -312,7 +311,9 @@ INSERT INTO `payments` (`id`, `guest_id`, `price`, `deleted_at`, `created_at`, `
 (2, 1, 500.00, NULL, '2020-01-30 18:59:54', '2020-01-30 18:59:54'),
 (3, 5, 600.00, NULL, '2020-02-01 18:33:26', '2020-02-01 18:33:26'),
 (4, 5, 1600.00, NULL, '2020-02-01 18:45:44', '2020-02-01 18:45:44'),
-(5, 5, 300.00, NULL, '2020-02-01 18:45:53', '2020-02-01 18:45:53');
+(5, 5, 300.00, NULL, '2020-02-01 18:45:53', '2020-02-01 18:45:53'),
+(6, 11, 500.00, NULL, '2020-02-02 16:57:16', '2020-02-02 16:57:16'),
+(7, 12, 600.00, NULL, '2020-02-02 18:48:19', '2020-02-02 18:48:19');
 
 -- --------------------------------------------------------
 
@@ -394,9 +395,16 @@ CREATE TABLE `rooms_data` (
 INSERT INTO `rooms_data` (`room_id`, `room`, `room_floor`, `cap`, `room_type`, `room_status`, `room_number`, `room_sales`, `room_views`, `created_at`, `updated_at`) VALUES
 (22, 2201, '2', 1, 'Bayside', 'Occupied', 201, NULL, NULL, '2020-02-02 02:32:27', '2020-02-02 06:15:27'),
 (23, 2202, '2', 1, 'City Side', 'Reserved', 202, NULL, NULL, '2020-02-02 06:55:07', '2020-02-02 07:53:17'),
-(24, 2203, '2', 1, 'Bayside', 'Cleaning', 203, NULL, NULL, '2020-02-02 07:13:19', '2020-02-02 07:22:52'),
-(25, 2204, '2', 1, 'City Side', 'For Inspection', 204, NULL, NULL, '2020-02-02 07:15:19', '2020-02-02 07:15:19'),
-(26, 2205, '2', 1, 'Bayside', 'Maintenance', 205, NULL, NULL, '2020-02-02 07:15:53', '2020-02-02 07:22:55');
+(24, 2203, '2', 1, 'Bayside', 'Available', 203, NULL, NULL, '2020-02-02 07:13:19', '2020-02-02 18:51:17'),
+(25, 2204, '2', 1, 'City Side', 'Available', 204, NULL, NULL, '2020-02-02 07:15:19', '2020-02-02 18:51:27'),
+(26, 2205, '2', 1, 'Bayside', 'Available', 205, NULL, NULL, '2020-02-02 07:15:53', '2020-02-02 18:51:29'),
+(27, 2206, '2', 1, 'City Side', 'For Inspection', 206, NULL, NULL, '2020-02-04 23:18:39', '2020-02-04 23:19:24'),
+(28, 2207, '2', 1, 'Bayside', 'For Inspection', 207, NULL, NULL, '2020-02-04 23:19:05', '2020-02-04 23:19:05'),
+(29, 2208, '2', 1, 'City Side', 'For Inspection', 208, NULL, NULL, '2020-02-04 23:19:56', '2020-02-04 23:19:56'),
+(30, 2209, '2', 1, 'Bayside', 'For Inspection', 209, NULL, NULL, '2020-02-04 23:20:05', '2020-02-04 23:20:05'),
+(31, 2210, '2', 1, 'City Side', 'For Inspection', 210, NULL, NULL, '2020-02-04 23:20:16', '2020-02-04 23:20:16'),
+(32, 2211, '2', 1, 'Bayside', 'For Inspection', 211, NULL, NULL, '2020-02-04 23:20:50', '2020-02-04 23:20:50'),
+(33, 2212, '2', 1, 'City Side', 'For Inspection', 212, NULL, NULL, '2020-02-04 23:21:01', '2020-02-04 23:21:01');
 
 -- --------------------------------------------------------
 
@@ -605,7 +613,7 @@ ALTER TABLE `occus`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `rates`
@@ -623,7 +631,7 @@ ALTER TABLE `reservations_data`
 -- AUTO_INCREMENT for table `rooms_data`
 --
 ALTER TABLE `rooms_data`
-  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `room_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
